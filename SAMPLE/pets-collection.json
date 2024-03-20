@@ -1,0 +1,112 @@
+[
+  {
+    "id": "1",
+    "name": "Fluffy",
+    "type": "Cat",
+    "emoji": "🐈",
+    "health": 100,
+    "happiness": 80,
+    "hunger": 20,
+    "energy": 70
+  },
+  {
+    "id": "2",
+    "name": "Rex",
+    "type": "Dog",
+    "emoji": "🐕",
+    "health": 90,
+    "happiness": 85,
+    "hunger": 25,
+    "energy": 60
+  },
+  {
+    "id": "3",
+    "name": "Bubbles",
+    "type": "Fish",
+    "emoji": "🐡",
+    "health": 95,
+    "happiness": 70,
+    "hunger": 30,
+    "energy": 50
+  },
+  {
+    "id": "4",
+    "name": "Chirpy",
+    "type": "Bird",
+    "emoji": "🦜",
+    "health": 100,
+    "happiness": 90,
+    "hunger": 20,
+    "energy": 75
+  },
+  {
+    "id": "5",
+    "name": "Hopper",
+    "type": "Rabbit",
+    "emoji": "🐇",
+    "health": 80,
+    "happiness": 95,
+    "hunger": 10,
+    "energy": 90
+  },
+  {
+    "id": "6",
+    "name": "Slinky",
+    "type": "Snake",
+    "emoji": "🐍",
+    "health": 85,
+    "happiness": 75,
+    "hunger": 40,
+    "energy": 60
+  },
+  {
+    "id": "7",
+    "name": "Whiskers",
+    "type": "Hamster",
+    "emoji": "🐹",
+    "health": 90,
+    "happiness": 80,
+    "hunger": 30,
+    "energy": 70
+  },
+  {
+    "id": "8",
+    "name": "Thunder",
+    "type": "Horse",
+    "emoji": "🐎",
+    "health": 90,
+    "happiness": 80,
+    "hunger": 20,
+    "energy": 85
+  },
+  {
+    "id": "9",
+    "name": "Mystic",
+    "type": "Unicorn",
+    "emoji": "🦄",
+    "health": 100,
+    "happiness": 100,
+    "hunger": 0,
+    "energy": 100
+  },
+  {
+    "id": "10",
+    "name": "Pebble",
+    "type": "Turtle",
+    "emoji": "🐢",
+    "health": 100,
+    "happiness": 75,
+    "hunger": 40,
+    "energy": 50
+  },
+  {
+    "id": "11",
+    "name": "Cleo",
+    "type": "Crocodile",
+    "emoji": "🐊",
+    "health": 85,
+    "happiness": 80,
+    "hunger": 30,
+    "energy": 60
+  }
+]
