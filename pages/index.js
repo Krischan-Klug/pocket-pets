@@ -1,9 +1,7 @@
-import styled from "styled-components";
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <>
-      <h1>Hello World</h1>
-    </>
+    <div>
+      <h1>Hello from Next.js</h1>
+    </div>
   );
 }
