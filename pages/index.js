@@ -29,8 +29,6 @@ export default function HomePage({ myPets }) {
     <>
       <StyledPetCollectionHeader>
         <h1>My Pets</h1>
-        <button>Add</button>
-        <button>Delete</button>
       </StyledPetCollectionHeader>
       <StyledPetCollectionWrapper>
         <StyledPetCollection>
