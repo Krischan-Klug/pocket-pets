@@ -37,10 +37,14 @@ const initialMyPets = [
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useState(initialMyPets);
 
+  function handleDeletePet(id) {
+    setMyPets(myPets.filter((myPet) => myPet.id !== id));
+  }
+
   return (
     <>
       <GlobalStyle />
-      <Component {...pageProps} myPets={myPets} />
+      <Component {...pageProps} myPets={myPets} onDeletePet={handleDeletePet} />
     </>
   );
 }
