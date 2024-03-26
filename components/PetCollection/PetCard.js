@@ -24,7 +24,7 @@ const StyledName = styled.p`
   margin: 0;
 `;
 
-const StyledIcon = styled(Image)`
+const StyledDeleteIcon = styled(Image)`
   position: absolute;
   top: 0;
   width: 70%;
@@ -41,7 +41,12 @@ export default function PetCard({ myPet, deleteMode, handleClickOnPetCard }) {
         deleteMode={deleteMode}
       >
         {deleteMode && (
-          <StyledIcon src={trashcanIcon} alt="Delete" height={50} width={50} />
+          <StyledDeleteIcon
+            src={trashcanIcon}
+            alt="Delete"
+            height={50}
+            width={50}
+          />
         )}
         <Image src={myPet.image} alt={myPet.type} height={50} width={50} />
         <StyledName>{myPet.name}</StyledName>
