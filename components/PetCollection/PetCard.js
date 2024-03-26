@@ -41,7 +41,7 @@ export default function PetCard({ myPet, deleteMode, handleClickOnPetCard }) {
         deleteMode={deleteMode}
       >
         {deleteMode && (
-          <StyledIcon src={trashcanIcon} alt="Delete" height={70} width={70} />
+          <StyledIcon src={trashcanIcon} alt="Delete" height={50} width={50} />
         )}
         <Image src={myPet.image} alt={myPet.type} height={50} width={50} />
         <StyledName>{myPet.name}</StyledName>
