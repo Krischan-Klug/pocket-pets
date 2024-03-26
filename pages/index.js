@@ -2,6 +2,7 @@ import PetCard from "@/components/PetCollection/PetCard";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import { useState } from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 const StyledPetCollectionHeader = styled.header`
   padding: 0px 30px;
@@ -29,6 +30,7 @@ const StyledPetCollection = styled.section`
 export default function HomePage({ myPets, onDeletePet }) {
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedPetId, setSelectedPetId] = useState(null);
+  const router = useRouter();
 
   function handleToggleDelete() {
     setDeleteMode((prevDeleteMode) => !prevDeleteMode);
@@ -37,6 +39,8 @@ export default function HomePage({ myPets, onDeletePet }) {
   function handleClickOnPetCard(id) {
     if (deleteMode) {
       setSelectedPetId(id);
+    } else {
+      router.push(`/pet-detail-page/${id}`);
     }
   }
 
