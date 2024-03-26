@@ -38,7 +38,6 @@ export default function Create({ onAddPet }) {
       happiness: 100,
       energy: 100,
     };
-    console.log(newFormData);
     onAddPet(newFormData);
     router.push("/");
   };
