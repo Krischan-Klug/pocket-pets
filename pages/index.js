@@ -1,4 +1,6 @@
 import PetCard from "@/components/PetCollection/PetCard";
+import ConfirmationPopup from "@/components/util/ConfirmPopUp";
+import { useState } from "react";
 import styled from "styled-components";
 
 const StyledPetCollectionHeader = styled.header`
@@ -24,19 +26,59 @@ const StyledPetCollection = styled.section`
   width: 350px;
 `;
 
-export default function HomePage({ myPets }) {
+export default function HomePage({ myPets, onDeletePet }) {
+  const [deleteMode, setDeleteMode] = useState(false);
+  const [selectedPetId, setSelectedPetId] = useState(null);
+
+  function handleToggleDelete() {
+    setDeleteMode((prevDeleteMode) => !prevDeleteMode);
+  }
+
+  function handleClickOnPetCard(id) {
+    if (deleteMode) {
+      setSelectedPetId(id);
+    }
+  }
+
+  function handleConfirmDelete() {
+    onDeletePet(selectedPetId);
+    handleToggleDelete();
+    setSelectedPetId(null);
+  }
+
   return (
     <>
       <StyledPetCollectionHeader>
         <h1>My Pets</h1>
+        <button
+          onClick={() => {
+            handleToggleDelete();
+          }}
+        >
+          Delete Pet
+        </button>
       </StyledPetCollectionHeader>
       <StyledPetCollectionWrapper>
         <StyledPetCollection>
           {myPets.map((myPet) => (
-            <PetCard key={myPet.id} myPet={myPet} />
+            <PetCard
+              key={myPet.id}
+              myPet={myPet}
+              deleteMode={deleteMode}
+              handleClickOnPetCard={handleClickOnPetCard}
+            />
           ))}
         </StyledPetCollection>
       </StyledPetCollectionWrapper>
+      {deleteMode && selectedPetId && (
+        <ConfirmationPopup
+          message={`Are you sure you want to delete the pet ${
+            myPets.find((pet) => pet.id === selectedPetId).name
+          }?`}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setSelectedPetId(null)}
+        />
+      )}
     </>
   );
 }
