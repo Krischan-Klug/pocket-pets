@@ -1,7 +1,42 @@
-export default function HomePage() {
+import PetCard from "@/components/PetCollection/PetCard";
+import styled from "styled-components";
+
+const StyledPetCollectionHeader = styled.header`
+  padding: 0px 30px;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+`;
+
+const StyledPetCollectionWrapper = styled.main`
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+`;
+
+const StyledPetCollection = styled.section`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px 0px;
+  width: 350px;
+`;
+
+export default function HomePage({ myPets }) {
   return (
-    <div>
-      <h1>Hello from Next.js</h1>
-    </div>
+    <>
+      <StyledPetCollectionHeader>
+        <h1>My Pets</h1>
+      </StyledPetCollectionHeader>
+      <StyledPetCollectionWrapper>
+        <StyledPetCollection>
+          {myPets.map((myPet) => (
+            <PetCard key={myPet.id} myPet={myPet} />
+          ))}
+        </StyledPetCollection>
+      </StyledPetCollectionWrapper>
+    </>
   );
 }
