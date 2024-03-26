@@ -37,10 +37,14 @@ const initialMyPets = [
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useState(initialMyPets);
 
+  function handleAddPet(newPet) {
+    setMyPets([...myPets, newPet]);
+  }
+
   return (
     <>
       <GlobalStyle />
-      <Component {...pageProps} myPets={myPets} />
+      <Component {...pageProps} myPets={myPets} onAddPet={handleAddPet} />
     </>
   );
 }
