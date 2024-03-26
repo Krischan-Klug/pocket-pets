@@ -10,6 +10,8 @@ const ConfirmPopupOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  //the height of the Z index should ensure that this popup is always the top element.
+  //Since we work with the z-index in steps of 10, I have chosen 100 here.
   z-index: 100;
 `;
 
