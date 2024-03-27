@@ -50,8 +50,8 @@ export default function Create({ onAddPet }) {
 
   return (
     <div>
-      <Link href="/">Back</Link>
       <h1>Add a New Pet</h1>
+      <Link href="/">Back</Link>
       <StyledForm onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>
         <input

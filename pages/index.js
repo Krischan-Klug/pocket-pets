@@ -1,5 +1,6 @@
 import PetCard from "@/components/PetCollection/PetCard";
 import styled from "styled-components";
+import Link from "next/link";
 
 const StyledPetCollectionHeader = styled.header`
   padding: 0px 30px;
@@ -29,6 +30,7 @@ export default function HomePage({ myPets }) {
     <>
       <StyledPetCollectionHeader>
         <h1>My Pets</h1>
+        <Link href="/create">Create Pet</Link>
       </StyledPetCollectionHeader>
       <StyledPetCollectionWrapper>
         <StyledPetCollection>
