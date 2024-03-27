@@ -10,18 +10,34 @@ const StyledStatusBarContainer = styled.div`
   margin: 5px;
 `;
 
+const colors = [
+  "#00FF00",
+  "#33FF00",
+  "#66FF00",
+  "#99FF00",
+  "#CCFF00",
+  "#FFFF00",
+  "#FFCC00",
+  "#FF9900",
+  "#FF6600",
+  "#FF3300",
+];
+
 const StyledStatusBar = styled.p`
-  background-color: green;
-  color: white;
+  background-color: ${(props) => {
+    const index = Math.floor((100 - props.value) / 10);
+    return colors[index];
+  }};
+  color: black;
   border-radius: 10px;
-  width: 75%;
+  width: ${(props) => props.value}%;
   padding-left: 20px;
 `;
 
-export default function StatusBar({ text }) {
+export default function StatusBar({ text, value }) {
   return (
     <StyledStatusBarContainer>
-      <StyledStatusBar>{text}</StyledStatusBar>
+      <StyledStatusBar value={value}>{text}</StyledStatusBar>
     </StyledStatusBarContainer>
   );
 }
