@@ -1,9 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 import styled from "styled-components";
+import trashcanIcon from "/public/assets/icons/round_delete_outline_black.png";
 
-const StyledPetCard = styled.div`
-  border: solid 2px black;
+const StyledPetCard = styled.button`
+  border: solid 2px ${({ deleteMode }) => (deleteMode ? "red" : "black")};
   border-radius: 10px;
   height: 80px;
   width: 80px;
@@ -24,17 +24,33 @@ const StyledName = styled.p`
   margin: 0;
 `;
 
-const StyledPetCardLink = styled(Link)`
-  text-decoration: none;
+const StyledDeleteIcon = styled(Image)`
+  position: absolute;
+  top: 0;
+  width: 70%;
+  height: 70%;
 `;
 
-export default function PetCard({ myPet }) {
+export default function PetCard({ myPet, deleteMode, handleClickOnPetCard }) {
   return (
-    <StyledPetCardLink href="/">
-      <StyledPetCard>
+    <>
+      <StyledPetCard
+        onClick={() => {
+          handleClickOnPetCard(myPet.id);
+        }}
+        deleteMode={deleteMode}
+      >
+        {deleteMode && (
+          <StyledDeleteIcon
+            src={trashcanIcon}
+            alt="Delete"
+            height={50}
+            width={50}
+          />
+        )}
         <Image src={myPet.image} alt={myPet.type} height={50} width={50} />
         <StyledName>{myPet.name}</StyledName>
       </StyledPetCard>
-    </StyledPetCardLink>
+    </>
   );
 }
