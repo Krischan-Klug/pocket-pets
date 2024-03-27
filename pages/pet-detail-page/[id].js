@@ -5,7 +5,7 @@ import styled from "styled-components";
 import StatusBar from "@/components/DetailPage/StatusBar";
 
 const StyledPetDetailPageHeader = styled.header`
-  padding: 0px 30px;
+  padding: 0 30px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -19,11 +19,11 @@ const StyledPetDetailPageMain = styled.main`
 `;
 
 const StyledPetImage = styled(Image)`
-  margin: 40px 0px;
+  margin: 40px 0;
 `;
 
 const StyledPetDetailPageFooter = styled.footer`
-  padding: 0px 30px;
+  padding: 0 30px;
   width: 100%;
   position: sticky;
   bottom: 20;
