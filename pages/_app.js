@@ -1,63 +1,6 @@
 import GlobalStyle from "../styles";
 import { useState } from "react";
-
-const initialMyPets = [
-  {
-    id: "7da41d54-8213-424d-8484-5f77e1cfe491",
-    type: "beaver",
-    name: "Hans",
-    image: "/assets/images/pets/beaver.png",
-    health: 100,
-    hunger: 100,
-    happiness: 100,
-    energy: 100,
-    isDead: false,
-  },
-  {
-    id: "2",
-    type: "beaver",
-    name: "Bello",
-    image: "/assets/images/pets/crab.png",
-    health: 100,
-    hunger: 100,
-    happiness: 100,
-    energy: 100,
-    isDead: false,
-  },
-  {
-    id: "3",
-    type: "beaver",
-    name: "Timmy",
-    image: "/assets/images/pets/beaver.png",
-    health: 100,
-    hunger: 100,
-    happiness: 100,
-    energy: 100,
-    isDead: false,
-  },
-  {
-    id: "4",
-    type: "beaver",
-    name: "Timmy",
-    image: "/assets/images/pets/beaver.png",
-    health: 100,
-    hunger: 100,
-    happiness: 100,
-    energy: 100,
-    isDead: true,
-  },
-  {
-    id: "5",
-    type: "beaver",
-    name: "Timmy",
-    image: "/assets/images/pets/beaver.png",
-    health: 100,
-    hunger: 100,
-    happiness: 100,
-    energy: 100,
-    isDead: false,
-  },
-];
+import initialMyPets from "@/lib/initialPet";
 
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useState(initialMyPets);
