@@ -13,32 +13,32 @@ const StyledForm = styled.form`
 
 export default function Create({ onAddPet }) {
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [petData, setPetData] = useState({
     name: "",
     type: "",
     image: "/assets/images/pets/book.png",
   });
 
-  const [imagePath, setImagePath] = useState(formData.image);
+  const [imagePath, setImagePath] = useState(petData.image);
 
   const handleTypeChange = (event) => {
     const selectedType = event.target.value;
     const imagePath = `/assets/images/pets/${selectedType}.png`;
-    setFormData({ ...formData, type: selectedType, image: imagePath });
+    setPetData({ ...petData, type: selectedType, image: imagePath });
     setImagePath(imagePath); // filled with local one!
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newFormData = {
-      ...formData,
+    const newPetData = {
+      ...petData,
       id: uuidv4(),
       health: 100,
       hunger: 100,
       happiness: 100,
       energy: 100,
     };
-    onAddPet(newFormData);
+    onAddPet(newPetData);
     router.push("/");
   };
 
@@ -52,9 +52,9 @@ export default function Create({ onAddPet }) {
           type="text"
           name="name"
           id="name"
-          value={formData.name}
+          value={petData.name}
           onChange={(event) =>
-            setFormData({ ...formData, name: event.target.value })
+            setPetData({ ...petData, name: event.target.value })
           }
           minLength={1}
           maxLength={50}
@@ -64,7 +64,7 @@ export default function Create({ onAddPet }) {
         <select
           name="type"
           id="type"
-          value={formData.type}
+          value={petData.type}
           onChange={handleTypeChange}
           required
         >
@@ -81,11 +81,11 @@ export default function Create({ onAddPet }) {
           type="hidden"
           name="image"
           id="image"
-          value={formData.image}
+          value={petData.image}
           readOnly
         />
         <br />
-        <Image alt={formData.type} src={imagePath} width={100} height={100} />
+        <Image alt={petData.type} src={imagePath} width={100} height={100} />
         <br />
         <button type="submit">Create Pet</button>
       </StyledForm>
