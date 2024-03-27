@@ -31,8 +31,6 @@ const StyledPetDetailPageFooter = styled.footer`
 `;
 
 export default function PetDetailPage({ myPets }) {
-  console.log("MY_PETS: ", myPets);
-
   const router = useRouter();
   const { id } = router.query;
 

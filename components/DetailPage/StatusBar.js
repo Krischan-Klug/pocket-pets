@@ -10,7 +10,7 @@ const StyledStatusBarContainer = styled.div`
   margin: 5px;
 `;
 
-const StyledStatusBar = styled.div`
+const StyledStatusBar = styled.p`
   background-color: green;
   color: white;
   border-radius: 10px;
