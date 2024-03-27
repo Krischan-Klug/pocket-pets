@@ -5,10 +5,12 @@ import styled from "styled-components";
 import StatusBar from "@/components/DetailPage/StatusBar";
 
 const StyledPetDetailPageHeader = styled.header`
-  padding: 0 30px;
+  padding: 20px;
   width: 100%;
-  display: flex;
-  justify-content: center;
+`;
+
+const StyledEditButton = styled.button`
+  position: left;
 `;
 
 const StyledPetDetailPageMain = styled.main`
@@ -59,9 +61,17 @@ export default function PetDetailPage({ myPets }) {
   return (
     <>
       <StyledPetDetailPageHeader>
-        <h1>{name}</h1>
+        <StyledEditButton>
+          <Image
+            src={"/../../public/assets/icon/edit_round_outline_black.png"}
+            alt="edit button"
+            height={20}
+            width={20}
+          />
+        </StyledEditButton>
       </StyledPetDetailPageHeader>
       <StyledPetDetailPageMain>
+        <h1>{name}</h1>
         <StatusBar text={"Health"} />
         <StatusBar text={"Hunger"} />
         <StatusBar text={"Happiness"} />
