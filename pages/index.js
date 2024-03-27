@@ -2,7 +2,9 @@ import PetCard from "@/components/PetCollection/PetCard";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import { useState } from "react";
 import styled from "styled-components";
+import Link from "next/link";
 import { useRouter } from "next/router";
+
 
 const StyledPetCollectionHeader = styled.header`
   padding: 0px 30px;
@@ -54,6 +56,9 @@ export default function HomePage({ myPets, onDeletePet }) {
     <>
       <StyledPetCollectionHeader>
         <h1>My Pets</h1>
+
+        <Link href="/create">Create Pet</Link>
+
         <button
           onClick={() => {
             handleToggleDelete();
