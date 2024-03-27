@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import pets from "@/lib/pet";
 import styled from "styled-components";
+import Link from "next/link";
 
 const StyledForm = styled.form`
   display: flex;
@@ -28,8 +29,7 @@ export default function Create({ onAddPet }) {
     setImagePath(imagePath); // filled with local one!
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  function combinePetData() {
     const newPetData = {
       ...petData,
       id: uuidv4(),
@@ -38,13 +38,19 @@ export default function Create({ onAddPet }) {
       happiness: 100,
       energy: 100,
     };
-    onAddPet(newPetData);
+    return newPetData;
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    onAddPet(combinePetData());
     router.push("/");
   };
 
   return (
     <div>
-      <button onClick={() => router.push("/")}>Back</button>
+      <Link href="/">Back</Link>
       <h1>Add a New Pet</h1>
       <StyledForm onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>
