@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
+import editIcon from "/public/assets/icons/edit_round_outline_black.png";
 import Link from "next/link";
 import styled from "styled-components";
 import StatusBar from "@/components/DetailPage/StatusBar";
@@ -61,13 +62,8 @@ export default function PetDetailPage({ myPets }) {
   return (
     <>
       <StyledPetDetailPageHeader>
-        <StyledEditButton>
-          <Image
-            src={"/../../public/assets/icon/edit_round_outline_black.png"}
-            alt="edit button"
-            height={20}
-            width={20}
-          />
+        <StyledEditButton onClick={() => router.push(`/edit/${id}`)}>
+          <Image src={editIcon} alt="edit button" height={20} width={20} />
         </StyledEditButton>
       </StyledPetDetailPageHeader>
       <StyledPetDetailPageMain>
