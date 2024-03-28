@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
+import editIcon from "/public/assets/icons/edit_round_outline_black.png";
 import Link from "next/link";
 import styled from "styled-components";
 import StatusBar from "@/components/DetailPage/StatusBar";
@@ -9,10 +10,12 @@ import { useState } from "react";
 import graveImage from "/public/assets/images/grave.png";
 
 const StyledPetDetailPageHeader = styled.header`
-  padding: 0 30px;
+  padding: 20px;
   width: 100%;
-  display: flex;
-  justify-content: center;
+`;
+
+const StyledEditButton = styled.button`
+  position: left;
 `;
 
 const StyledPetDetailPageMain = styled.main`
@@ -87,9 +90,12 @@ export default function PetDetailPage({ myPets, onGameUpdate, onSetIsDead }) {
   return (
     <>
       <StyledPetDetailPageHeader>
-        <h1>{name}</h1>
+        <StyledEditButton onClick={() => router.push(`/edit/${id}`)}>
+          <Image src={editIcon} alt="edit button" height={20} width={20} />
+        </StyledEditButton>
       </StyledPetDetailPageHeader>
       <StyledPetDetailPageMain>
+        <h1>{name}</h1>
         <StatusBar text={"Health"} value={currentPet.health} />
         <StatusBar text={"Hunger"} value={currentPet.hunger} />
         <StatusBar text={"Happiness"} value={currentPet.happiness} />

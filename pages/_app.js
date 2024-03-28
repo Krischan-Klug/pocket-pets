@@ -8,9 +8,17 @@ export default function App({ Component, pageProps }) {
   function handleAddPet(newPet) {
     setMyPets([...myPets, newPet]);
   }
+
+  function handleUpdatePet(updatedPet) {
+    setMyPets(
+      myPets.map((myPet) => (myPet.id === updatedPet.id ? updatedPet : myPet))
+    );
+  }
+
   function handleDeletePet(id) {
     setMyPets(myPets.filter((myPet) => myPet.id !== id));
   }
+  
   function handleGameUpdate(updateId) {
     setMyPets(
       myPets.map((pet) =>
@@ -26,6 +34,7 @@ export default function App({ Component, pageProps }) {
       )
     );
   }
+  
   function handleSetIsDead(updateId) {
     setMyPets(
       myPets.map((pet) =>
@@ -46,6 +55,7 @@ export default function App({ Component, pageProps }) {
         {...pageProps}
         myPets={myPets}
         onAddPet={handleAddPet}
+        onUpdatePet={handleUpdatePet}
         onDeletePet={handleDeletePet}
         onGameUpdate={handleGameUpdate}
         onSetIsDead={handleSetIsDead}
