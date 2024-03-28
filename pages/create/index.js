@@ -37,6 +37,7 @@ export default function Create({ onAddPet }) {
       hunger: 100,
       happiness: 100,
       energy: 100,
+      isDead: false,
     };
     return newPetData;
   }
