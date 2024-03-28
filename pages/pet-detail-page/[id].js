@@ -7,6 +7,8 @@ import StatusBar from "@/components/DetailPage/StatusBar";
 import { useEffect } from "react";
 import { useState } from "react";
 
+import hungerImg from "/public/assets/images/interaction/hunger.png";
+
 import graveImage from "/public/assets/images/grave.png";
 
 const StyledPetDetailPageHeader = styled.header`
@@ -39,6 +41,7 @@ const StyledPetDetailPageFooter = styled.footer`
 
 export default function PetDetailPage({ myPets, onGameUpdate, onSetIsDead }) {
   const [currentPet, setCurrentPet] = useState(null);
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -55,7 +58,7 @@ export default function PetDetailPage({ myPets, onGameUpdate, onSetIsDead }) {
 
     const interval = setInterval(() => {
       onGameUpdate(id);
-    }, 100);
+    }, 1000);
 
     // Cleaning up the component unmount
     return () => clearInterval(interval);
@@ -87,6 +90,18 @@ export default function PetDetailPage({ myPets, onGameUpdate, onSetIsDead }) {
     }
   }
 
+  function handleFeed(foodToGive) {
+    if (!currentPet.isDead) {
+      setCurrentPet((prevCurrentPet) => {
+        return {
+          ...prevCurrentPet,
+          hunger: prevCurrentPet.hunger + foodToGive,
+        };
+      });
+    }
+    console.log(currentPet.hunger);
+  }
+
   return (
     <>
       <StyledPetDetailPageHeader>
@@ -100,6 +115,10 @@ export default function PetDetailPage({ myPets, onGameUpdate, onSetIsDead }) {
         <StatusBar text={"Hunger"} value={currentPet.hunger} />
         <StatusBar text={"Happiness"} value={currentPet.happiness} />
         <StatusBar text={"Energy"} value={currentPet.energy} />
+        <button onClick={() => handleFeed(10)}>
+          <Image alt="Hunger" src={hungerImg} width={50} height={50}></Image>
+        </button>
+
         <StyledPetImage
           src={isDead ? graveImage : image}
           alt={type}
