@@ -39,7 +39,12 @@ const StyledPetDetailPageFooter = styled.footer`
   z-index: 10;
 `;
 
-export default function PetDetailPage({ myPets, onGameUpdate, onSetIsDead }) {
+export default function PetDetailPage({
+  myPets,
+  onGameUpdate,
+  onSetIsDead,
+  onUpdatePet,
+}) {
   const [currentPet, setCurrentPet] = useState(null);
 
   const router = useRouter();
@@ -92,11 +97,10 @@ export default function PetDetailPage({ myPets, onGameUpdate, onSetIsDead }) {
 
   function handleFeed(foodToGive) {
     if (!currentPet.isDead) {
-      setCurrentPet((prevCurrentPet) => {
-        return {
-          ...prevCurrentPet,
-          hunger: prevCurrentPet.hunger + foodToGive,
-        };
+      const updatedHunger = currentPet.hunger + foodToGive;
+      onUpdatePet({
+        ...currentPet,
+        hunger: updatedHunger > 100 ? 100 : updatedHunger,
       });
     }
     console.log(currentPet.hunger);
