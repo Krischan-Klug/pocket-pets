@@ -4,6 +4,10 @@ import editIcon from "/public/assets/icons/edit_round_outline_black.png";
 import Link from "next/link";
 import styled from "styled-components";
 import StatusBar from "@/components/DetailPage/StatusBar";
+import { useEffect } from "react";
+import { useState } from "react";
+
+import graveImage from "/public/assets/images/grave.png";
 
 const StyledPetDetailPageHeader = styled.header`
   padding: 20px;
@@ -33,9 +37,29 @@ const StyledPetDetailPageFooter = styled.footer`
   z-index: 10;
 `;
 
-export default function PetDetailPage({ myPets }) {
+export default function PetDetailPage({ myPets, onGameUpdate, onSetIsDead }) {
+  const [currentPet, setCurrentPet] = useState(null);
   const router = useRouter();
   const { id } = router.query;
+
+  //Gameloop for DEBUGING with 100ms later 10.000ms
+  useEffect(() => {
+    if (!id) return;
+
+    const pet = myPets.find((myPet) => myPet.id == id);
+    if (!pet) return;
+
+    setCurrentPet(pet);
+
+    if (pet.isDead) return;
+
+    const interval = setInterval(() => {
+      onGameUpdate(id);
+    }, 100);
+
+    // Cleaning up the component unmount
+    return () => clearInterval(interval);
+  }, [id, myPets]);
 
   if (!id) {
     return (
@@ -46,8 +70,6 @@ export default function PetDetailPage({ myPets }) {
     );
   }
 
-  const currentPet = myPets.find((myPet) => myPet.id == id);
-
   if (!currentPet) {
     return (
       <>
@@ -57,7 +79,13 @@ export default function PetDetailPage({ myPets }) {
     );
   }
 
-  const { name, type, image } = currentPet;
+  const { name, type, image, health, hunger, happiness, energy, isDead } =
+    currentPet;
+  if (health === 0 || hunger === 0 || happiness === 0 || energy === 0) {
+    if (!isDead) {
+      onSetIsDead(id);
+    }
+  }
 
   return (
     <>
@@ -68,11 +96,16 @@ export default function PetDetailPage({ myPets }) {
       </StyledPetDetailPageHeader>
       <StyledPetDetailPageMain>
         <h1>{name}</h1>
-        <StatusBar text={"Health"} />
-        <StatusBar text={"Hunger"} />
-        <StatusBar text={"Happiness"} />
-        <StatusBar text={"Energy"} />
-        <StyledPetImage src={image} alt={type} height={150} width={150} />
+        <StatusBar text={"Health"} value={currentPet.health} />
+        <StatusBar text={"Hunger"} value={currentPet.hunger} />
+        <StatusBar text={"Happiness"} value={currentPet.happiness} />
+        <StatusBar text={"Energy"} value={currentPet.energy} />
+        <StyledPetImage
+          src={isDead ? graveImage : image}
+          alt={type}
+          height={150}
+          width={150}
+        />
       </StyledPetDetailPageMain>
 
       <StyledPetDetailPageFooter>

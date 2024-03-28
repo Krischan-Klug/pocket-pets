@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import trashcanIcon from "/public/assets/icons/round_delete_outline_black.png";
+import graveImage from "/public/assets/images/grave.png";
 
 const StyledPetCard = styled.button`
   border: solid 2px ${({ deleteMode }) => (deleteMode ? "red" : "black")};
@@ -49,7 +50,12 @@ export default function PetCard({ myPet, deleteMode, handleClickOnPetCard }) {
             width={50}
           />
         )}
-        <Image src={myPet.image} alt={myPet.type} height={50} width={50} />
+        <Image
+          src={myPet.isDead ? graveImage : myPet.image}
+          alt={myPet.type}
+          height={50}
+          width={50}
+        />
         <StyledName>{myPet.name}</StyledName>
       </StyledPetCard>
     </>
