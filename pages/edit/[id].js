@@ -1,4 +1,3 @@
-// import InputField from "@/components/util/InputField";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import styled from "styled-components";
 import { useRouter } from "next/router";
@@ -29,11 +28,9 @@ const StyledEditForm = styled.form`
   gap: 20px;
 `;
 
-// const StyledSaveButton = styled.button``;
-// const StyledCancelButton = styled.button``;
-
-export default function EditPet({ myPets }) {
+export default function EditPet({ myPets, onUpdatePet }) {
   const [savePopUp, setSavePopUp] = useState(false);
+  const [newCurrentPetData, setNewCurrentPetData] = useState(null);
   const router = useRouter();
   const { id } = router.query;
 
@@ -59,16 +56,22 @@ export default function EditPet({ myPets }) {
 
   const { name, type, image } = currentPet;
 
-  const [newPetData, setNewPetData] = useState({
-    name: { name },
-    type: { type },
-    image: { image },
-    // was ist mit den statusBar werten? health / hunger / happiness / energy?
-  });
+  function handleSubmit(event) {
+    event.preventDefault();
+    const newPetName = event.target.name.value;
 
-  function handleEditPet(newPetName) {
-    setNewPetData({ ...newPetData, name: newPetName });
-    //setNewPetData({ id, name: newPetName, type, image });
+    setNewCurrentPetData({
+      ...currentPet,
+
+      name: newPetName,
+    });
+
+    setSavePopUp(true);
+  }
+
+  function handleConfirm() {
+    onUpdatePet(newCurrentPetData);
+    router.push(`/pet-detail-page/${id}`);
   }
 
   return (
@@ -82,7 +85,7 @@ export default function EditPet({ myPets }) {
       </StyledUpdatePetHeader>
       <StyledUpdatePetMain>
         <h1>Edit your pet</h1>
-        <form>
+        <StyledEditForm onSubmit={handleSubmit}>
           <label htmlFor="name">Name: </label>
           <input
             id="name"
@@ -92,19 +95,14 @@ export default function EditPet({ myPets }) {
             maxLength={50}
             required
           />
-        </form>
-        <Image alt={type} src={image} width={150} height={150} />
-        <button type="submit" onClick={() => setSavePopUp(true)}>
-          Save
-        </button>
-        {/* <button onClick={() => router.push(`/pet-detail-page/${id}`)}>
-          Cancel
-        </button> */}
+          <Image alt={type} src={image} width={150} height={150} />
+          <button type="submit">Save</button>
+        </StyledEditForm>
       </StyledUpdatePetMain>
       {savePopUp && (
         <ConfirmationPopup
-          message={"Are you sure you want to change the name of your pet?"}
-          onConfirm={handleEditPet}
+          message={`Are you sure you want to change the name of your pet to ${newCurrentPetData.name}?`}
+          onConfirm={handleConfirm}
           onCancel={() => setSavePopUp(false)}
         />
       )}
