@@ -25,7 +25,7 @@ export default function App({ Component, pageProps }) {
         pet.id === updateId
           ? {
               ...pet,
-              health: Math.max(pet.health - 0.4, 0),
+              health: (pet.hunger + pet.happiness + pet.energy) / 3,
               hunger: Math.max(pet.hunger - 1, 0),
               happiness: Math.max(pet.happiness - 0.75, 0),
               energy: isSleep ? 100 : Math.max(pet.energy - 0.5, 0),

@@ -10,7 +10,7 @@ import { useState } from "react";
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
 import energyImage from "/public/assets/images/interaction/energy.png";
-import sleepingImage from "/public/assets/images/interaction/sleeping.png";
+
 import graveImage from "/public/assets/images/grave.png";
 
 const StyledPetDetailPageHeader = styled.header`
@@ -37,16 +37,30 @@ const StyledPetImage = styled(Image)`
   margin: 40px 0;
 `;
 
-const moveUpDown = keyframes`
+const sleepingAnimation = keyframes`
 0% {transform: translateY(0);}
 50% {transform: translateY(-10px);}
 100% {transform: translateY(0);}`;
 
+const toyAnimation = keyframes`
+0% {transform: translateY(10px) translateX(-10px) scale(1);}
+50% {transform: translateY(-10px) translateX(10px) scale(0.5);}
+100% {transform: translateY(10px) translateX(-10px) scale(1);}`;
+
+const foodAnimation = keyframes`
+0% {opacity: 1; transform: translateX(0);}
+100% {opacity: 0; transform: translateX(100);}`;
+
 const StyledInteractionImage = styled(Image)`
   position: absolute;
   top: 0;
-  right: 20%;
-  animation: ${moveUpDown} 1s ease-in-out infinite;
+  right: 30%;
+  animation: ${(props) => {
+      if (props.animationStyle === "sleeping") return sleepingAnimation;
+      if (props.animationStyle === "toy") return toyAnimation;
+      if (props.animationStyle === "food") return foodAnimation;
+    }}
+    1s ease-in-out infinite;
 `;
 
 const StyledPetDetailPageFooter = styled.footer`
@@ -64,7 +78,10 @@ export default function PetDetailPage({
   onUpdatePet,
 }) {
   const [currentPet, setCurrentPet] = useState(null);
-  const [isSleep, setIsSleep] = useState(0);
+  const [isInteracting, setIsInteracting] = useState({
+    duration: 0,
+    interaction: "",
+  });
 
   const router = useRouter();
   const { id } = router.query;
@@ -81,12 +98,18 @@ export default function PetDetailPage({
     if (pet.isDead) return;
 
     const interval = setInterval(() => {
-      if (isSleep > 0) {
+      if (isInteracting.interaction === "sleep" && isInteracting.duration > 0) {
         onGameUpdate(id, true);
-        setIsSleep((prevIsSleep) => (prevIsSleep -= 1));
       } else {
         onGameUpdate(id, false);
       }
+      setIsInteracting((prevIsInteracting) => ({
+        ...prevIsInteracting,
+        duration:
+          prevIsInteracting.duration > 0
+            ? (prevIsInteracting.duration -= 1)
+            : 0,
+      }));
     }, 1000);
 
     // Cleaning up the component unmount
@@ -113,7 +136,7 @@ export default function PetDetailPage({
 
   const { name, type, image, health, hunger, happiness, energy, isDead } =
     currentPet;
-  if (health === 0 || hunger === 0 || happiness === 0 || energy === 0) {
+  if (health < 10) {
     if (!isDead) {
       onSetIsDead(id);
     }
@@ -126,8 +149,8 @@ export default function PetDetailPage({
         ...currentPet,
         hunger: updatedHunger > 100 ? 100 : updatedHunger,
       });
+      setIsInteracting({ interaction: "food", duration: 5 });
     }
-    console.log(currentPet.hunger);
   }
 
   function handlePlay(toyToGive) {
@@ -137,15 +160,15 @@ export default function PetDetailPage({
         ...currentPet,
         happiness: updatedHappiness > 100 ? 100 : updatedHappiness,
       });
+
+      setIsInteracting({ interaction: "toy", duration: 5 });
     }
-    console.log(currentPet.happiness);
   }
 
   function handleSleep() {
     if (!currentPet.isDead) {
-      setIsSleep(10);
+      setIsInteracting({ interaction: "sleeping", duration: 5 });
     }
-    console.log(currentPet.energy);
   }
 
   return (
@@ -162,10 +185,16 @@ export default function PetDetailPage({
         <StatusBar text={"Happiness"} value={currentPet.happiness} />
         <StatusBar text={"Energy"} value={currentPet.energy} />
 
-        <button onClick={() => handleFeed(10)} disabled={isSleep > 0}>
+        <button
+          onClick={() => handleFeed(10)}
+          disabled={isInteracting.duration > 0}
+        >
           <Image alt="Hunger" src={hungerImage} width={50} height={50}></Image>
         </button>
-        <button onClick={() => handlePlay(10)} disabled={isSleep > 0}>
+        <button
+          onClick={() => handlePlay(10)}
+          disabled={isInteracting.duration > 0}
+        >
           <Image
             alt="Happiness"
             src={happinessImage}
@@ -173,17 +202,21 @@ export default function PetDetailPage({
             height={50}
           ></Image>
         </button>
-        <button onClick={() => handleSleep(100)} disabled={isSleep > 0}>
+        <button
+          onClick={() => handleSleep(100)}
+          disabled={isInteracting.duration > 0}
+        >
           <Image alt="Energy" src={energyImage} width={50} height={50}></Image>
         </button>
 
         <StyledPetContainer>
-          {isSleep > 0 && (
+          {isInteracting.duration > 0 && (
             <StyledInteractionImage
-              src={sleepingImage}
-              alt="sleeping icon"
+              src={`/assets/images/interaction/${isInteracting.interaction}.png`}
+              alt="interaction icon"
               height={50}
               width={50}
+              animationStyle={isInteracting.interaction}
             />
           )}
           <StyledPetImage
