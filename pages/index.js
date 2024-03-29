@@ -5,9 +5,6 @@ import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import useSound from "use-sound";
-import sound1 from "/public/assets/sounds/musicfox_the_small_farm.mp3";
-
 const StyledPetCollectionHeader = styled.header`
   padding: 0px 30px;
   width: 100%;
@@ -54,11 +51,8 @@ export default function HomePage({ myPets, onDeletePet }) {
     setSelectedPetId(null);
   }
 
-  const [play] = useSound(sound1, { volume: 0.4 });
-
   return (
     <>
-      <button onClick={() => play()}>Music</button>
       <StyledPetCollectionHeader>
         <h1>My Pets</h1>
 
