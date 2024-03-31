@@ -120,8 +120,8 @@ export default function AudioInterface() {
     interrupt: true,
     volume,
     onload: () => {
-      setPlaying(true);
-      handlePlayPause();
+      //setPlaying(true);
+      //handlePlayPause();
       console.log("ONLOAD");
     },
     onend: () => handleNextAuto(),
@@ -150,7 +150,7 @@ export default function AudioInterface() {
     setCurrentSound(soundKeys[previousIndex]);
     setCurrentTitle(sounds[soundKeys[previousIndex]].title);
     if (playing) {
-      //play();
+      play();
     }
   }
 
