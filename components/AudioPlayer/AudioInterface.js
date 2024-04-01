@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 import playIcon from "/public/assets/icons/round_play_arrow_black.png";
@@ -13,6 +13,9 @@ import useSound from "use-sound";
 import sound1 from "public/assets/sounds/musicfox_the_small_farm.mp3";
 import sound2 from "public/assets/sounds/musicfox_shopping_street.mp3";
 import sound3 from "public/assets/sounds/musicfox_old_news.mp3";
+import AudioPlayer from "./Audio2";
+
+const soundTest = [sound1, sound2, sound3];
 
 const sounds = {
   sound1: { title: "The Small Farm", file: sound1 },
@@ -112,19 +115,20 @@ export default function AudioInterface() {
   const [currentSound, setCurrentSound] = useState("sound1");
   const [playing, setPlaying] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(sounds[currentSound].title);
-  const [volume, setVolume] = useState(0.5);
+  const [volume, setVolume] = useState(0.05);
   //
   //
 
-  const [play, { stop }] = useSound(sounds[currentSound].file, {
+  const [play, { stop }] = useSound(soundTest, {
     interrupt: true,
     volume,
     onload: () => {
       //setPlaying(true);
       //handlePlayPause();
-      console.log("ONLOAD");
+      //console.log("ONLOAD");
+      //play();
     },
-    onend: () => handleNextAuto(),
+    //onend: () => handleNextAuto(),
     onPlayError: () => {
       console.error("Error occured!");
     },
@@ -142,6 +146,7 @@ export default function AudioInterface() {
 
   function handlePrevious() {
     stop();
+    setPlaying(false);
     const soundKeys = Object.keys(sounds);
     const currentIndex = soundKeys.indexOf(currentSound);
     const previousIndex =
@@ -149,21 +154,25 @@ export default function AudioInterface() {
     console.log("previousIndex: ", previousIndex);
     setCurrentSound(soundKeys[previousIndex]);
     setCurrentTitle(sounds[soundKeys[previousIndex]].title);
-    if (playing) {
-      play();
-    }
+    // if (playing) {
+    //  play();
+    //}
   }
 
   function handleNext() {
-    stop();
+    console.log("Handle Next");
+    play({ id: 2 });
+
+    /*stop();
+    setPlaying(false);
     const soundKeys = Object.keys(sounds);
     const currentIndex = soundKeys.indexOf(currentSound);
     const nextIndex = (currentIndex + 1) % soundKeys.length;
     setCurrentSound(soundKeys[nextIndex]);
     setCurrentTitle(sounds[soundKeys[nextIndex]].title);
     if (playing) {
-      //play();
-    }
+      play();
+    }*/
   }
   function handleNextAuto() {
     //stop();
