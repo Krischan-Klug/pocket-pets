@@ -6,6 +6,11 @@ import pets from "@/lib/pet";
 import styled from "styled-components";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
+import {
+  InputLabel,
+  InputField,
+  Label,
+} from "@/components/StyledComponents/StyledInputField";
 
 const StyledForm = styled.form`
   display: flex;

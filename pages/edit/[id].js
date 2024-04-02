@@ -6,6 +6,11 @@ import Link from "next/link";
 import Image from "next/image";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
+import {
+  InputLabel,
+  InputField,
+  Label,
+} from "@/components/StyledComponents/StyledInputField";
 
 const StyledEditForm = styled.form`
   display: flex;
@@ -65,20 +70,26 @@ export default function EditPet({ myPets, onUpdatePet }) {
         <StyledLeftButton onClick={() => router.push(`/pet-detail-page/${id}`)}>
           Back
         </StyledLeftButton>
-
         <h1>Edit your pet</h1>
       </header>
       <main>
         <StyledEditForm onSubmit={handleSubmit}>
-          <label htmlFor="name">Name: </label>
-          <input
-            id="name"
-            name="name"
-            defaultValue={name}
-            minLength={1}
-            maxLength={50}
-            required
-          />
+          <Label className="input">
+            <InputField
+              className="inputField"
+              id="name"
+              name="name"
+              defaultValue={name}
+              minLength={1}
+              maxLength={50}
+              required
+              placeholder=" "
+            />
+            <InputLabel className="inputLabel" htmlFor="name">
+              Name:
+            </InputLabel>
+          </Label>
+
           <Image alt={type} src={image} width={150} height={150} />
           <StyledButton type="submit">Save</StyledButton>
         </StyledEditForm>
