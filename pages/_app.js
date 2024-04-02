@@ -8,6 +8,7 @@ export default function App({ Component, pageProps }) {
     defaultValue: initialMyPets,
   });
 
+  //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
     function updatePetsWithNewKeys() {
       setMyPets((prevPets) => {
