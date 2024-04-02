@@ -2,7 +2,6 @@ import GlobalStyle from "../styles";
 import { useState } from "react";
 import initialMyPets from "@/lib/initialPet";
 import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
-import Player from "@/components/AudioPlayer/Audio2";
 
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useState(initialMyPets);
@@ -63,7 +62,6 @@ export default function App({ Component, pageProps }) {
         onSetIsDead={handleSetIsDead}
       />
       <AudioInterface></AudioInterface>
-      <Player></Player>
     </>
   );
 }

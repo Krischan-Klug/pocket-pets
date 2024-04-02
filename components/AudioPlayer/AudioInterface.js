@@ -95,7 +95,8 @@ const AudioSlider = styled.input`
 const ImagesliderWrapper = styled.div`
   width: 100%;
   display: flex;
-  align-content: center;
+  align-items: center;
+  padding: 5px 0;
 `;
 
 const MusicTitel = styled.p`
@@ -124,10 +125,10 @@ export default function AudioInterface() {
 
   useEffect(() => {
     audioRef.current.src = playlist[currentTrackIndex].url;
-    audioRef.current.load(); // Laden der Audiodatei
-    audioRef.current.volume = volume; // Setzen der Anfangslautstärke
+    audioRef.current.load();
+    audioRef.current.volume = volume;
     if (isPlaying && userInteraction) {
-      audioRef.current.play().catch((error) => console.error(error)); // Versuch das Audio abzuspielen und Fehler behandeln
+      audioRef.current.play().catch((error) => console.error(error));
     }
   }, [currentTrackIndex]);
 
