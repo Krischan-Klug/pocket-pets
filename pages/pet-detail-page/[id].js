@@ -98,7 +98,10 @@ export default function PetDetailPage({
     if (pet.isDead) return;
 
     const interval = setInterval(() => {
-      if (isInteracting.interaction === "sleep" && isInteracting.duration > 0) {
+      if (
+        isInteracting.interaction === "sleeping" &&
+        isInteracting.duration > 0
+      ) {
         onGameUpdate(id, true);
       } else {
         onGameUpdate(id, false);
@@ -167,7 +170,7 @@ export default function PetDetailPage({
 
   function handleSleep() {
     if (!currentPet.isDead) {
-      setIsInteracting({ interaction: "sleeping", duration: 5 });
+      setIsInteracting({ interaction: "sleeping", duration: 10 });
     }
   }
 
