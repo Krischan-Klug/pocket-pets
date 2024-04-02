@@ -1,5 +1,4 @@
 import GlobalStyle from "../styles";
-import { useState } from "react";
 import initialMyPets from "@/lib/initialPet";
 import defaultMyPet from "@/lib/myPetTemplate";
 import { useEffect } from "react";
