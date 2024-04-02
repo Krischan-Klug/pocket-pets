@@ -1,6 +1,7 @@
 import GlobalStyle from "../styles";
 import { useState } from "react";
 import initialMyPets from "@/lib/initialPet";
+import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
 
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useState(initialMyPets);
@@ -18,6 +19,7 @@ export default function App({ Component, pageProps }) {
   function handleDeletePet(id) {
     setMyPets(myPets.filter((myPet) => myPet.id !== id));
   }
+
 
   function handleGameUpdate(updateId, isSleep) {
     setMyPets(
@@ -60,6 +62,7 @@ export default function App({ Component, pageProps }) {
         onGameUpdate={handleGameUpdate}
         onSetIsDead={handleSetIsDead}
       />
+      <AudioInterface />
     </>
   );
 }
