@@ -3,8 +3,11 @@ import { useState } from "react";
 import initialMyPets from "@/lib/initialPet";
 import defaultMyPet from "@/lib/myPetTemplate";
 import { useEffect } from "react";
+import useLocalStorageState from "use-local-storage-state";
 export default function App({ Component, pageProps }) {
-  const [myPets, setMyPets] = useState(initialMyPets);
+  const [myPets, setMyPets] = useLocalStorageState("myPets", {
+    defaultValue: initialMyPets,
+  });
 
   useEffect(() => {
     function updatePetsWithNewKeys() {
@@ -18,8 +21,6 @@ export default function App({ Component, pageProps }) {
 
     updatePetsWithNewKeys();
   }, []);
-
-  console.log(myPets);
 
   function handleAddPet(newPet) {
     setMyPets([...myPets, newPet]);

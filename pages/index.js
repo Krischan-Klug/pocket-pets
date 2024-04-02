@@ -5,7 +5,6 @@ import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-
 const StyledPetCollectionHeader = styled.header`
   padding: 0px 30px;
   width: 100%;
