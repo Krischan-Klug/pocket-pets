@@ -29,19 +29,7 @@ export default function App({ Component, pageProps }) {
               hunger: Math.max(pet.hunger - 1, 0),
               happiness: Math.max(pet.happiness - 0.75, 0),
               energy: isSleep ? 100 : Math.max(pet.energy - 0.5, 0),
-            }
-          : pet
-      )
-    );
-  }
-
-  function handleSetIsDead(updateId) {
-    setMyPets(
-      myPets.map((pet) =>
-        pet.id === updateId
-          ? {
-              ...pet,
-              isDead: true,
+              isDead: pet.health > 10 ? false : true,
             }
           : pet
       )
@@ -58,7 +46,6 @@ export default function App({ Component, pageProps }) {
         onUpdatePet={handleUpdatePet}
         onDeletePet={handleDeletePet}
         onGameUpdate={handleGameUpdate}
-        onSetIsDead={handleSetIsDead}
       />
     </>
   );

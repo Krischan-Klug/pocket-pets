@@ -71,12 +71,7 @@ const StyledPetDetailPageFooter = styled.footer`
   z-index: 10;
 `;
 
-export default function PetDetailPage({
-  myPets,
-  onGameUpdate,
-  onSetIsDead,
-  onUpdatePet,
-}) {
+export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
   const [currentPet, setCurrentPet] = useState(null);
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
@@ -139,11 +134,6 @@ export default function PetDetailPage({
 
   const { name, type, image, health, hunger, happiness, energy, isDead } =
     currentPet;
-  if (health < 10) {
-    if (!isDead) {
-      onSetIsDead(id);
-    }
-  }
 
   function handleFeed(foodToGive) {
     if (!currentPet.isDead) {

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import StyledButton from "../StyledComponents/StyledButton";
 
 const ConfirmPopupOverlay = styled.div`
   position: fixed;
@@ -16,30 +17,18 @@ const ConfirmPopupOverlay = styled.div`
 `;
 
 const ConfirmPopupContent = styled.div`
-  background-color: white;
+  background-color: var(--background-color);
   padding: 20px;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: black;
+  color: var(--text-color);
   text-align: center;
 `;
 
-const ConfirmPopUpButton = styled.button`
-  padding: 8px 16px;
+const ConfirmPopUpButton = styled(StyledButton)`
   margin: 0 8px;
-  border: none;
-  border-radius: 4px;
-  background-color: ${({ red }) => (red ? "red" : "#007bff")};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: white;
+  background-color: ${({ red }) => (red ? "red" : "var(--accent-color)")};
   cursor: pointer;
-  transform: scale(1);
-  transition: 0.5s;
-
-  &:hover {
-    transform: scale(1.1);
-    transition: 0.5s;
-  }
 `;
 
 export default function ConfirmationPopup({

@@ -2,22 +2,26 @@ import PetCard from "@/components/PetCollection/PetCard";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import { useState } from "react";
 import styled from "styled-components";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import StyledButton from "@/components/StyledComponents/StyledButton";
 
+// const StyledPetCollectionHeader = styled.header`
+//   padding: 0px 30px;
+//   width: 100%;
+//   position: sticky;
+//   top: 0;
+//   z-index: 10;
+// `;
 
-const StyledPetCollectionHeader = styled.header`
-  padding: 0px 30px;
-  width: 100%;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-`;
+// const StyledPetCollectionWrapper = styled.main`
+//   display: flex;
+//   justify-content: center;
+//   width: 100vw;
+// `;
 
-const StyledPetCollectionWrapper = styled.main`
+const StyledButtonWrapper = styled.section`
   display: flex;
-  justify-content: center;
-  width: 100vw;
+  gap: 10px;
 `;
 
 const StyledPetCollection = styled.section`
@@ -54,20 +58,27 @@ export default function HomePage({ myPets, onDeletePet }) {
 
   return (
     <>
-      <StyledPetCollectionHeader>
+      <header>
         <h1>My Pets</h1>
+      </header>
+      <main>
+        <StyledButtonWrapper>
+          <StyledButton
+            onClick={() => {
+              router.push(`/create/`);
+            }}
+          >
+            Create Pet
+          </StyledButton>
 
-        <Link href="/create">Create Pet</Link>
-
-        <button
-          onClick={() => {
-            handleToggleDelete();
-          }}
-        >
-          Delete Pet
-        </button>
-      </StyledPetCollectionHeader>
-      <StyledPetCollectionWrapper>
+          <StyledButton
+            onClick={() => {
+              handleToggleDelete();
+            }}
+          >
+            Delete Pet
+          </StyledButton>
+        </StyledButtonWrapper>
         <StyledPetCollection>
           {myPets.map((myPet) => (
             <PetCard
@@ -78,7 +89,7 @@ export default function HomePage({ myPets, onDeletePet }) {
             />
           ))}
         </StyledPetCollection>
-      </StyledPetCollectionWrapper>
+      </main>
       {deleteMode && selectedPetId && (
         <ConfirmationPopup
           message={`Are you sure you want to delete the pet ${

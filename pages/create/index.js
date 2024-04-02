@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import pets from "@/lib/pet";
 import styled from "styled-components";
-import Link from "next/link";
+import StyledButton from "@/components/StyledComponents/StyledButton";
+import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 
 const StyledForm = styled.form`
   display: flex;
@@ -50,52 +51,58 @@ export default function Create({ onAddPet }) {
   };
 
   return (
-    <div>
-      <h1>Add a New Pet</h1>
-      <Link href="/">Back</Link>
-      <StyledForm onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={petData.name}
-          onChange={(event) =>
-            setPetData({ ...petData, name: event.target.value })
-          }
-          minLength={1}
-          maxLength={50}
-          required
-        />
-        <label htmlFor="type">Type</label>
-        <select
-          name="type"
-          id="type"
-          value={petData.type}
-          onChange={handleTypeChange}
-          required
-        >
-          <option value="" disabled>
-            Please select a pet type
-          </option>
-          {pets.map((pet) => (
-            <option key={pet.type} value={pet.type}>
-              {pet.type}
+    <>
+      <header>
+        <StyledLeftButton onClick={() => router.push("/")}>
+          Back
+        </StyledLeftButton>
+        <h1>Add a New Pet</h1>
+      </header>
+      <main>
+        <StyledForm onSubmit={handleSubmit}>
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={petData.name}
+            onChange={(event) =>
+              setPetData({ ...petData, name: event.target.value })
+            }
+            minLength={1}
+            maxLength={50}
+            required
+          />
+          <label htmlFor="type">Type</label>
+          <select
+            name="type"
+            id="type"
+            value={petData.type}
+            onChange={handleTypeChange}
+            required
+          >
+            <option value="" disabled>
+              Please select a pet type
             </option>
-          ))}
-        </select>
-        <input
-          type="hidden"
-          name="image"
-          id="image"
-          value={petData.image}
-          readOnly
-        />
-        <br />
-        <Image alt={petData.type} src={imagePath} width={100} height={100} />
-        <br />
-        <button type="submit">Create Pet</button>
-      </StyledForm>
-    </div>
+            {pets.map((pet) => (
+              <option key={pet.type} value={pet.type}>
+                {pet.type}
+              </option>
+            ))}
+          </select>
+          <input
+            type="hidden"
+            name="image"
+            id="image"
+            value={petData.image}
+            readOnly
+          />
+          <br />
+          <Image alt={petData.type} src={imagePath} width={100} height={100} />
+          <br />
+          <StyledButton type="submit">Create Pet</StyledButton>
+        </StyledForm>
+      </main>
+    </>
   );
 }
