@@ -5,7 +5,7 @@ import Image from "next/image";
 import pets from "@/lib/pet";
 import styled from "styled-components";
 import Link from "next/link";
-import sampleMyPet from "@/lib/sampleMyPet";
+import defaultMyPet from "@/lib/myPetTemplate";
 
 const StyledForm = styled.form`
   display: flex;
@@ -32,7 +32,7 @@ export default function Create({ onAddPet }) {
 
   function combinePetData() {
     const newPetData = {
-      ...sampleMyPet,
+      ...defaultMyPet,
       ...petData,
       id: uuidv4(),
     };
