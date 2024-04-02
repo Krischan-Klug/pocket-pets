@@ -194,7 +194,7 @@ export default function AudioInterface() {
                 alt={`volume ${volume === 0 ? `Off` : `Up`} Icon`}
                 width={20}
                 height={20}
-              ></Image>
+              />
               <AudioSlider
                 type="range"
                 min="0"
