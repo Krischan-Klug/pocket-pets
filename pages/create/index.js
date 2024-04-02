@@ -36,7 +36,6 @@ export default function Create({ onAddPet }) {
       ...petData,
       id: uuidv4(),
     };
-    console.log(newPetData);
     return newPetData;
   }
 

@@ -1,9 +1,25 @@
 import GlobalStyle from "../styles";
 import { useState } from "react";
 import initialMyPets from "@/lib/initialPet";
-
+import defaultMyPet from "@/lib/myPetTemplate";
+import { useEffect } from "react";
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useState(initialMyPets);
+
+  useEffect(() => {
+    function updatePetsWithNewKeys() {
+      setMyPets((prevPets) => {
+        return prevPets.map((pet) => {
+          const updatedPet = { ...defaultMyPet, ...pet };
+          return updatedPet;
+        });
+      });
+    }
+
+    updatePetsWithNewKeys();
+  }, []);
+
+  console.log(myPets);
 
   function handleAddPet(newPet) {
     setMyPets([...myPets, newPet]);
