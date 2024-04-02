@@ -11,6 +11,7 @@ import {
   InputField,
   Label,
 } from "@/components/StyledComponents/StyledInputField";
+import defaultMyPet from "@/lib/myPetTemplate";
 
 const StyledForm = styled.form`
   display: flex;
@@ -20,43 +21,28 @@ const StyledForm = styled.form`
 
 export default function Create({ onAddPet }) {
   const router = useRouter();
-  const [petData, setPetData] = useState({
-    name: "",
-    type: "owl",
-    image: "/assets/images/pets/book.png",
-  });
+
   const [petType, stePetType] = useState(0);
-
-  const [imagePath, setImagePath] = useState(petData.image);
-
-  const handleTypeChange = (event) => {
-    const selectedType = event.target.value;
-    const imagePath = `/assets/images/pets/${selectedType}.png`;
-    setPetData({ ...petData, type: selectedType, image: imagePath });
-    setImagePath(imagePath); // filled with local one!
-  };
-
-  function combinePetData() {
-    const newPetData = {
-      ...petData,
-      id: uuidv4(),
-      health: 100,
-      hunger: 100,
-      happiness: 100,
-      energy: 100,
-      isDead: false,
-    };
-    return newPetData;
-  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    onAddPet(combinePetData());
+    onAddPet({
+      ...defaultMyPet,
+      id: uuidv4(),
+      name: event.target.name.value,
+      image: `/assets/images/pets/${pets[petType].type}.png`,
+      type: pets[petType].type,
+    });
     router.push("/");
   };
 
   function handleNextPetType() {
+    stePetType((prevPetType) =>
+      prevPetType + 1 >= pets.length ? 0 : prevPetType + 1
+    );
+  }
+  function handlePreviousPetType() {
     stePetType((prevPetType) =>
       prevPetType + 1 >= pets.length ? 0 : prevPetType + 1
     );
@@ -79,10 +65,6 @@ export default function Create({ onAddPet }) {
               type="text"
               name="name"
               id="name"
-              value={petData.name}
-              onChange={(event) =>
-                setPetData({ ...petData, name: event.target.value })
-              }
               minLength={1}
               maxLength={50}
               required
@@ -92,33 +74,13 @@ export default function Create({ onAddPet }) {
             </InputLabel>
           </Label>
           <label htmlFor="type">Type</label>
-          <select
-            name="type"
-            id="type"
-            value={petData.type}
-            onChange={handleTypeChange}
-            required
-          >
-            <option value="" disabled>
-              Please select a pet type
-            </option>
-            {pets.map((pet) => (
-              <option key={pet.type} value={pet.type}>
-                {pet.type}
-              </option>
-            ))}
-          </select>
-          <input
-            type="hidden"
-            name="image"
-            id="image"
-            value={petData.image}
-            readOnly
-          />
+
           <br />
-          <button type="button">Privous</button>
+          <button type="button" onClick={handlePreviousPetType}>
+            Privous
+          </button>
           <Image
-            alt={petData.type}
+            alt={`${pets[petType].type}`}
             src={`/assets/images/pets/${pets[petType].type}.png`}
             width={100}
             height={100}
