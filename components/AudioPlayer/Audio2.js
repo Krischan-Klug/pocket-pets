@@ -1,20 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-
-import sound1 from "public/assets/sounds/musicfox_the_small_farm.mp3";
-import sound2 from "public/assets/sounds/musicfox_shopping_street.mp3";
-import sound3 from "public/assets/sounds/musicfox_old_news.mp3";
-
-const playlist = [
-  { title: "The Small Farm", url: sound1 },
-  { title: "Shopping Street", url: sound2 },
-  { title: "Old News", url: sound3 },
-];
+import playlist from "./playlist";
 
 const AudioPlayer = () => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef(null);
+  const [userInteraction, setUserInteraction] = useState(false);
+  const [volume, setVolume] = useState(0.1);
 
   useEffect(() => {
     if (isPlaying) {
@@ -26,16 +19,22 @@ const AudioPlayer = () => {
 
   useEffect(() => {
     audioRef.current.src = playlist[currentTrackIndex].url;
-    audioRef.current.play().catch((error) => console.error(error));
-    setIsPlaying(true);
+    audioRef.current.load(); // Laden der Audiodatei
+    audioRef.current.volume = volume; // Setzen der Anfangslautstärke
+    if (isPlaying && userInteraction) {
+      audioRef.current.play().catch((error) => console.error(error)); // Versuch das Audio abzuspielen und Fehler behandeln
+    }
   }, [currentTrackIndex]);
 
   const togglePlayPause = () => {
+    if (!userInteraction) setUserInteraction(true);
     setIsPlaying(!isPlaying);
   };
 
   const handleVolumeChange = (e) => {
-    audioRef.current.volume = e.target.value;
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    audioRef.current.volume = newVolume;
   };
 
   const handleTimeUpdate = () => {

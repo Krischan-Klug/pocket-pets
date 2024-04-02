@@ -1,27 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled, { keyframes } from "styled-components";
+import playlist from "./playlist";
 
 import playIcon from "/public/assets/icons/round_play_arrow_black.png";
 import pauseIcon from "/public/assets/icons/round_pause_black.png";
 import nextIcon from "/public/assets/icons/round_skip_next_black.png";
 import previousIcon from "/public/assets/icons/round_skip_previous_black.png";
 import musicIcon from "/public/assets/icons/round_audiotrack_black.png";
+import volumeUpIcon from "/public/assets/icons/round_volume_up_black.png";
+import volumeOffIcon from "/public/assets/icons/round_volume_off_black.png";
+import scheduleIcon from "/public/assets/icons/round_schedule_black.png";
 import Image from "next/image";
-
-import useSound from "use-sound";
-
-import sound1 from "public/assets/sounds/musicfox_the_small_farm.mp3";
-import sound2 from "public/assets/sounds/musicfox_shopping_street.mp3";
-import sound3 from "public/assets/sounds/musicfox_old_news.mp3";
-import AudioPlayer from "./Audio2";
-
-const soundTest = [sound1, sound2, sound3];
-
-const sounds = {
-  sound1: { title: "The Small Farm", file: sound1 },
-  sound2: { title: "shopping Street", file: sound2 },
-  sound3: { title: "Old News", file: sound3 },
-};
 
 const ActivatingInterfaceButton = styled.div`
   position: fixed;
@@ -77,7 +66,7 @@ const AudioInterfaceButton = styled.button`
   }
 `;
 
-const AudioVolumeSlider = styled.input`
+const AudioSlider = styled.input`
   width: 100%;
   -webkit-appearance: none;
   appearance: none;
@@ -103,6 +92,12 @@ const AudioVolumeSlider = styled.input`
   }
 `;
 
+const ImagesliderWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-content: center;
+`;
+
 const MusicTitel = styled.p`
   margin: 0;
   padding: 0;
@@ -112,86 +107,77 @@ const MusicTitel = styled.p`
 
 export default function AudioInterface() {
   const [hovered, setHovered] = useState(false);
-  const [currentSound, setCurrentSound] = useState("sound1");
-  const [playing, setPlaying] = useState(false);
-  const [currentTitle, setCurrentTitle] = useState(sounds[currentSound].title);
-  const [volume, setVolume] = useState(0.05);
-  //
-  //
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const audioRef = useRef(null);
+  const [userInteraction, setUserInteraction] = useState(false);
+  const [volume, setVolume] = useState(0.1);
 
-  const [play, { stop }] = useSound(soundTest, {
-    interrupt: true,
-    volume,
-    onload: () => {
-      //setPlaying(true);
-      //handlePlayPause();
-      //console.log("ONLOAD");
-      //play();
-    },
-    //onend: () => handleNextAuto(),
-    onPlayError: () => {
-      console.error("Error occured!");
-    },
-  });
+  useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    audioRef.current.src = playlist[currentTrackIndex].url;
+    audioRef.current.load(); // Laden der Audiodatei
+    audioRef.current.volume = volume; // Setzen der Anfangslautstärke
+    if (isPlaying && userInteraction) {
+      audioRef.current.play().catch((error) => console.error(error)); // Versuch das Audio abzuspielen und Fehler behandeln
+    }
+  }, [currentTrackIndex]);
 
   function handlePlayPause() {
-    if (playing) {
-      stop();
-      setPlaying(false);
-    } else {
-      play();
-      setPlaying(true);
-    }
+    if (!userInteraction) setUserInteraction(true);
+    setIsPlaying(!isPlaying);
   }
 
   function handlePrevious() {
-    stop();
-    setPlaying(false);
-    const soundKeys = Object.keys(sounds);
-    const currentIndex = soundKeys.indexOf(currentSound);
-    const previousIndex =
-      (currentIndex - 1 + soundKeys.length) % soundKeys.length;
-    console.log("previousIndex: ", previousIndex);
-    setCurrentSound(soundKeys[previousIndex]);
-    setCurrentTitle(sounds[soundKeys[previousIndex]].title);
-    // if (playing) {
-    //  play();
-    //}
+    setCurrentTrackIndex((prevIndex) => {
+      if (prevIndex > 0) {
+        return prevIndex - 1;
+      } else {
+        return playlist.length - 1;
+      }
+    });
   }
 
   function handleNext() {
-    console.log("Handle Next");
-    play({ id: 2 });
-
-    /*stop();
-    setPlaying(false);
-    const soundKeys = Object.keys(sounds);
-    const currentIndex = soundKeys.indexOf(currentSound);
-    const nextIndex = (currentIndex + 1) % soundKeys.length;
-    setCurrentSound(soundKeys[nextIndex]);
-    setCurrentTitle(sounds[soundKeys[nextIndex]].title);
-    if (playing) {
-      play();
-    }*/
-  }
-  function handleNextAuto() {
-    //stop();
-    const soundKeys = Object.keys(sounds);
-    const currentIndex = soundKeys.indexOf(currentSound);
-    const nextIndex = (currentIndex + 1) % soundKeys.length;
-    setCurrentSound(soundKeys[nextIndex]);
-    setCurrentTitle(sounds[soundKeys[nextIndex]].title);
-    if (playing) {
-      play();
-    }
+    setCurrentTrackIndex((prevIndex) => {
+      if (prevIndex < playlist.length - 1) {
+        return prevIndex + 1;
+      } else {
+        return 0;
+      }
+    });
   }
 
   function handleSliderChange(event) {
-    setVolume(event.target.value);
+    const newVolume = parseFloat(event.target.value);
+    setVolume(newVolume);
+    audioRef.current.volume = newVolume;
   }
+
+  const handleTimeUpdate = () => {
+    setCurrentTime(audioRef.current.currentTime);
+  };
+
+  const handleTimeSeek = (event) => {
+    audioRef.current.currentTime = event.target.value;
+    setCurrentTime(audioRef.current.currentTime);
+  };
 
   return (
     <>
+      <audio
+        ref={audioRef}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleNext} // Automatically play the next track when current one ends
+      ></audio>
       <ActivatingInterfaceButton
         onMouseEnter={() => setHovered(true)}
         onTouchStart={() => setHovered(true)}
@@ -201,14 +187,22 @@ export default function AudioInterface() {
       {hovered && (
         <AudioInterfaceWraper onMouseLeave={() => setHovered(false)}>
           <AudioInterfaceContainer>
-            <AudioVolumeSlider
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={volume}
-              onChange={handleSliderChange}
-            />
+            <ImagesliderWrapper>
+              <Image
+                src={volume === 0 ? volumeOffIcon : volumeUpIcon}
+                alt={`volume ${volume === 0 ? `Off` : `Up`} Icon`}
+                width={20}
+                height={20}
+              ></Image>
+              <AudioSlider
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={volume}
+                onChange={handleSliderChange}
+              />
+            </ImagesliderWrapper>
             <div>
               <AudioInterfaceButton onClick={handlePrevious}>
                 <Image
@@ -220,8 +214,8 @@ export default function AudioInterface() {
               </AudioInterfaceButton>
               <AudioInterfaceButton onClick={handlePlayPause}>
                 <Image
-                  src={playing ? pauseIcon : playIcon}
-                  alt={`${playing ? "Pause" : "Play"} Icon`}
+                  src={isPlaying ? pauseIcon : playIcon}
+                  alt={`${isPlaying ? "Pause" : "Play"} Icon`}
                   width={30}
                   height={30}
                 ></Image>
@@ -235,7 +229,27 @@ export default function AudioInterface() {
                 ></Image>
               </AudioInterfaceButton>
             </div>
-            <MusicTitel>{currentTitle}</MusicTitel>
+            <ImagesliderWrapper>
+              <Image
+                src={scheduleIcon}
+                alt="schedule Icon"
+                width={20}
+                height={20}
+              ></Image>
+              <AudioSlider
+                type="range"
+                min="0"
+                max={
+                  audioRef.current && !isNaN(audioRef.current.duration)
+                    ? audioRef.current.duration
+                    : 0
+                }
+                value={currentTime}
+                onChange={handleTimeSeek}
+              />
+            </ImagesliderWrapper>
+
+            <MusicTitel>{playlist[currentTrackIndex].title}</MusicTitel>
           </AudioInterfaceContainer>
         </AudioInterfaceWraper>
       )}
