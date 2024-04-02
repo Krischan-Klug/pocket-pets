@@ -41,6 +41,7 @@ export default createGlobalStyle`
   }
 
   h1 {
-  text-align: center;
+    text-align: center;
+    margin: 0;
   }
 `;

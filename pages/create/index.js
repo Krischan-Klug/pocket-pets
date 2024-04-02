@@ -22,9 +22,10 @@ export default function Create({ onAddPet }) {
   const router = useRouter();
   const [petData, setPetData] = useState({
     name: "",
-    type: "",
+    type: "owl",
     image: "/assets/images/pets/book.png",
   });
+  const [petType, stePetType] = useState(0);
 
   const [imagePath, setImagePath] = useState(petData.image);
 
@@ -55,6 +56,12 @@ export default function Create({ onAddPet }) {
     router.push("/");
   };
 
+  function handleNextPetType() {
+    stePetType((prevPetType) =>
+      prevPetType + 1 >= pets.length ? 0 : prevPetType + 1
+    );
+  }
+
   return (
     <>
       <header>
@@ -65,19 +72,25 @@ export default function Create({ onAddPet }) {
       </header>
       <main>
         <StyledForm onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={petData.name}
-            onChange={(event) =>
-              setPetData({ ...petData, name: event.target.value })
-            }
-            minLength={1}
-            maxLength={50}
-            required
-          />
+          <Label className="input">
+            <InputField
+              className="inputField"
+              placeholder=" "
+              type="text"
+              name="name"
+              id="name"
+              value={petData.name}
+              onChange={(event) =>
+                setPetData({ ...petData, name: event.target.value })
+              }
+              minLength={1}
+              maxLength={50}
+              required
+            />
+            <InputLabel className="inputLabel" htmlFor="name">
+              Name
+            </InputLabel>
+          </Label>
           <label htmlFor="type">Type</label>
           <select
             name="type"
@@ -103,7 +116,16 @@ export default function Create({ onAddPet }) {
             readOnly
           />
           <br />
-          <Image alt={petData.type} src={imagePath} width={100} height={100} />
+          <button type="button">Privous</button>
+          <Image
+            alt={petData.type}
+            src={`/assets/images/pets/${pets[petType].type}.png`}
+            width={100}
+            height={100}
+          />
+          <button type="button" onClick={handleNextPetType}>
+            Next
+          </button>
           <br />
           <StyledButton type="submit">Create Pet</StyledButton>
         </StyledForm>

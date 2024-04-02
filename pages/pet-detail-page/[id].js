@@ -6,6 +6,7 @@ import styled, { keyframes } from "styled-components";
 import StatusBar from "@/components/DetailPage/StatusBar";
 import { useEffect } from "react";
 import { useState } from "react";
+import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
@@ -16,10 +17,6 @@ import graveImage from "/public/assets/images/grave.png";
 const StyledPetDetailPageHeader = styled.header`
   padding: 20px;
   width: 100%;
-`;
-
-const StyledEditButton = styled.button`
-  position: left;
 `;
 
 const StyledPetDetailPageMain = styled.main`
@@ -40,16 +37,19 @@ const StyledPetImage = styled(Image)`
 const sleepingAnimation = keyframes`
 0% {transform: translateY(0);}
 50% {transform: translateY(-10px);}
-100% {transform: translateY(0);}`;
+100% {transform: translateY(0);}
+`;
 
 const toyAnimation = keyframes`
 0% {transform: translateY(10px) translateX(-10px) scale(1);}
 50% {transform: translateY(-10px) translateX(10px) scale(0.5);}
-100% {transform: translateY(10px) translateX(-10px) scale(1);}`;
+100% {transform: translateY(10px) translateX(-10px) scale(1);}
+`;
 
 const foodAnimation = keyframes`
 0% {opacity: 1; transform: translateX(0);}
-100% {opacity: 0; transform: translateX(100);}`;
+100% {opacity: 0; transform: translateX(100);}
+`;
 
 const StyledInteractionImage = styled(Image)`
   position: absolute;
@@ -63,12 +63,35 @@ const StyledInteractionImage = styled(Image)`
     1s ease-in-out infinite;
 `;
 
-const StyledPetDetailPageFooter = styled.footer`
-  padding: 0 30px;
+const SyledInteractionButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+`;
+
+const StyledGameArea = styled.section`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+`;
+
+const StatusBarWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  position: sticky;
-  bottom: 20;
-  z-index: 10;
+  align-items: center;
+
+  & > :first-child {
+    margin-bottom: 15px;
+  }
+`;
+
+const StyledDiv = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
@@ -167,63 +190,89 @@ export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
   return (
     <>
       <StyledPetDetailPageHeader>
-        <StyledEditButton onClick={() => router.push(`/edit/${id}`)}>
-          <Image src={editIcon} alt="edit button" height={20} width={20} />
-        </StyledEditButton>
+        <StyledLeftButton
+          onClick={() => {
+            router.push("/");
+          }}
+        >
+          Back
+        </StyledLeftButton>
+
+        <StyledDiv>
+          <h1 onClick={() => router.push(`/edit/${id}`)}>{name}</h1>
+          <Image
+            src={editIcon}
+            alt="edit button"
+            height={20}
+            width={20}
+            onClick={() => router.push(`/edit/${id}`)}
+          />
+        </StyledDiv>
       </StyledPetDetailPageHeader>
       <StyledPetDetailPageMain>
-        <h1>{name}</h1>
-        <StatusBar text={"Health"} value={currentPet.health} />
-        <StatusBar text={"Hunger"} value={currentPet.hunger} />
-        <StatusBar text={"Happiness"} value={currentPet.happiness} />
-        <StatusBar text={"Energy"} value={currentPet.energy} />
-
-        <button
-          onClick={() => handleFeed(10)}
-          disabled={isInteracting.duration > 0}
-        >
-          <Image alt="Hunger" src={hungerImage} width={50} height={50}></Image>
-        </button>
-        <button
-          onClick={() => handlePlay(10)}
-          disabled={isInteracting.duration > 0}
-        >
-          <Image
-            alt="Happiness"
-            src={happinessImage}
-            width={50}
-            height={50}
-          ></Image>
-        </button>
-        <button
-          onClick={() => handleSleep(100)}
-          disabled={isInteracting.duration > 0}
-        >
-          <Image alt="Energy" src={energyImage} width={50} height={50}></Image>
-        </button>
-
-        <StyledPetContainer>
-          {isInteracting.duration > 0 && (
-            <StyledInteractionImage
-              src={`/assets/images/interaction/${isInteracting.interaction}.png`}
-              alt="interaction icon"
-              height={50}
-              width={50}
-              animationStyle={isInteracting.interaction}
+        <StatusBarWrapper>
+          <StatusBar text={"Health"} value={currentPet.health} />
+          <StatusBar text={"Hunger"} value={currentPet.hunger} />
+          <StatusBar text={"Happiness"} value={currentPet.happiness} />
+          <StatusBar text={"Energy"} value={currentPet.energy} />
+        </StatusBarWrapper>
+        <StyledGameArea>
+          <SyledInteractionButtonWrapper>
+            <button
+              onClick={() => handleFeed(10)}
+              disabled={isInteracting.duration > 0}
+            >
+              <Image
+                alt="Hunger"
+                src={hungerImage}
+                width={50}
+                height={50}
+              ></Image>
+            </button>
+            <button
+              onClick={() => handlePlay(10)}
+              disabled={isInteracting.duration > 0}
+            >
+              <Image
+                alt="Happiness"
+                src={happinessImage}
+                width={50}
+                height={50}
+              ></Image>
+            </button>
+          </SyledInteractionButtonWrapper>
+          <StyledPetContainer>
+            {isInteracting.duration > 0 && (
+              <StyledInteractionImage
+                src={`/assets/images/interaction/${isInteracting.interaction}.png`}
+                alt="interaction icon"
+                height={50}
+                width={50}
+                animationStyle={isInteracting.interaction}
+              />
+            )}
+            <StyledPetImage
+              src={isDead ? graveImage : image}
+              alt={type}
+              height={150}
+              width={150}
             />
-          )}
-          <StyledPetImage
-            src={isDead ? graveImage : image}
-            alt={type}
-            height={150}
-            width={150}
-          />
-        </StyledPetContainer>
+          </StyledPetContainer>
+          <SyledInteractionButtonWrapper>
+            <button
+              onClick={() => handleSleep(100)}
+              disabled={isInteracting.duration > 0}
+            >
+              <Image
+                alt="Energy"
+                src={energyImage}
+                width={50}
+                height={50}
+              ></Image>
+            </button>
+          </SyledInteractionButtonWrapper>
+        </StyledGameArea>
       </StyledPetDetailPageMain>
-
-      <StyledPetDetailPageFooter>
-        <Link href="/">← Back to pets collection</Link>
-      </StyledPetDetailPageFooter>
     </>
   );
 }

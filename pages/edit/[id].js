@@ -86,7 +86,7 @@ export default function EditPet({ myPets, onUpdatePet }) {
               placeholder=" "
             />
             <InputLabel className="inputLabel" htmlFor="name">
-              Name:
+              Name
             </InputLabel>
           </Label>
 
