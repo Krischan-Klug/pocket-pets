@@ -61,7 +61,7 @@ export default function App({ Component, pageProps }) {
         onGameUpdate={handleGameUpdate}
         onSetIsDead={handleSetIsDead}
       />
-      <AudioInterface></AudioInterface>
+      <AudioInterface />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled, { keyframes } from "styled-components";
 import playlist from "./playlist";
 
@@ -178,7 +178,7 @@ export default function AudioInterface() {
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleNext} // Automatically play the next track when current one ends
-      ></audio>
+      />
       <ActivatingInterfaceButton
         onMouseEnter={() => setHovered(true)}
         onTouchStart={() => setHovered(true)}
@@ -211,7 +211,7 @@ export default function AudioInterface() {
                   alt="Previous Icon"
                   width={30}
                   height={30}
-                ></Image>
+                />
               </AudioInterfaceButton>
               <AudioInterfaceButton onClick={handlePlayPause}>
                 <Image
@@ -219,7 +219,7 @@ export default function AudioInterface() {
                   alt={`${isPlaying ? "Pause" : "Play"} Icon`}
                   width={30}
                   height={30}
-                ></Image>
+                />
               </AudioInterfaceButton>
               <AudioInterfaceButton onClick={handleNext}>
                 <Image
