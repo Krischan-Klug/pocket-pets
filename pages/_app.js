@@ -80,6 +80,9 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
+      <button onClick={() => setUserStats({ ...setUserStats, money: 1000 })}>
+        Cheat
+      </button>
       <Component
         {...pageProps}
         myPets={myPets}

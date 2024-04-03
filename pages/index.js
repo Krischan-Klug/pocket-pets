@@ -4,7 +4,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
-import Image from "next/image";
 
 import MoneyImage from "@/components/util/MoneyImage";
 

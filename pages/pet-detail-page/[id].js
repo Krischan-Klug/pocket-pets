@@ -121,7 +121,12 @@ export default function PetDetailPage({
     duration: 0,
     interaction: "",
   });
-  const [reviveDialog, setReviveDialog] = useState(false);
+  const [confirmationPopUpContent, setConfirmationPopUpContent] = useState({
+    message: "",
+    onConfirm: null,
+    onCancel: null,
+    show: false,
+  });
 
   const router = useRouter();
   const { id } = router.query;
@@ -207,6 +212,19 @@ export default function PetDetailPage({
     if (!currentPet.isDead) {
       setIsInteracting({ interaction: "sleeping", duration: 10 });
     }
+  }
+
+  function handleConfirm(value) {
+    onSubtracMoney(value);
+    setConfirmationPopUpContent({ ...confirmationPopUpContent, show: false });
+    onUpdatePet({
+      ...currentPet,
+      isDead: false,
+      hunger: 50,
+      happiness: 25,
+      energy: 50,
+      health: 42,
+    });
   }
 
   return (
@@ -295,17 +313,45 @@ export default function PetDetailPage({
           </SyledInteractionButtonWrapper>
         </StyledGameArea>
         {isDead && (
-          <StyledButton onClick={() => setReviveDialog(true)}>
+          <StyledButton
+            onClick={() => {
+              if (userStats.money > 200) {
+                setConfirmationPopUpContent({
+                  ...confirmationPopUpContent,
+                  show: true,
+                  message: `Are you sure you want to revive ${name}? `,
+                  onConfirm: () => handleConfirm(200),
+                  onCancel: () =>
+                    setConfirmationPopUpContent({
+                      ...confirmationPopUpContent,
+                      show: false,
+                    }),
+                });
+              } else {
+                setConfirmationPopUpContent({
+                  ...confirmationPopUpContent,
+                  show: true,
+                  message: `You don't have enough money for this. `,
+                  onConfirm: () =>
+                    setConfirmationPopUpContent({
+                      ...confirmationPopUpContent,
+                      show: false,
+                    }),
+                  onCancel: null,
+                });
+              }
+            }}
+          >
             Revive {name} costs
             <MoneyColored cost={200} money={userStats.money} /> <MoneyImage />
           </StyledButton>
         )}
       </StyledPetDetailPageMain>
-      {reviveDialog && (
+      {confirmationPopUpContent.show && (
         <ConfirmationPopup
-          message={`Are you sure you want to revive ${name}? `}
-          onConfirm={null}
-          onCancel={() => setReviveDialog(false)}
+          message={confirmationPopUpContent.message}
+          onConfirm={confirmationPopUpContent.onConfirm}
+          onCancel={confirmationPopUpContent.onCancel}
         />
       )}
     </>

@@ -8,7 +8,7 @@ const StyledMoneyColor = styled.p`
 
 export default function MoneyColored({ cost, money }) {
   return (
-    <StyledMoneyColor red={money <= cost ? true : false}>
+    <StyledMoneyColor red={money < cost ? true : false}>
       {cost}
     </StyledMoneyColor>
   );

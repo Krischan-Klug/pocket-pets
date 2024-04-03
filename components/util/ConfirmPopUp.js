@@ -28,7 +28,7 @@ const ConfirmPopupContent = styled.div`
 
 const ConfirmPopUpButton = styled(StyledButton)`
   margin: 0 8px;
-  background-color: ${({ red }) => (red ? "red" : "var(--accent-color)")};
+  background-color: ${({ $red }) => $red && "red"};
   cursor: pointer;
 `;
 
@@ -49,12 +49,16 @@ export default function ConfirmationPopup({
       <ConfirmPopupContent>
         <p>{message}</p>
         <ConfirmButtonWrapper>
-          <ConfirmPopUpButton onClick={onConfirm}>
-            {confirmText ? confirmText : "Confirm"}
-          </ConfirmPopUpButton>
-          <ConfirmPopUpButton red onClick={onCancel}>
-            {cancelText ? cancelText : "Cancel"}
-          </ConfirmPopUpButton>
+          {onConfirm != null && (
+            <ConfirmPopUpButton onClick={onConfirm}>
+              {confirmText ? confirmText : "Confirm"}
+            </ConfirmPopUpButton>
+          )}
+          {onCancel != null && (
+            <ConfirmPopUpButton $red onClick={onCancel}>
+              {cancelText ? cancelText : "Cancel"}
+            </ConfirmPopUpButton>
+          )}
         </ConfirmButtonWrapper>
       </ConfirmPopupContent>
     </ConfirmPopupOverlay>
