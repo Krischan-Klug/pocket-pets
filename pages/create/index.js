@@ -16,6 +16,7 @@ import defaultMyPet from "@/lib/myPetTemplate";
 import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
 import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
 
+
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -41,8 +42,8 @@ const SytledTypeChangeButton = styled(Image)`
 
 export default function Create({ onAddPet }) {
   const router = useRouter();
-
   const [petType, setPetType] = useState(0);
+
 
   const handleSubmit = (event) => {
     event.preventDefault();

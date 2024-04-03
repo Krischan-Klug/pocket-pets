@@ -38,7 +38,7 @@ const StyledStatusBar = styled.p`
 export default function StatusBar({ text, value }) {
   return (
     <StyledStatusBarContainer>
-      <StyledStatusBar $value={value}>{text}</StyledStatusBar>
+      <StyledStatusBar $value={Math.floor(value)}>{text}</StyledStatusBar>
     </StyledStatusBarContainer>
   );
 }

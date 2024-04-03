@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 
+
 const StyledPetCollectionHeader = styled.header`
   height: 120px;
   display: flex;
