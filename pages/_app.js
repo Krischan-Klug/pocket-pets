@@ -3,6 +3,8 @@ import initialMyPets from "@/lib/initialPet";
 import defaultMyPet from "@/lib/myPetTemplate";
 import { useEffect } from "react";
 import useLocalStorageState from "use-local-storage-state";
+import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
+
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useLocalStorageState("myPets", {
     defaultValue: initialMyPets,
@@ -35,6 +37,7 @@ export default function App({ Component, pageProps }) {
   function handleDeletePet(id) {
     setMyPets(myPets.filter((myPet) => myPet.id !== id));
   }
+
 
   function handleGameUpdate(updateId, isSleep) {
     setMyPets(
@@ -77,6 +80,7 @@ export default function App({ Component, pageProps }) {
         onGameUpdate={handleGameUpdate}
         onSetIsDead={handleSetIsDead}
       />
+      <AudioInterface />
     </>
   );
 }
