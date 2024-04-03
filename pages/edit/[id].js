@@ -81,7 +81,7 @@ export default function EditPet({ myPets, onUpdatePet }) {
               name="name"
               defaultValue={name}
               minLength={1}
-              maxLength={50}
+              maxLength={15}
               required
               placeholder=" "
             />

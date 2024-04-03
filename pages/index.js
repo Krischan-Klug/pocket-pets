@@ -5,19 +5,13 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 
-// const StyledPetCollectionHeader = styled.header`
-//   padding: 0px 30px;
-//   width: 100%;
-//   position: sticky;
-//   top: 0;
-//   z-index: 10;
-// `;
-
-// const StyledPetCollectionWrapper = styled.main`
-//   display: flex;
-//   justify-content: center;
-//   width: 100vw;
-// `;
+const StyledPetCollectionHeader = styled.header`
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
 
 const StyledButtonWrapper = styled.section`
   display: flex;
@@ -31,6 +25,8 @@ const StyledPetCollection = styled.section`
   gap: 10px;
   padding: 20px 0px;
   width: 350px;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
 `;
 
 export default function HomePage({ myPets, onDeletePet }) {
@@ -58,10 +54,8 @@ export default function HomePage({ myPets, onDeletePet }) {
 
   return (
     <>
-      <header>
+      <StyledPetCollectionHeader>
         <h1>My Pets</h1>
-      </header>
-      <main>
         <StyledButtonWrapper>
           <StyledButton
             onClick={() => {
@@ -79,6 +73,8 @@ export default function HomePage({ myPets, onDeletePet }) {
             Delete Pet
           </StyledButton>
         </StyledButtonWrapper>
+      </StyledPetCollectionHeader>
+      <main>
         <StyledPetCollection>
           {myPets.map((myPet) => (
             <PetCard

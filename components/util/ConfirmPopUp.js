@@ -18,7 +18,8 @@ const ConfirmPopupOverlay = styled.div`
 
 const ConfirmPopupContent = styled.div`
   background-color: var(--background-color);
-  padding: 20px;
+  padding: 15px;
+  max-width: 90vw;
   border-radius: var(--border-radius);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: var(--text-color);

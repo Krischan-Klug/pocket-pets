@@ -20,11 +20,7 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-weight: bold;
-
-  & > :nth-child(1) + :nth-child(2) {
-    margin-top: 25px;
-  }
+  gap: 10px;
 `;
 
 const PetSelectionSection = styled.section`
@@ -46,7 +42,7 @@ const SytledTypeChangeButton = styled(Image)`
 export default function Create({ onAddPet }) {
   const router = useRouter();
 
-  const [petType, stePetType] = useState(0);
+  const [petType, setPetType] = useState(0);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -62,13 +58,13 @@ export default function Create({ onAddPet }) {
   };
 
   function handleNextPetType() {
-    stePetType((prevPetType) =>
+    setPetType((prevPetType) =>
       prevPetType + 1 >= pets.length ? 0 : prevPetType + 1
     );
   }
   function handlePreviousPetType() {
-    stePetType((prevPetType) =>
-      prevPetType + 1 >= pets.length ? 0 : prevPetType + 1
+    setPetType((prevPetType) =>
+      prevPetType - 1 < 0 ? pets.length - 1 : prevPetType - 1
     );
   }
 
@@ -90,14 +86,13 @@ export default function Create({ onAddPet }) {
               name="name"
               id="name"
               minLength={1}
-              maxLength={50}
+              maxLength={15}
               required
             />
             <InputLabel className="inputLabel" htmlFor="name">
               Name
             </InputLabel>
           </Label>
-          <label htmlFor="type">Type</label>
 
           <br />
           <PetSelectionSection>
