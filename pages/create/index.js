@@ -13,10 +13,34 @@ import {
 } from "@/components/StyledComponents/StyledInputField";
 import defaultMyPet from "@/lib/myPetTemplate";
 
+import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
+import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
+
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-weight: bold;
+
+  & > :nth-child(1) + :nth-child(2) {
+    margin-top: 25px;
+  }
+`;
+
+const PetSelectionSection = styled.section`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+`;
+const SytledTypeChangeButton = styled(Image)`
+  transform: scale(1);
+  transition: 0.5s;
+
+  &:hover {
+    transform: scale(1.3);
+    transition: 0.5s;
+  }
 `;
 
 export default function Create({ onAddPet }) {
@@ -76,18 +100,28 @@ export default function Create({ onAddPet }) {
           <label htmlFor="type">Type</label>
 
           <br />
-          <button type="button" onClick={handlePreviousPetType}>
-            Privous
-          </button>
-          <Image
-            alt={`${pets[petType].type}`}
-            src={`/assets/images/pets/${pets[petType].type}.png`}
-            width={100}
-            height={100}
-          />
-          <button type="button" onClick={handleNextPetType}>
-            Next
-          </button>
+          <PetSelectionSection>
+            <SytledTypeChangeButton
+              onClick={handlePreviousPetType}
+              src={arrowLeft}
+              alt="Privous Pet Button"
+              width={50}
+              height={50}
+            />
+            <Image
+              alt={`${pets[petType].type}`}
+              src={`/assets/images/pets/${pets[petType].type}.png`}
+              width={180}
+              height={180}
+            />
+            <SytledTypeChangeButton
+              onClick={handleNextPetType}
+              src={arrowRight}
+              alt="Privous Pet Button"
+              width={50}
+              height={50}
+            />
+          </PetSelectionSection>
           <br />
           <StyledButton type="submit">Create Pet</StyledButton>
         </StyledForm>
