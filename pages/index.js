@@ -22,11 +22,16 @@ const StyledPetCollection = styled.section`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-content: flex-start;
   gap: 10px;
   padding: 20px 0px;
-  width: 350px;
+  width: 95vw;
   height: calc(100vh - 120px);
   overflow-y: auto;
+  @media (min-width: 400px) {
+    max-width: 700px;
+    padding: 20px;
+  }
 `;
 
 export default function HomePage({ myPets, onDeletePet }) {
