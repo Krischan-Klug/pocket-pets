@@ -9,6 +9,8 @@ import { useState } from "react";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import MoneyImage from "@/components/util/MoneyImage";
+import MoneyColored from "@/components/util/MoneyColored";
+import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
@@ -119,6 +121,7 @@ export default function PetDetailPage({
     duration: 0,
     interaction: "",
   });
+  const [reviveDialog, setReviveDialog] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -291,10 +294,20 @@ export default function PetDetailPage({
             </button>
           </SyledInteractionButtonWrapper>
         </StyledGameArea>
-        <StyledButton>
-          Revive {name} costs 200 <MoneyImage />
-        </StyledButton>
+        {isDead && (
+          <StyledButton onClick={() => setReviveDialog(true)}>
+            Revive {name} costs
+            <MoneyColored cost={200} money={userStats.money} /> <MoneyImage />
+          </StyledButton>
+        )}
       </StyledPetDetailPageMain>
+      {reviveDialog && (
+        <ConfirmationPopup
+          message={`Are you sure you want to revive ${name}? `}
+          onConfirm={null}
+          onCancel={() => setReviveDialog(false)}
+        />
+      )}
     </>
   );
 }

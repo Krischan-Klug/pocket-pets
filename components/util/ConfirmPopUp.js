@@ -32,6 +32,11 @@ const ConfirmPopUpButton = styled(StyledButton)`
   cursor: pointer;
 `;
 
+const ConfirmButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 export default function ConfirmationPopup({
   message,
   onConfirm,
@@ -43,12 +48,14 @@ export default function ConfirmationPopup({
     <ConfirmPopupOverlay>
       <ConfirmPopupContent>
         <p>{message}</p>
-        <ConfirmPopUpButton onClick={onConfirm}>
-          {confirmText ? confirmText : "Confirm"}
-        </ConfirmPopUpButton>
-        <ConfirmPopUpButton red onClick={onCancel}>
-          {cancelText ? cancelText : "Cancel"}
-        </ConfirmPopUpButton>
+        <ConfirmButtonWrapper>
+          <ConfirmPopUpButton onClick={onConfirm}>
+            {confirmText ? confirmText : "Confirm"}
+          </ConfirmPopUpButton>
+          <ConfirmPopUpButton red onClick={onCancel}>
+            {cancelText ? cancelText : "Cancel"}
+          </ConfirmPopUpButton>
+        </ConfirmButtonWrapper>
       </ConfirmPopupContent>
     </ConfirmPopupOverlay>
   );
