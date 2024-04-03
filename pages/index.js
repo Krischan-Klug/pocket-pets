@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import Image from "next/image";
 
-import moneyImage from "/public/assets/images/dollar.png";
+import MoneyImage from "@/components/util/MoneyImage";
 
 const StyledPetCollectionHeader = styled.header`
   height: 120px;
@@ -93,12 +93,7 @@ export default function HomePage({ myPets, onDeletePet, userStats }) {
           </StyledButton>
         </StyledButtonWrapper>
         <MoneyCounter>
-          <Image
-            src={moneyImage}
-            alt="Money Image"
-            width={20}
-            height={20}
-          ></Image>
+          <MoneyImage />
           {userStats.money}
         </MoneyCounter>
       </StyledPetCollectionHeader>

@@ -7,6 +7,8 @@ import StatusBar from "@/components/DetailPage/StatusBar";
 import { useEffect } from "react";
 import { useState } from "react";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
+import StyledButton from "@/components/StyledComponents/StyledButton";
+import MoneyImage from "@/components/util/MoneyImage";
 
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
@@ -105,7 +107,13 @@ const StyledDiv = styled.div`
   justify-content: center;
 `;
 
-export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
+export default function PetDetailPage({
+  myPets,
+  onGameUpdate,
+  onUpdatePet,
+  userStats,
+  onSubtracMoney,
+}) {
   const [currentPet, setCurrentPet] = useState(null);
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
@@ -115,7 +123,7 @@ export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
   const router = useRouter();
   const { id } = router.query;
 
-  //Gameloop for DEBUGING with 100ms later 10.000ms
+  //Gameloop 1.000ms Zyclus
   useEffect(() => {
     if (!id) return;
 
@@ -283,6 +291,9 @@ export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
             </button>
           </SyledInteractionButtonWrapper>
         </StyledGameArea>
+        <StyledButton>
+          Revive {name} costs 200 <MoneyImage />
+        </StyledButton>
       </StyledPetDetailPageMain>
     </>
   );
