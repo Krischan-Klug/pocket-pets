@@ -14,6 +14,17 @@ import energyImage from "/public/assets/images/interaction/energy.png";
 
 import graveImage from "/public/assets/images/grave.png";
 
+const StyledEditImage = styled(Image)`
+  transform: scale(1);
+  transition: 0.5s;
+
+  &:hover {
+    transform: scale(1.2);
+    transition: 0.5s;
+    cursor: pointer;
+  }
+`;
+
 const StyledPetDetailPageHeader = styled.header`
   padding: 20px;
   width: 100%;
@@ -200,7 +211,7 @@ export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
 
         <StyledDiv>
           <h1 onClick={() => router.push(`/edit/${id}`)}>{name}</h1>
-          <Image
+          <StyledEditImage
             src={editIcon}
             alt="edit button"
             height={20}
