@@ -6,8 +6,8 @@ import graveImage from "/public/assets/images/grave.png";
 const StyledPetCard = styled.button`
   border: solid 2px ${({ deleteMode }) => (deleteMode ? "red" : "black")};
   border-radius: 10px;
-  height: 80px;
-  width: 80px;
+  height: 110px;
+  width: 110px;
   padding: 2px 0px;
   display: flex;
   flex-direction: column;
@@ -24,13 +24,14 @@ const StyledPetCard = styled.button`
 
 const StyledName = styled.p`
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 80px;
 `;
 
 const StyledDeleteIcon = styled(Image)`
   position: absolute;
   top: 0;
-  width: 70%;
-  height: 70%;
 `;
 
 export default function PetCard({ myPet, deleteMode, handleClickOnPetCard }) {
@@ -53,8 +54,8 @@ export default function PetCard({ myPet, deleteMode, handleClickOnPetCard }) {
         <Image
           src={myPet.isDead ? graveImage : myPet.image}
           alt={myPet.type}
-          height={50}
-          width={50}
+          height={70}
+          width={70}
         />
         <StyledName>{myPet.name}</StyledName>
       </StyledPetCard>

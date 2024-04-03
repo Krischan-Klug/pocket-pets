@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 const StyledStatusBarContainer = styled.div`
   background-color: lightgrey;
-  border-radius: 10px;
-  height: 20px;
+  border-radius: 12.5px;
+  height: 25px;
   width: 80%;
   display: flex;
   align-items: center;
@@ -29,9 +29,10 @@ const StyledStatusBar = styled.p`
     return colors[index];
   }};
   color: black;
-  border-radius: 10px;
+  border-radius: 12.5px;
   width: ${(props) => props.$value}%;
   padding-left: 20px;
+  height: 100%;
 `;
 
 export default function StatusBar({ text, value }) {

@@ -2,30 +2,37 @@ import PetCard from "@/components/PetCollection/PetCard";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import { useState } from "react";
 import styled from "styled-components";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import StyledButton from "@/components/StyledComponents/StyledButton";
+
 
 const StyledPetCollectionHeader = styled.header`
-  padding: 0px 30px;
-  width: 100%;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 `;
 
-const StyledPetCollectionWrapper = styled.main`
+const StyledButtonWrapper = styled.section`
   display: flex;
-  justify-content: center;
-  width: 100vw;
+  gap: 10px;
 `;
 
 const StyledPetCollection = styled.section`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-content: flex-start;
   gap: 10px;
   padding: 20px 0px;
-  width: 350px;
+  width: 95vw;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+  @media (min-width: 400px) {
+    max-width: 700px;
+    padding: 20px;
+  }
 `;
 
 export default function HomePage({ myPets, onDeletePet }) {
@@ -55,18 +62,25 @@ export default function HomePage({ myPets, onDeletePet }) {
     <>
       <StyledPetCollectionHeader>
         <h1>My Pets</h1>
+        <StyledButtonWrapper>
+          <StyledButton
+            onClick={() => {
+              router.push(`/create/`);
+            }}
+          >
+            Create Pet
+          </StyledButton>
 
-        <Link href="/create">Create Pet</Link>
-
-        <button
-          onClick={() => {
-            handleToggleDelete();
-          }}
-        >
-          Delete Pet
-        </button>
+          <StyledButton
+            onClick={() => {
+              handleToggleDelete();
+            }}
+          >
+            Delete Pet
+          </StyledButton>
+        </StyledButtonWrapper>
       </StyledPetCollectionHeader>
-      <StyledPetCollectionWrapper>
+      <main>
         <StyledPetCollection>
           {myPets.map((myPet) => (
             <PetCard
@@ -77,7 +91,7 @@ export default function HomePage({ myPets, onDeletePet }) {
             />
           ))}
         </StyledPetCollection>
-      </StyledPetCollectionWrapper>
+      </main>
       {deleteMode && selectedPetId && (
         <ConfirmationPopup
           message={`Are you sure you want to delete the pet ${

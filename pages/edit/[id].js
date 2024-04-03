@@ -4,23 +4,13 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
-const StyledUpdatePetHeader = styled.header`
-  padding: 20px;
-  width: 100%;
-`;
-
-const StyledBackToDetailPageButton = styled.button`
-  position: left;
-`;
-
-const StyledUpdatePetMain = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-`;
+import StyledButton from "@/components/StyledComponents/StyledButton";
+import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
+import {
+  InputLabel,
+  InputField,
+  Label,
+} from "@/components/StyledComponents/StyledInputField";
 
 const StyledEditForm = styled.form`
   display: flex;
@@ -76,29 +66,34 @@ export default function EditPet({ myPets, onUpdatePet }) {
 
   return (
     <>
-      <StyledUpdatePetHeader>
-        <StyledBackToDetailPageButton
-          onClick={() => router.push(`/pet-detail-page/${id}`)}
-        >
+      <header>
+        <StyledLeftButton onClick={() => router.push(`/pet-detail-page/${id}`)}>
           Back
-        </StyledBackToDetailPageButton>
-      </StyledUpdatePetHeader>
-      <StyledUpdatePetMain>
+        </StyledLeftButton>
         <h1>Edit your pet</h1>
+      </header>
+      <main>
         <StyledEditForm onSubmit={handleSubmit}>
-          <label htmlFor="name">Name: </label>
-          <input
-            id="name"
-            name="name"
-            defaultValue={name}
-            minLength={1}
-            maxLength={50}
-            required
-          />
+          <Label className="input">
+            <InputField
+              className="inputField"
+              id="name"
+              name="name"
+              defaultValue={name}
+              minLength={1}
+              maxLength={15}
+              required
+              placeholder=" "
+            />
+            <InputLabel className="inputLabel" htmlFor="name">
+              Name
+            </InputLabel>
+          </Label>
+
           <Image alt={type} src={image} width={150} height={150} />
-          <button type="submit">Save</button>
+          <StyledButton type="submit">Save</StyledButton>
         </StyledEditForm>
-      </StyledUpdatePetMain>
+      </main>
       {savePopUp && (
         <ConfirmationPopup
           message={`Are you sure you want to change the name of your pet to ${newCurrentPetData.name}?`}

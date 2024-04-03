@@ -4,95 +4,124 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import pets from "@/lib/pet";
 import styled from "styled-components";
-import Link from "next/link";
+import StyledButton from "@/components/StyledComponents/StyledButton";
+import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
+import {
+  InputLabel,
+  InputField,
+  Label,
+} from "@/components/StyledComponents/StyledInputField";
 import defaultMyPet from "@/lib/myPetTemplate";
+
+import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
+import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
+
 
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
+`;
+
+const PetSelectionSection = styled.section`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+`;
+const SytledTypeChangeButton = styled(Image)`
+  transform: scale(1);
+  transition: 0.5s;
+
+  &:hover {
+    transform: scale(1.3);
+    transition: 0.5s;
+  }
 `;
 
 export default function Create({ onAddPet }) {
   const router = useRouter();
-  const [petData, setPetData] = useState({
-    name: "",
-    type: "",
-    image: "/assets/images/pets/book.png",
-  });
+  const [petType, setPetType] = useState(0);
 
-  const [imagePath, setImagePath] = useState(petData.image);
-
-  const handleTypeChange = (event) => {
-    const selectedType = event.target.value;
-    const imagePath = `/assets/images/pets/${selectedType}.png`;
-    setPetData({ ...petData, type: selectedType, image: imagePath });
-    setImagePath(imagePath); // filled with local one!
-  };
-
-  function combinePetData() {
-    const newPetData = {
-      ...defaultMyPet,
-      ...petData,
-      id: uuidv4(),
-    };
-    return newPetData;
-  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    onAddPet(combinePetData());
+    onAddPet({
+      ...defaultMyPet,
+      id: uuidv4(),
+      name: event.target.name.value,
+      image: `/assets/images/pets/${pets[petType].type}.png`,
+      type: pets[petType].type,
+    });
     router.push("/");
   };
 
+  function handleNextPetType() {
+    setPetType((prevPetType) =>
+      prevPetType + 1 >= pets.length ? 0 : prevPetType + 1
+    );
+  }
+  function handlePreviousPetType() {
+    setPetType((prevPetType) =>
+      prevPetType - 1 < 0 ? pets.length - 1 : prevPetType - 1
+    );
+  }
+
   return (
-    <div>
-      <h1>Add a New Pet</h1>
-      <Link href="/">Back</Link>
-      <StyledForm onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={petData.name}
-          onChange={(event) =>
-            setPetData({ ...petData, name: event.target.value })
-          }
-          minLength={1}
-          maxLength={50}
-          required
-        />
-        <label htmlFor="type">Type</label>
-        <select
-          name="type"
-          id="type"
-          value={petData.type}
-          onChange={handleTypeChange}
-          required
-        >
-          <option value="" disabled>
-            Please select a pet type
-          </option>
-          {pets.map((pet) => (
-            <option key={pet.type} value={pet.type}>
-              {pet.type}
-            </option>
-          ))}
-        </select>
-        <input
-          type="hidden"
-          name="image"
-          id="image"
-          value={petData.image}
-          readOnly
-        />
-        <br />
-        <Image alt={petData.type} src={imagePath} width={100} height={100} />
-        <br />
-        <button type="submit">Create Pet</button>
-      </StyledForm>
-    </div>
+    <>
+      <header>
+        <StyledLeftButton onClick={() => router.push("/")}>
+          Back
+        </StyledLeftButton>
+        <h1>Add a New Pet</h1>
+      </header>
+      <main>
+        <StyledForm onSubmit={handleSubmit}>
+          <Label className="input">
+            <InputField
+              className="inputField"
+              placeholder=" "
+              type="text"
+              name="name"
+              id="name"
+              minLength={1}
+              maxLength={15}
+              required
+            />
+            <InputLabel className="inputLabel" htmlFor="name">
+              Name
+            </InputLabel>
+          </Label>
+
+          <br />
+          <PetSelectionSection>
+            <SytledTypeChangeButton
+              onClick={handlePreviousPetType}
+              src={arrowLeft}
+              alt="Privous Pet Button"
+              width={50}
+              height={50}
+            />
+            <Image
+              alt={`${pets[petType].type}`}
+              src={`/assets/images/pets/${pets[petType].type}.png`}
+              width={180}
+              height={180}
+            />
+            <SytledTypeChangeButton
+              onClick={handleNextPetType}
+              src={arrowRight}
+              alt="Privous Pet Button"
+              width={50}
+              height={50}
+            />
+          </PetSelectionSection>
+          <br />
+          <StyledButton type="submit">Create Pet</StyledButton>
+        </StyledForm>
+      </main>
+    </>
   );
 }
