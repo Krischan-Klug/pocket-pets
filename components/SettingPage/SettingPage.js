@@ -66,9 +66,12 @@ export default function SettingPage({ onSettingPageClose, handleGameReset }) {
       <StyledButton onClick={handleReset}>Reset Game</StyledButton>
       <div>
         <p>Impressum</p>
-        <p>This Project is from: Krischan,Markus,Nina</p>
+        <p>This Project is from: Krischan, Markus, Nina</p>
         <p>
-          Images from: <Link href={"https://www.flaticon.com/"}>Flaticon</Link>
+          Images from:{" "}
+          <Link href={"https://www.flaticon.com/"} target="_blank">
+            Flaticon
+          </Link>
         </p>
         <p>
           Music from:{" "}
@@ -76,6 +79,7 @@ export default function SettingPage({ onSettingPageClose, handleGameReset }) {
             href={
               "https://www.musicfox.com/info/kostenlose-gemafreie-musik.php"
             }
+            target="_blank"
           >
             Musicfox
           </Link>
