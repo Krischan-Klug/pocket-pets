@@ -15,7 +15,6 @@ import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
 import energyImage from "/public/assets/images/interaction/energy.png";
-
 import graveImage from "/public/assets/images/grave.png";
 
 const StyledEditImage = styled(Image)`
@@ -260,7 +259,7 @@ export default function PetDetailPage({
           <SyledInteractionButtonWrapper>
             <button
               onClick={() => handleFeed(10)}
-              disabled={isInteracting.duration > 0}
+              disabled={isInteracting.duration > 0 || currentPet.isDead}
             >
               <Image
                 alt="Hunger"
@@ -271,7 +270,7 @@ export default function PetDetailPage({
             </button>
             <button
               onClick={() => handlePlay(10)}
-              disabled={isInteracting.duration > 0}
+              disabled={isInteracting.duration > 0 || currentPet.isDead}
             >
               <Image
                 alt="Happiness"
@@ -301,7 +300,7 @@ export default function PetDetailPage({
           <SyledInteractionButtonWrapper>
             <button
               onClick={() => handleSleep(100)}
-              disabled={isInteracting.duration > 0}
+              disabled={isInteracting.duration > 0 || currentPet.isDead}
             >
               <Image
                 alt="Energy"
@@ -315,7 +314,7 @@ export default function PetDetailPage({
         {isDead && (
           <StyledButton
             onClick={() => {
-              if (userStats.money > 200) {
+              if (userStats.money >= 200) {
                 setConfirmationPopUpContent({
                   ...confirmationPopUpContent,
                   show: true,

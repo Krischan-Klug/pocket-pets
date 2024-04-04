@@ -2,9 +2,11 @@ import GlobalStyle from "../styles";
 import initialMyPets from "@/lib/initialPet";
 import defaultMyPet from "@/lib/myPetTemplate";
 import defaultUserStats from "@/lib/defaultUserStats";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
+import SettingPage from "@/components/SettingPage/SettingPage";
+import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useLocalStorageState("myPets", {
@@ -13,6 +15,7 @@ export default function App({ Component, pageProps }) {
   const [userStats, setUserStats] = useLocalStorageState("userStats", {
     defaultValue: defaultUserStats,
   });
+  const [settingPageShow, setSettingPage] = useState(false);
 
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
@@ -24,14 +27,14 @@ export default function App({ Component, pageProps }) {
         });
       });
     }
-    function updateUserStatsWithNewkeys() {
+    function updateUserStatsWithNewKeys() {
       setUserStats((prevUserStat) => {
         return { ...defaultUserStats, ...prevUserStat };
       });
     }
 
     updatePetsWithNewKeys();
-    updateUserStatsWithNewkeys();
+    updateUserStatsWithNewKeys();
   }, []);
 
   function handleAddPet(newPet) {
@@ -60,6 +63,20 @@ export default function App({ Component, pageProps }) {
     });
   }
 
+  function handleSettingPageClose() {
+    setSettingPage(false);
+  }
+
+  function handleSettingPageOpen() {
+    setSettingPage(true);
+  }
+
+  function handleGameReset() {
+    setUserStats(defaultUserStats);
+    setMyPets([]);
+    setSettingPage(false);
+  }
+
   function handleGameUpdate(updateId, isSleep) {
     setMyPets(
       myPets.map((pet) =>
@@ -80,9 +97,6 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
-      <button onClick={() => setUserStats({ ...setUserStats, money: 1000 })}>
-        Cheat
-      </button>
       <Component
         {...pageProps}
         myPets={myPets}
@@ -94,6 +108,13 @@ export default function App({ Component, pageProps }) {
         onSubtracMoney={handleSubtracMoney}
         addMoney={handleAddMoney}
       />
+      <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
+      {settingPageShow && (
+        <SettingPage
+          onSettingPageClose={handleSettingPageClose}
+          handleGameReset={handleGameReset}
+        />
+      )}
       <AudioInterface />
     </>
   );
