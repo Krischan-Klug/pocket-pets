@@ -10,6 +10,10 @@ const StyledButton = styled.button`
   transform: scale(1);
   transition: 0.5s;
 
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
   &:hover {
     transform: scale(1.1);
     transition: 0.5s;

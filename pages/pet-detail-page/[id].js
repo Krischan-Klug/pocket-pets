@@ -7,11 +7,14 @@ import StatusBar from "@/components/DetailPage/StatusBar";
 import { useEffect } from "react";
 import { useState } from "react";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
+import StyledButton from "@/components/StyledComponents/StyledButton";
+import MoneyImage from "@/components/util/MoneyImage";
+import MoneyColored from "@/components/util/MoneyColored";
+import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
 import energyImage from "/public/assets/images/interaction/energy.png";
-
 import graveImage from "/public/assets/images/grave.png";
 
 const StyledEditImage = styled(Image)`
@@ -105,17 +108,29 @@ const StyledDiv = styled.div`
   justify-content: center;
 `;
 
-export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
+export default function PetDetailPage({
+  myPets,
+  onGameUpdate,
+  onUpdatePet,
+  userStats,
+  onSubtracMoney,
+}) {
   const [currentPet, setCurrentPet] = useState(null);
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
     interaction: "",
   });
+  const [confirmationPopUpContent, setConfirmationPopUpContent] = useState({
+    message: "",
+    onConfirm: null,
+    onCancel: null,
+    show: false,
+  });
 
   const router = useRouter();
   const { id } = router.query;
 
-  //Gameloop for DEBUGING with 100ms later 10.000ms
+  //Gameloop 1.000ms Cycle
   useEffect(() => {
     if (!id) return;
 
@@ -198,6 +213,19 @@ export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
     }
   }
 
+  function handleConfirm(value) {
+    onSubtracMoney(value);
+    setConfirmationPopUpContent({ ...confirmationPopUpContent, show: false });
+    onUpdatePet({
+      ...currentPet,
+      isDead: false,
+      hunger: 50,
+      happiness: 25,
+      energy: 50,
+      health: 42,
+    });
+  }
+
   return (
     <>
       <StyledPetDetailPageHeader>
@@ -231,7 +259,7 @@ export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
           <SyledInteractionButtonWrapper>
             <button
               onClick={() => handleFeed(10)}
-              disabled={isInteracting.duration > 0}
+              disabled={isInteracting.duration > 0 || currentPet.isDead}
             >
               <Image
                 alt="Hunger"
@@ -242,7 +270,7 @@ export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
             </button>
             <button
               onClick={() => handlePlay(10)}
-              disabled={isInteracting.duration > 0}
+              disabled={isInteracting.duration > 0 || currentPet.isDead}
             >
               <Image
                 alt="Happiness"
@@ -272,7 +300,7 @@ export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
           <SyledInteractionButtonWrapper>
             <button
               onClick={() => handleSleep(100)}
-              disabled={isInteracting.duration > 0}
+              disabled={isInteracting.duration > 0 || currentPet.isDead}
             >
               <Image
                 alt="Energy"
@@ -283,7 +311,48 @@ export default function PetDetailPage({ myPets, onGameUpdate, onUpdatePet }) {
             </button>
           </SyledInteractionButtonWrapper>
         </StyledGameArea>
+        {isDead && (
+          <StyledButton
+            onClick={() => {
+              if (userStats.money >= 200) {
+                setConfirmationPopUpContent({
+                  ...confirmationPopUpContent,
+                  show: true,
+                  message: `Are you sure you want to revive ${name}? `,
+                  onConfirm: () => handleConfirm(200),
+                  onCancel: () =>
+                    setConfirmationPopUpContent({
+                      ...confirmationPopUpContent,
+                      show: false,
+                    }),
+                });
+              } else {
+                setConfirmationPopUpContent({
+                  ...confirmationPopUpContent,
+                  show: true,
+                  message: `You don't have enough money for this. `,
+                  onConfirm: () =>
+                    setConfirmationPopUpContent({
+                      ...confirmationPopUpContent,
+                      show: false,
+                    }),
+                  onCancel: null,
+                });
+              }
+            }}
+          >
+            Revive {name} costs
+            <MoneyColored cost={200} money={userStats.money} /> <MoneyImage />
+          </StyledButton>
+        )}
       </StyledPetDetailPageMain>
+      {confirmationPopUpContent.show && (
+        <ConfirmationPopup
+          message={confirmationPopUpContent.message}
+          onConfirm={confirmationPopUpContent.onConfirm}
+          onCancel={confirmationPopUpContent.onCancel}
+        />
+      )}
     </>
   );
 }

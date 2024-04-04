@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 
+import MoneyImage from "@/components/util/MoneyImage";
 
 const StyledPetCollectionHeader = styled.header`
   height: 120px;
@@ -12,6 +13,7 @@ const StyledPetCollectionHeader = styled.header`
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  position: relative;
 `;
 
 const StyledButtonWrapper = styled.section`
@@ -35,7 +37,17 @@ const StyledPetCollection = styled.section`
   }
 `;
 
-export default function HomePage({ myPets, onDeletePet }) {
+const MoneyCounter = styled.p`
+  position: absolute;
+  bottom: -10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+`;
+
+export default function HomePage({ myPets, onDeletePet, userStats }) {
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedPetId, setSelectedPetId] = useState(null);
   const router = useRouter();
@@ -79,6 +91,10 @@ export default function HomePage({ myPets, onDeletePet }) {
             Delete Pet
           </StyledButton>
         </StyledButtonWrapper>
+        <MoneyCounter>
+          <MoneyImage />
+          {userStats.money}
+        </MoneyCounter>
       </StyledPetCollectionHeader>
       <main>
         <StyledPetCollection>
