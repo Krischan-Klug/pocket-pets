@@ -5,7 +5,7 @@ import defaultUserStats from "@/lib/defaultUserStats";
 import { useEffect, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
-import SettingPage from "@/components/SettingPage/SettingPage";
+import SettingPopUp from "@/components/SettingPage/SettingPopUp";
 import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 
 export default function App({ Component, pageProps }) {
@@ -110,7 +110,7 @@ export default function App({ Component, pageProps }) {
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
       {settingPageShow && (
-        <SettingPage
+        <SettingPopUp
           onSettingPageClose={handleSettingPageClose}
           handleGameReset={handleGameReset}
         />

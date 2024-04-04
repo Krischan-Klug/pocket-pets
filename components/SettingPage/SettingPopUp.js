@@ -5,7 +5,7 @@ import { useState } from "react";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import { useRouter } from "next/router";
 
-const StyledSettingPage = styled.div`
+const StyledSettingPopUp = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -27,7 +27,7 @@ const StyledCloseButton = styled(StyledButton)`
   right: 20px;
 `;
 
-export default function SettingPage({ onSettingPageClose, handleGameReset }) {
+export default function SettingPopUp({ onSettingPageClose, handleGameReset }) {
   const [confirmationPopUpContent, setConfirmationPopUpContent] = useState({
     message: "",
     onConfirm: null,
@@ -60,7 +60,7 @@ export default function SettingPage({ onSettingPageClose, handleGameReset }) {
   }
 
   return (
-    <StyledSettingPage>
+    <StyledSettingPopUp>
       <h1>Settings</h1>
       <StyledCloseButton onClick={onSettingPageClose}>Close</StyledCloseButton>
       <StyledButton onClick={handleReset}>Reset Game</StyledButton>
@@ -92,6 +92,6 @@ export default function SettingPage({ onSettingPageClose, handleGameReset }) {
           onCancel={confirmationPopUpContent.onCancel}
         />
       )}
-    </StyledSettingPage>
+    </StyledSettingPopUp>
   );
 }
