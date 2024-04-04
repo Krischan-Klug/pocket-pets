@@ -130,7 +130,7 @@ export default function PetDetailPage({
   const router = useRouter();
   const { id } = router.query;
 
-  //Gameloop 1.000ms Zyclus
+  //Gameloop 1.000ms Cycle
   useEffect(() => {
     if (!id) return;
 
