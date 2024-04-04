@@ -65,6 +65,10 @@ export default function ObstacleJumper() {
     ]);
   }, []);
 
+  if (!canvasRef.current) {
+    return null;
+  }
+
   return (
     <>
       <canvas
