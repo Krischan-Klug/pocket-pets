@@ -28,7 +28,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
 
     k.scene("start", () => {
       const start = k.add([
-        k.text("Press Space to Start"),
+        k.text("Press SPACE to Start"),
         k.pos(k.center().x, k.center().y - 100),
         k.anchor("center"),
         k.area(),
@@ -148,6 +148,12 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       const moneyEarnCount = k.add([
         k.text(moneyToAdd + " Coins"),
         k.pos(k.center().x, k.center().y + 150),
+        k.anchor("center"),
+      ]);
+
+      const endText = k.add([
+        k.text("Press SPACE to End"),
+        k.pos(k.center().x, k.center().y + 200),
         k.anchor("center"),
       ]);
 
