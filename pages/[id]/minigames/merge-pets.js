@@ -15,6 +15,7 @@ const PlayGround = styled.div`
   width: 235px;
   background-color: var(--accent-color);
   padding: 10px;
+  border-radius: 8px;
 `;
 
 const Square = styled.div`
@@ -49,10 +50,6 @@ const Square = styled.div`
         return `background: rgb(90, 177, 162);`;
       case "zahl2048":
         return `background: rgb(54, 165, 173);`;
-      case "zahl4096":
-        return `background: rgb(114, 107, 184);`;
-      case "zahl8192":
-        return `background: rgb(50, 33, 128);`;
       default:
         return `background: var(--background-color);`;
     }
@@ -76,7 +73,7 @@ const StyledLegend = styled.div`
   gap: 5px;
 
   & > span {
-    font-size: 20px; /* Größe des Pfeils */
+    font-size: 20px;
   }
 `;
 
@@ -180,21 +177,19 @@ export default function MergePets({ onAddMoney }) {
 
         // Determine the direction of the swipe
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          // Horizontal swipe
-          if (deltaX > 50) {
-            // Swipe to the right
+          // Swipe to right and less vertical than 80px
+          if (deltaX > 100 && Math.abs(deltaY) < 80) {
             moveRight();
-          } else if (deltaX < -50) {
-            // Swipe to the left
+            // Swipe to left and less vertical than 80px
+          } else if (deltaX < -100 && Math.abs(deltaY) < 80) {
             moveLeft();
           }
         } else {
-          // Vertical swipe
-          if (deltaY > 50) {
-            // Swipe down
+          // swipe to down and less horizontal than 80px
+          if (deltaY > 100 && Math.abs(deltaX) < 80) {
             moveDown();
-          } else if (deltaY < -50) {
-            // Swipe up
+            // swipe to up and less horizontal than 80px
+          } else if (deltaY < -100 && Math.abs(deltaX) < 80) {
             moveUp();
           }
         }
