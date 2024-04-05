@@ -178,18 +178,18 @@ export default function MergePets({ onAddMoney }) {
         // Determine the direction of the swipe
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
           // Swipe to right and less vertical than 80px
-          if (deltaX > 100 && Math.abs(deltaY) < 80) {
+          if (deltaX > 50 && Math.abs(deltaY) < 80) {
             moveRight();
             // Swipe to left and less vertical than 80px
-          } else if (deltaX < -100 && Math.abs(deltaY) < 80) {
+          } else if (deltaX < -50 && Math.abs(deltaY) < 80) {
             moveLeft();
           }
         } else {
           // swipe to down and less horizontal than 80px
-          if (deltaY > 100 && Math.abs(deltaX) < 80) {
+          if (deltaY > 50 && Math.abs(deltaX) < 80) {
             moveDown();
             // swipe to up and less horizontal than 80px
-          } else if (deltaY < -100 && Math.abs(deltaX) < 80) {
+          } else if (deltaY < -50 && Math.abs(deltaX) < 80) {
             moveUp();
           }
         }
