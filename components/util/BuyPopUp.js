@@ -1,5 +1,9 @@
 import styled from "styled-components";
+import Image from "next/image";
 import StyledButton from "../StyledComponents/StyledButton";
+import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
+import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
+import { useState } from "react";
 
 const BuyPopUpOverlay = styled.div`
   position: fixed;
@@ -37,26 +41,53 @@ const BuyButtonWrapper = styled.div`
   justify-content: center;
 `;
 
-export default function BuyPopUp({
-  message,
-  onConfirm,
-  onCancel,
-  confirmText,
-  cancelText,
-}) {
+const StyledCountButton = styled(Image)`
+  transform: scale(1);
+  transition: 0.5s;
+
+  &:hover {
+    transform: scale(1.3);
+    transition: 0.5s;
+  }
+`;
+
+export default function BuyPopUp({ message, onBuy, onCancel }) {
+  const [count, setCount] = useState(1);
+
+  const decrementCount = () => {
+    setCount((prevCount) => Math.math(prevCount - 1, 1));
+  };
+
+  const incrementCount = () => {
+    setCount((prevCount) => prevCount + 1);
+  };
+
   return (
     <BuyPopUpOverlay>
       <BuyPopUpContent>
         <p>{message}</p>
+        <StyledCountButton
+          onClick={decrementCount}
+          src={arrowLeft}
+          alt="subtract one item"
+          width={50}
+          height={50}
+        />
+        {count}
+        <StyledCountButton
+          onClick={incrementCount}
+          src={arrowRight}
+          alt="add one item"
+          width={50}
+          height={50}
+        />
         <BuyButtonWrapper>
-          {onConfirm != null && (
-            <BuyPopUpButton onClick={onConfirm}>
-              {confirmText ? confirmText : "Confirm"}
-            </BuyPopUpButton>
+          {onBuy != null && (
+            <BuyPopUpButton onClick={onBuy}>Buy</BuyPopUpButton>
           )}
           {onCancel != null && (
             <BuyPopUpButton $red onClick={onCancel}>
-              {cancelText ? cancelText : "Cancel"}
+              Cancel
             </BuyPopUpButton>
           )}
         </BuyButtonWrapper>

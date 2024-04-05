@@ -12,6 +12,16 @@ export default function FoodShop({ userStats }) {
   const router = useRouter();
   const { id } = router.query;
 
+  function buyFoodItem(id) {
+    setSelectedFoodId(id);
+  }
+
+  // function handleAddFood({value, id}) {
+  //   setUserStats((prevUserStat) => {
+  //     return { ...prevUserStat, inventory.food[id]: prevUserStat.inventory.food + value };
+  //   });
+  // }
+
   return (
     <>
       <StyledDefaultHeader>
@@ -22,7 +32,7 @@ export default function FoodShop({ userStats }) {
         <MoneyCounter money={userStats.money} />
       </StyledDefaultHeader>
       <main>
-        <ShopTable data={foods} />
+        <ShopTable data={foods} onItemClick={buyFoodItem} />
       </main>
 
       {/* neues BuyPopUp zum Kaufen von Essen:  */}
@@ -30,8 +40,8 @@ export default function FoodShop({ userStats }) {
         <BuyPopUp
           message={`How much ${
             foods.find((food) => food.id === selectedFoodId).name
-          } would you like to buy?`}
-          onConfirm={handleConfirmDelete}
+          }s would you like to buy?`}
+          onBuy={handleAddFood}
           onCancel={() => setSelectedFoodId(null)}
         />
       )}

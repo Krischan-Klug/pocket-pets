@@ -17,13 +17,13 @@ const StyledImageContainer = styled.div`
   gap: 5px;
 `;
 
-export default function ShopTable({ data }) {
+export default function ShopTable({ data, onItemClick }) {
   return (
     <>
       <table>
         <tbody>
           {data.map((item) => (
-            <tr key={item.id}>
+            <tr key={item.id} onClick={() => onItemClick(item.id)}>
               <StyledTd width={60}>
                 <Image
                   src={item.image}
