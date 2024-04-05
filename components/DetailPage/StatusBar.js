@@ -33,6 +33,8 @@ const StyledStatusBar = styled.p`
   width: ${(props) => props.$value}%;
   padding-left: 20px;
   height: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 export default function StatusBar({ text, value }) {

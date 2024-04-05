@@ -1,32 +1,40 @@
-import styled from "styled-components";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import ShopTable from "@/components/Shop/ShopTable";
 import { foods } from "@/lib/shop.js";
+import MoneyCounter from "@/components/util/MoneyCounter";
+import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
+import BuyPopUp from "@/components/util/BuyPopUp";
 
-const StyledListElement = styled.li`
-  list-style: none;
-`;
-
-export default function FoodShop() {
+export default function FoodShop({ userStats }) {
+  const [selectedFoodId, setSelectedFoodId] = useState(null);
   const router = useRouter();
   const { id } = router.query;
 
   return (
     <>
-      <header>
+      <StyledDefaultHeader>
         <StyledLeftButton onClick={() => router.push(`/${id}/shop`)}>
           Back
         </StyledLeftButton>
         <h1>Food Shop</h1>
-        <p>Money?!</p>
-      </header>
+        <MoneyCounter money={userStats.money} />
+      </StyledDefaultHeader>
       <main>
-        <ul>
-          {foods.map((food) => (
-            <StyledListElement key={food.id}>{food.name}</StyledListElement>
-          ))}
-        </ul>
+        <ShopTable data={foods} />
       </main>
+
+      {/* neues BuyPopUp zum Kaufen von Essen:  */}
+      {selectedFoodId && (
+        <BuyPopUp
+          message={`How much ${
+            foods.find((food) => food.id === selectedFoodId).name
+          } would you like to buy?`}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setSelectedFoodId(null)}
+        />
+      )}
     </>
   );
 }
