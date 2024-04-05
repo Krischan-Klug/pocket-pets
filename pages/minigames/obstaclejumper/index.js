@@ -17,7 +17,21 @@ export default function ObstacleJumper() {
 
     //Scene Management
 
-    k.scene("start", () => {});
+    k.scene("start", () => {
+      k.add([
+        k.text("Press Space to Start"),
+        k.pos(k.center()),
+        k.anchor("center"),
+      ]);
+
+      k.onKeyPress("space", () => {
+        k.go("game");
+      });
+
+      k.onTouchStart(() => {
+        k.go("game");
+      });
+    });
 
     k.scene("game", () => {
       //Globals
@@ -43,8 +57,14 @@ export default function ObstacleJumper() {
         k.scale(0.2),
       ]);
 
-      //Jump
+      //Movement
       k.onKeyPress("space", () => {
+        if (player.isGrounded()) {
+          player.jump();
+        }
+      });
+
+      k.onTouchStart(() => {
         if (player.isGrounded()) {
           player.jump();
         }
@@ -95,7 +115,7 @@ export default function ObstacleJumper() {
       ]);
     });
 
-    k.go("game");
+    k.go("start");
   }, []);
 
   if (!canvasRef.current) {
