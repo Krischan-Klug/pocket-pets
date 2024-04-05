@@ -338,7 +338,7 @@ export default function MergePets({ onAddMoney }) {
 
   function gameOver() {
     const points = getPoints();
-    const money = Math.floor(points / 4);
+    const money = Math.floor(points / 8);
     setConfirmationPopUpContent({
       ...confirmationPopUpContent,
       show: true,
