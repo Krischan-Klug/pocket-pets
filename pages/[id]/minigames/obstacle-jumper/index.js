@@ -2,7 +2,7 @@ import kaboom from "kaboom";
 import { useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 
-export default function ObstacleJumper({ onAddMoney }) {
+export default function ObstacleJumper({ onAddMoney, myPets }) {
   const router = useRouter();
   const id = router.query.id;
   const canvasRef = useRef(null);
@@ -15,6 +15,12 @@ export default function ObstacleJumper({ onAddMoney }) {
       background: [214, 210, 210],
       canvas: canvasRef.current,
     });
+
+    const actualPet = myPets.find((myPet) => myPet.id === id);
+
+    if (!actualPet) {
+      return;
+    }
 
     let score = 0;
 
@@ -52,7 +58,7 @@ export default function ObstacleJumper({ onAddMoney }) {
       const scoreText = k.add([k.text("Score: " + score), k.pos(40, 60)]);
 
       //Player
-      k.loadSprite("player", "/assets/images/pets/beaver.png");
+      k.loadSprite("player", actualPet.image);
       const player = k.add([
         k.sprite("player"),
         k.pos(20, k.height() - 250),
@@ -62,22 +68,22 @@ export default function ObstacleJumper({ onAddMoney }) {
       ]);
 
       //Movement
-      k.onKeyPress("space", () => {
+      function jumpLogic() {
         if (player.isGrounded()) {
           player.jump();
         }
+      }
+      k.onKeyPress("space", () => {
+        jumpLogic();
       });
 
       k.onTouchStart(() => {
-        if (player.isGrounded()) {
-          player.jump();
-        }
+        jumpLogic();
       });
 
       //Collision detection
       player.onCollide("obstacle", () => {
         k.shake();
-        //GameoverLogic here!
         k.go("gameover");
       });
 
@@ -114,24 +120,31 @@ export default function ObstacleJumper({ onAddMoney }) {
       const moneyToAdd = Math.floor(score / 100);
       const gameOver = k.add([
         k.text("Game Over!"),
-        k.pos(k.center()),
+        k.pos(k.center().x, k.center().y - 100),
         k.anchor("center"),
       ]);
       const scoreText = k.add([
         k.text("Score: " + score),
-        k.pos(k.center().x, k.center().y + 50),
+        k.pos(k.center().x, k.center().y),
         k.anchor("center"),
       ]);
 
-      const moneyText = k.add([
-        k.text("You earned: " + moneyToAdd + "Coins"),
+      const moneyEarnText = k.add([
+        k.text("You earned: "),
+        k.pos(k.center().x, k.center().y + 100),
+        k.anchor("center"),
+      ]);
+      const moneyEarnCount = k.add([
+        k.text(moneyToAdd + " Coins"),
         k.pos(k.center().x, k.center().y + 150),
         k.anchor("center"),
       ]);
 
       function endGame() {
         onAddMoney(moneyToAdd);
-        router.push(`/pet-detail-page/${id}`);
+
+        //Router wont work here, reload is needed!
+        window.location.href = `/pet-detail-page/${id}`;
       }
 
       k.onKeyPress("space", () => {

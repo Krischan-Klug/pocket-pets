@@ -348,7 +348,7 @@ export default function PetDetailPage({
         <StyledButton
           onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
         >
-          Minigames
+          Obstacle Jumper
         </StyledButton>
       </StyledPetDetailPageMain>
       {confirmationPopUpContent.show && (
