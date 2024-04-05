@@ -345,6 +345,13 @@ export default function PetDetailPage({
             <MoneyColored cost={200} money={userStats.money} /> <MoneyImage />
           </StyledButton>
         )}
+        <StyledButton
+          onClick={() => {
+            router.push(`/${id}/shop/`);
+          }}
+        >
+          Shop
+        </StyledButton>
       </StyledPetDetailPageMain>
       {confirmationPopUpContent.show && (
         <ConfirmationPopup
