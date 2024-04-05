@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
+import StyledButton from "@/components/StyledComponents/StyledButton";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 
 const PlayGround = styled.div`
@@ -66,10 +67,37 @@ const ImageContainer = styled.div`
   align-items: center;
 `;
 
+const StyledLegend = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  gap: 5px;
+
+  & > span {
+    font-size: 20px; /* Größe des Pfeils */
+  }
+`;
+
+const petImageMap = {
+  2: "/assets/images/pets/duck.png",
+  4: "/assets/images/pets/hen.png",
+  8: "/assets/images/pets/chameleon.png",
+  16: "/assets/images/pets/jellyfish.png",
+  32: "/assets/images/pets/cat.png",
+  64: "/assets/images/pets/beaver.png",
+  128: "/assets/images/pets/owl.png",
+  256: "/assets/images/pets/bear.png",
+  512: "/assets/images/pets/elephant.png",
+  1024: "/assets/images/pets/whale.png",
+  2048: "/assets/images/pets/dragon.png",
+};
+
 export default function MergePets({ onAddMoney }) {
   const [grid, setGrid] = useState([]);
   const [points, setPoints] = useState(0);
-  const [animalImage, setAnimalImage] = useState(false);
+  const [animalImage, setAnimalImage] = useState(true);
   const [confirmationPopUpContent, setConfirmationPopUpContent] = useState({
     message:
       "The aim of the game is to stack as many animals/numbers as possible until the playing field is full. To do this, either press the arrow keys or swipe across the display. All filled fields move to the respective side and the same fields stack to higher value fields.",
@@ -331,13 +359,37 @@ export default function MergePets({ onAddMoney }) {
     if (value !== 0) {
       return animalImage ? (
         <ImageContainer>
-          <Image src="/assets/images/pets/owl.png" width={40} height={40} />
+          <Image
+            src={petImageMap[value]}
+            alt="Pet Image"
+            width={40}
+            height={40}
+          />
         </ImageContainer>
       ) : (
         value
       );
     }
     return "";
+  }
+
+  function renderSquareLegend() {
+    let content = [];
+
+    Object.entries(petImageMap).forEach(([val, imgUrl], index) => {
+      const backgroundColor = `zahl${val}`;
+      content.push(
+        <Square key={index} $squareColor={backgroundColor}>
+          <Image src={imgUrl} alt="Pet Image" width={40} height={40} />
+        </Square>
+      );
+      // Add arrow if not the last item
+      if (index !== Object.keys(petImageMap).length - 1) {
+        content.push(<span key={`arrow${index}`}>&rarr;</span>);
+      }
+    });
+
+    return <StyledLegend>{content}</StyledLegend>;
   }
 
   const toggleDisplay = () => {
@@ -366,9 +418,10 @@ export default function MergePets({ onAddMoney }) {
             ))
           )}
         </PlayGround>
-        <button onClick={toggleDisplay}>
+        <StyledButton onClick={toggleDisplay}>
           {animalImage ? "Show Numbers" : "Show Images"}
-        </button>
+        </StyledButton>
+        {renderSquareLegend()}
       </main>
       {confirmationPopUpContent.show && (
         <ConfirmationPopup
