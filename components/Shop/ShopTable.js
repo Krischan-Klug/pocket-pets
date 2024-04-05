@@ -23,7 +23,7 @@ export default function ShopTable({ data, onItemClick }) {
       <table>
         <tbody>
           {data.map((item) => (
-            <tr key={item.id} onClick={() => onItemClick(item.id)}>
+            <tr key={item.id} onClick={() => onItemClick(item.id, item.cost)}>
               <StyledTd width={60}>
                 <Image
                   src={item.image}

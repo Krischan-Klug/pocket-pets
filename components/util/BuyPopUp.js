@@ -41,7 +41,7 @@ const BuyButtonWrapper = styled.div`
   justify-content: center;
 `;
 
-const StyledCountButton = styled(Image)`
+const StyledValueButton = styled(Image)`
   transform: scale(1);
   transition: 0.5s;
 
@@ -51,39 +51,57 @@ const StyledCountButton = styled(Image)`
   }
 `;
 
-export default function BuyPopUp({ message, onBuy, onCancel }) {
-  const [count, setCount] = useState(1);
+export default function BuyPopUp({
+  message,
+  onBuy,
+  onCancel,
+  id,
+  money,
+  cost,
+}) {
+  const [value, setValue] = useState(1);
 
-  const decrementCount = () => {
-    setCount((prevCount) => Math.math(prevCount - 1, 1));
+  const decrementValue = () => {
+    setValue((prevValue) => Math.max(prevValue - 1, 1));
   };
 
-  const incrementCount = () => {
-    setCount((prevCount) => prevCount + 1);
+  const incrementValue = () => {
+    setValue((prevValue) => prevValue + 1);
   };
 
   return (
     <BuyPopUpOverlay>
       <BuyPopUpContent>
         <p>{message}</p>
-        <StyledCountButton
-          onClick={decrementCount}
+        <StyledValueButton
+          onClick={decrementValue}
           src={arrowLeft}
           alt="subtract one item"
-          width={50}
-          height={50}
+          width={20}
+          height={20}
         />
-        {count}
-        <StyledCountButton
-          onClick={incrementCount}
+        {value}
+        <StyledValueButton
+          onClick={incrementValue}
           src={arrowRight}
           alt="add one item"
-          width={50}
-          height={50}
+          width={20}
+          height={20}
         />
         <BuyButtonWrapper>
           {onBuy != null && (
-            <BuyPopUpButton onClick={onBuy}>Buy</BuyPopUpButton>
+            <BuyPopUpButton
+              onClick={() => {
+                if (cost * value < money) {
+                  onBuy(value, id);
+                  console.log("test");
+                } else {
+                  console.log("cost: ", cost);
+                }
+              }}
+            >
+              Buy
+            </BuyPopUpButton>
           )}
           {onCancel != null && (
             <BuyPopUpButton $red onClick={onCancel}>

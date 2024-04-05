@@ -7,20 +7,22 @@ import MoneyCounter from "@/components/util/MoneyCounter";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import BuyPopUp from "@/components/util/BuyPopUp";
 
-export default function FoodShop({ userStats }) {
+export default function FoodShop({ userStats, onAddFood }) {
   const [selectedFoodId, setSelectedFoodId] = useState(null);
+  const [itemCost, setItemCost] = useState(0);
   const router = useRouter();
   const { id } = router.query;
 
-  function buyFoodItem(id) {
+  function buyFoodItem(id, cost) {
     setSelectedFoodId(id);
+    setItemCost(cost);
   }
 
-  // function handleAddFood({value, id}) {
-  //   setUserStats((prevUserStat) => {
-  //     return { ...prevUserStat, inventory.food[id]: prevUserStat.inventory.food + value };
-  //   });
-  // }
+  function confirmBuy(value, id) {
+    onAddFood(value, id);
+    setSelectedFoodId(null);
+    console.log("test");
+  }
 
   return (
     <>
@@ -35,14 +37,16 @@ export default function FoodShop({ userStats }) {
         <ShopTable data={foods} onItemClick={buyFoodItem} />
       </main>
 
-      {/* neues BuyPopUp zum Kaufen von Essen:  */}
       {selectedFoodId && (
         <BuyPopUp
           message={`How much ${
             foods.find((food) => food.id === selectedFoodId).name
           }s would you like to buy?`}
-          onBuy={handleAddFood}
+          onBuy={confirmBuy}
           onCancel={() => setSelectedFoodId(null)}
+          id={selectedFoodId}
+          cost={itemCost}
+          money={userStats.money}
         />
       )}
     </>

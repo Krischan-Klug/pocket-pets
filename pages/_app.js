@@ -63,6 +63,19 @@ export default function App({ Component, pageProps }) {
     });
   }
 
+  function handleAddFood(value, newFoodId) {
+    setUserStats((prevStats) => {
+      const updatedInventory = { ...prevStats.inventory };
+      const foodIndex = updatedInventory.food.findIndex(
+        (item) => item.id === newFoodId
+      );
+      if (foodIndex !== -1) {
+        updatedInventory.food[foodIndex].value = value;
+      }
+      return { ...prevStats, inventory: updatedInventory };
+    });
+  }
+
   function handleSettingPageClose() {
     setSettingPage(false);
   }
@@ -107,6 +120,7 @@ export default function App({ Component, pageProps }) {
         onGameUpdate={handleGameUpdate}
         onSubtracMoney={handleSubtracMoney}
         addMoney={handleAddMoney}
+        onAddFood={handleAddFood}
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
       {settingPageShow && (
