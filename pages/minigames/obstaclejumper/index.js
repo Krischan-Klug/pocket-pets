@@ -1,7 +1,9 @@
 import kaboom from "kaboom";
 import { useRef, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function ObstacleJumper() {
+  const router = useRouter();
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -18,17 +20,18 @@ export default function ObstacleJumper() {
     //Scene Management
 
     k.scene("start", () => {
-      k.add([
-        k.text("Press Space to Start"),
-        k.pos(k.center()),
+      const start = k.add([
+        k.text("Press to Start"),
+        k.pos(k.center().x, k.center().y - 100),
         k.anchor("center"),
+        k.area(),
       ]);
 
-      k.onKeyPress("space", () => {
+      start.onKeyPress("space", () => {
         k.go("game");
       });
 
-      k.onTouchStart(() => {
+      start.onTouchStart(() => {
         k.go("game");
       });
     });
@@ -84,7 +87,7 @@ export default function ObstacleJumper() {
             k.sprite("obstacle"),
             k.scale(0.11),
             k.area(),
-            k.pos(k.width() - 20, k.height() - 20),
+            k.pos(k.width() - 20, k.height() - 120),
             k.anchor("botleft"),
             k.move(0, -300),
             k.offscreen({ destroy: true }),
@@ -98,8 +101,8 @@ export default function ObstacleJumper() {
 
       //Ground
       const ground = k.add([
-        k.rect(k.width(), 20),
-        k.pos(0, k.height() - 20),
+        k.rect(k.width(), 160),
+        k.pos(0, k.height() - 120),
         k.area(),
         k.body({ isStatic: true }),
         k.color(77, 150, 9),
@@ -107,14 +110,26 @@ export default function ObstacleJumper() {
     });
 
     k.scene("gameover", () => {
-      k.add([k.text("Game Over!"), k.pos(k.center()), k.anchor("center")]);
+      const gameOver = k.add([
+        k.text("Game Over!"),
+        k.pos(k.center()),
+        k.anchor("center"),
+      ]);
       const scoreText = k.add([
         k.text("Score: " + score),
         k.pos(k.center().x, k.center().y + 50),
         k.anchor("center"),
       ]);
-    });
 
+      k.onKeyPress("space", () => {
+        router.push("/");
+      });
+
+      k.onTouchStart(() => {
+        router.push("/");
+      });
+    });
+    // Init game
     k.go("start");
   }, []);
 
@@ -124,10 +139,7 @@ export default function ObstacleJumper() {
 
   return (
     <>
-      <canvas
-        style={{ width: "100vw", height: "100vw" }}
-        ref={canvasRef}
-      ></canvas>
+      <canvas ref={canvasRef}></canvas>
     </>
   );
 }
