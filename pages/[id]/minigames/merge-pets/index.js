@@ -193,6 +193,9 @@ export default function MergePets({ onAddMoney }) {
             moveUp();
           }
         }
+
+        // Prevent default behavior (swipe-to-refresh)
+        event.preventDefault();
       };
 
       window.addEventListener("touchstart", handleTouchStart);
