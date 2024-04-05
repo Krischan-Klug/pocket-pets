@@ -61,7 +61,6 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
 
       k.onUpdate(() => {
         customDeltaTime();
-        scoreText.text = score;
       });
 
       // UI
