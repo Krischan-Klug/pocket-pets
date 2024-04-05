@@ -28,7 +28,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
 
     k.scene("start", () => {
       const start = k.add([
-        k.text("Press to Start"),
+        k.text("Press Space to Start"),
         k.pos(k.center().x, k.center().y - 100),
         k.anchor("center"),
         k.area(),
@@ -174,9 +174,5 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
     return null;
   }
 
-  return (
-    <>
-      <canvas ref={canvasRef}></canvas>
-    </>
-  );
+  return <canvas ref={canvasRef}></canvas>;
 }
