@@ -47,8 +47,20 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       //Globals
       k.setGravity(1400);
 
+      let timeElapsed = 0;
+
+      function customDeltaTime() {
+        timeElapsed += k.dt();
+
+        if (timeElapsed >= 1) {
+          score++;
+          scoreText.text = score;
+          timeElapsed -= 1;
+        }
+      }
+
       k.onUpdate(() => {
-        score++;
+        customDeltaTime();
         scoreText.text = score;
       });
 
@@ -117,7 +129,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
     });
 
     k.scene("gameover", () => {
-      const moneyToAdd = Math.floor(score / 100);
+      const moneyToAdd = Math.floor(score * 1.1);
       const gameOver = k.add([
         k.text("Game Over!"),
         k.pos(k.center().x, k.center().y - 100),
