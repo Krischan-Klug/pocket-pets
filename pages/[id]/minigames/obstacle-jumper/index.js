@@ -2,8 +2,9 @@ import kaboom from "kaboom";
 import { useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 
-export default function ObstacleJumper() {
+export default function ObstacleJumper({ onAddMoney }) {
   const router = useRouter();
+  const id = router.query.id;
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -110,6 +111,7 @@ export default function ObstacleJumper() {
     });
 
     k.scene("gameover", () => {
+      const moneyToAdd = Math.floor(score / 100);
       const gameOver = k.add([
         k.text("Game Over!"),
         k.pos(k.center()),
@@ -121,12 +123,23 @@ export default function ObstacleJumper() {
         k.anchor("center"),
       ]);
 
+      const moneyText = k.add([
+        k.text("You earned: " + moneyToAdd + "Coins"),
+        k.pos(k.center().x, k.center().y + 150),
+        k.anchor("center"),
+      ]);
+
+      function endGame() {
+        onAddMoney(moneyToAdd);
+        router.push(`/pet-detail-page/${id}`);
+      }
+
       k.onKeyPress("space", () => {
-        router.push("/");
+        endGame();
       });
 
       k.onTouchStart(() => {
-        router.push("/");
+        endGame();
       });
     });
     // Init game
