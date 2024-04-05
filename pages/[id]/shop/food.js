@@ -39,7 +39,7 @@ export default function FoodShop({ userStats, onAddFood }) {
 
       {selectedFoodId && (
         <BuyPopUp
-          message={`How much ${
+          message={`How many ${
             foods.find((food) => food.id === selectedFoodId).name
           }s would you like to buy?`}
           onBuy={confirmBuy}
