@@ -58,6 +58,14 @@ const Square = styled.div`
   }}
 `;
 
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default function MergePets({ onAddMoney }) {
   const [grid, setGrid] = useState([]);
   const [points, setPoints] = useState(0);
@@ -91,6 +99,11 @@ export default function MergePets({ onAddMoney }) {
     setGrid(grid);
   }, []);
 
+  //Recalculate points when grid changes
+  useEffect(() => {
+    setPoints(() => getPoints());
+  }, [grid]);
+
   //Keyboard Input Detection
   useEffect(() => {
     if (!confirmationPopUpContent.show) {
@@ -120,6 +133,7 @@ export default function MergePets({ onAddMoney }) {
     }
   }, [confirmationPopUpContent.show]);
 
+  //Touch Input Detection
   useEffect(() => {
     if (!confirmationPopUpContent.show) {
       let startX = 0;
@@ -161,6 +175,7 @@ export default function MergePets({ onAddMoney }) {
       window.addEventListener("touchstart", handleTouchStart);
       window.addEventListener("touchend", handleTouchEnd);
 
+      // Cleanup-Function, to remove the event listener
       return () => {
         window.removeEventListener("touchstart", handleTouchStart);
         window.removeEventListener("touchend", handleTouchEnd);
@@ -168,17 +183,23 @@ export default function MergePets({ onAddMoney }) {
     }
   }, [confirmationPopUpContent.show]);
 
+  //Move all filled cells to the left and merge identical fields
   function moveLeft() {
     const newGrid = [...grid];
+    // Iterate over each row of the grid.
     for (let j = 0; j < 4; j++) {
+      // Iterate over each cell in the current row.
       for (let i = 1; i < 4; i++) {
+        // Check if the current cell is not empty (not equal to 0).
         if (newGrid[j][i] !== 0) {
           let k = i;
+          // Move the current number as far left as possible.
           while (k > 0 && newGrid[j][k - 1] === 0) {
             newGrid[j][k - 1] = newGrid[j][k];
             newGrid[j][k] = 0;
             k--;
           }
+          // Combine two neighboring numbers if they are the same.
           if (k > 0 && newGrid[j][k - 1] === newGrid[j][k]) {
             newGrid[j][k - 1] *= 2;
             newGrid[j][k] = 0;
@@ -254,7 +275,6 @@ export default function MergePets({ onAddMoney }) {
     }
     setGrid(newGrid);
     newNumber();
-    getPoints();
   }
 
   function newNumber() {
@@ -268,9 +288,9 @@ export default function MergePets({ onAddMoney }) {
         }
       }
     }
+
     // Check if there are empty cells
     if (emptyCells.length === 0) {
-      console.log("Game Over");
       gameOver();
       return;
     }
@@ -287,13 +307,8 @@ export default function MergePets({ onAddMoney }) {
 
   function getPoints() {
     let sum = 0;
-    for (let i = 0; i < grid.length; i++) {
-      for (let j = 0; j < grid[i].length; j++) {
-        sum += grid[i][j];
-      }
-    }
-    setPoints(() => {
-      return sum;
+    grid.forEach((row) => {
+      row.forEach((point) => (sum += point));
     });
     return sum;
   }
@@ -312,6 +327,23 @@ export default function MergePets({ onAddMoney }) {
     });
   }
 
+  function renderSquareContent(value) {
+    if (value !== 0) {
+      return animalImage ? (
+        <ImageContainer>
+          <Image src="/assets/images/pets/owl.png" width={40} height={40} />
+        </ImageContainer>
+      ) : (
+        value
+      );
+    }
+    return "";
+  }
+
+  const toggleDisplay = () => {
+    setAnimalImage(!animalImage);
+  };
+
   return (
     <>
       <header>
@@ -329,11 +361,14 @@ export default function MergePets({ onAddMoney }) {
                 key={`${rowIndex}-${colIndex}`}
                 $squareColor={`zahl${value}`}
               >
-                {value !== 0 ? value : ""}
+                {renderSquareContent(value)}
               </Square>
             ))
           )}
         </PlayGround>
+        <button onClick={toggleDisplay}>
+          {animalImage ? "Show Numbers" : "Show Images"}
+        </button>
       </main>
       {confirmationPopUpContent.show && (
         <ConfirmationPopup
