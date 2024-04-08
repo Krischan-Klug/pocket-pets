@@ -27,9 +27,16 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
     //Scene Management
 
     k.scene("start", () => {
-      const start = k.add([
-        k.text("Press SPACE to Start"),
+      const space = k.add([
+        k.text("Press SPACE"),
         k.pos(k.center().x, k.center().y - 100),
+        k.anchor("center"),
+        k.area(),
+      ]);
+
+      const start = k.add([
+        k.text("to Start"),
+        k.pos(k.center().x, k.center().y - 50),
         k.anchor("center"),
         k.area(),
       ]);
