@@ -18,7 +18,9 @@ export default function App({ Component, pageProps }) {
   const [settingPageShow, setSettingPage] = useState(false);
 
   //Clock
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useLocalStorageState("currentTime", {
+    defaultValue: 0,
+  });
   useEffect(() => {
     const interval = setInterval(() => {
       if (currentTime < 23) {
