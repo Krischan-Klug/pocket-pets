@@ -106,7 +106,7 @@ export default function App({ Component, pageProps }) {
         onDeletePet={handleDeletePet}
         onGameUpdate={handleGameUpdate}
         onSubtracMoney={handleSubtracMoney}
-        addMoney={handleAddMoney}
+        onAddMoney={handleAddMoney}
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
       {settingPageShow && (
