@@ -5,6 +5,7 @@ import Image from "next/image";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
+import StyledLink from "@/components/StyledComponents/StyledLink";
 
 const PlayGround = styled.div`
   display: grid;
@@ -18,6 +19,20 @@ const PlayGround = styled.div`
   border-radius: 8px;
 `;
 
+const squareColors = {
+  2: "rgb(238, 232, 232)",
+  4: "rgb(223, 213, 192)",
+  8: "rgb(218, 177, 125)",
+  16: "rgb(196, 155, 80)",
+  32: "rgb(194, 140, 90)",
+  64: "rgb(190, 175, 87)",
+  128: "rgb(185, 165, 49)",
+  256: "rgb(159, 197, 98)",
+  512: "rgb(134, 189, 61)",
+  1024: "rgb(90, 177, 162)",
+  2048: "rgb(54, 165, 173)",
+};
+
 const Square = styled.div`
   color: black;
   height: 50px;
@@ -26,34 +41,8 @@ const Square = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  ${(props) => {
-    switch (props.$squareColor) {
-      case "zahl2":
-        return `background: rgb(238, 232, 232);`;
-      case "zahl4":
-        return `background: rgb(223, 213, 192);`;
-      case "zahl8":
-        return `background: rgb(218, 177, 125);`;
-      case "zahl16":
-        return `background: rgb(196, 155, 80);`;
-      case "zahl32":
-        return `background: rgb(194, 140, 90);`;
-      case "zahl64":
-        return `background: rgb(190, 175, 87);`;
-      case "zahl128":
-        return `background: rgb(185, 165, 49);`;
-      case "zahl256":
-        return `background: rgb(159, 197, 98);`;
-      case "zahl512":
-        return `background: rgb(134, 189, 61);`;
-      case "zahl1024":
-        return `background: rgb(90, 177, 162);`;
-      case "zahl2048":
-        return `background: rgb(54, 165, 173);`;
-      default:
-        return `background: var(--background-color);`;
-    }
-  }}
+  background: ${(props) =>
+    squareColors[props.$squareColor] || "var(--background-color)"};
 `;
 
 const ImageContainer = styled.div`
@@ -95,6 +84,7 @@ export default function MergePets({ onAddMoney }) {
   const [grid, setGrid] = useState([]);
   const [points, setPoints] = useState(0);
   const [animalImage, setAnimalImage] = useState(true);
+  const [gameOver, setGameOver] = useState(false);
   const [confirmationPopUpContent, setConfirmationPopUpContent] = useState({
     message:
       "The aim of the game is to stack as many animals/numbers as possible until the playing field is full. To do this, either press the arrow keys or swipe across the display. All filled fields move to the respective side and the same fields stack to higher value fields.",
@@ -193,9 +183,6 @@ export default function MergePets({ onAddMoney }) {
             moveUp();
           }
         }
-
-        // Prevent default behavior (swipe-to-refresh)
-        event.preventDefault();
       };
 
       window.addEventListener("touchstart", handleTouchStart);
@@ -209,126 +196,150 @@ export default function MergePets({ onAddMoney }) {
     }
   }, [confirmationPopUpContent.show]);
 
+  console.log("GRID: ", grid);
+
   //Move all filled cells to the left and merge identical fields
   function moveLeft() {
-    const newGrid = [...grid];
-    // Iterate over each row of the grid.
-    for (let j = 0; j < 4; j++) {
-      // Iterate over each cell in the current row.
-      for (let i = 1; i < 4; i++) {
-        // Check if the current cell is not empty (not equal to 0).
-        if (newGrid[j][i] !== 0) {
-          let k = i;
-          // Move the current number as far left as possible.
-          while (k > 0 && newGrid[j][k - 1] === 0) {
-            newGrid[j][k - 1] = newGrid[j][k];
-            newGrid[j][k] = 0;
-            k--;
-          }
-          // Combine two neighboring numbers if they are the same.
-          if (k > 0 && newGrid[j][k - 1] === newGrid[j][k]) {
-            newGrid[j][k - 1] *= 2;
-            newGrid[j][k] = 0;
+    setGrid((prevGrid) => {
+      const newGrid = prevGrid.map((row) => [...row]);
+
+      // Iterate over each row of the grid.
+      for (let j = 0; j < 4; j++) {
+        // Iterate over each cell in the current row.
+        for (let i = 1; i < 4; i++) {
+          // Check if the current cell is not empty (not equal to 0).
+          if (newGrid[j][i] !== 0) {
+            let k = i;
+            // Move the current number as far left as possible.
+            while (k > 0 && newGrid[j][k - 1] === 0) {
+              newGrid[j][k - 1] = newGrid[j][k];
+              newGrid[j][k] = 0;
+              k--;
+            }
+            // Combine two neighboring numbers if they are the same.
+            if (k > 0 && newGrid[j][k - 1] === newGrid[j][k]) {
+              newGrid[j][k - 1] *= 2;
+              newGrid[j][k] = 0;
+            }
           }
         }
       }
-    }
-    setGrid(newGrid);
+
+      return newGrid;
+    });
     newNumber();
   }
 
   function moveRight() {
-    const newGrid = [...grid];
-    for (let j = 0; j < 4; j++) {
-      for (let i = 4 - 2; i >= 0; i--) {
-        if (newGrid[j][i] !== 0) {
-          let k = i;
-          while (k < 4 - 1 && newGrid[j][k + 1] === 0) {
-            newGrid[j][k + 1] = newGrid[j][k];
-            newGrid[j][k] = 0;
-            k++;
-          }
-          if (k < 4 - 1 && newGrid[j][k + 1] === newGrid[j][k]) {
-            newGrid[j][k + 1] *= 2;
-            newGrid[j][k] = 0;
+    setGrid((prevGrid) => {
+      const newGrid = prevGrid.map((row) => [...row]);
+
+      for (let j = 0; j < 4; j++) {
+        for (let i = 4 - 2; i >= 0; i--) {
+          if (newGrid[j][i] !== 0) {
+            let k = i;
+            while (k < 4 - 1 && newGrid[j][k + 1] === 0) {
+              newGrid[j][k + 1] = newGrid[j][k];
+              newGrid[j][k] = 0;
+              k++;
+            }
+            if (k < 4 - 1 && newGrid[j][k + 1] === newGrid[j][k]) {
+              newGrid[j][k + 1] *= 2;
+              newGrid[j][k] = 0;
+            }
           }
         }
       }
-    }
-    setGrid(newGrid);
+
+      return newGrid;
+    });
+
     newNumber();
   }
 
   function moveUp() {
-    const newGrid = [...grid];
-    for (let i = 0; i < 4; i++) {
-      for (let j = 1; j < 4; j++) {
-        if (newGrid[j][i] !== 0) {
-          let k = j;
-          while (k > 0 && newGrid[k - 1][i] === 0) {
-            newGrid[k - 1][i] = newGrid[k][i];
-            newGrid[k][i] = 0;
-            k--;
-          }
-          if (k > 0 && newGrid[k - 1][i] === newGrid[k][i]) {
-            newGrid[k - 1][i] *= 2;
-            newGrid[k][i] = 0;
+    setGrid((prevGrid) => {
+      const newGrid = prevGrid.map((row) => [...row]);
+
+      for (let i = 0; i < 4; i++) {
+        for (let j = 1; j < 4; j++) {
+          if (newGrid[j][i] !== 0) {
+            let k = j;
+            while (k > 0 && newGrid[k - 1][i] === 0) {
+              newGrid[k - 1][i] = newGrid[k][i];
+              newGrid[k][i] = 0;
+              k--;
+            }
+            if (k > 0 && newGrid[k - 1][i] === newGrid[k][i]) {
+              newGrid[k - 1][i] *= 2;
+              newGrid[k][i] = 0;
+            }
           }
         }
       }
-    }
-    setGrid(newGrid);
+
+      return newGrid;
+    });
+
     newNumber();
   }
 
   function moveDown() {
-    const newGrid = [...grid];
-    for (let i = 0; i < 4; i++) {
-      for (let j = 4 - 2; j >= 0; j--) {
-        if (newGrid[j][i] !== 0) {
-          let k = j;
-          while (k < 4 - 1 && newGrid[k + 1][i] === 0) {
-            newGrid[k + 1][i] = newGrid[k][i];
-            newGrid[k][i] = 0;
-            k++;
-          }
-          if (k < 4 - 1 && newGrid[k + 1][i] === newGrid[k][i]) {
-            newGrid[k + 1][i] *= 2;
-            newGrid[k][i] = 0;
+    setGrid((prevGrid) => {
+      const newGrid = prevGrid.map((row) => [...row]);
+
+      for (let i = 0; i < 4; i++) {
+        for (let j = 4 - 2; j >= 0; j--) {
+          if (newGrid[j][i] !== 0) {
+            let k = j;
+            while (k < 4 - 1 && newGrid[k + 1][i] === 0) {
+              newGrid[k + 1][i] = newGrid[k][i];
+              newGrid[k][i] = 0;
+              k++;
+            }
+            if (k < 4 - 1 && newGrid[k + 1][i] === newGrid[k][i]) {
+              newGrid[k + 1][i] *= 2;
+              newGrid[k][i] = 0;
+            }
           }
         }
       }
-    }
-    setGrid(newGrid);
+
+      return newGrid;
+    });
     newNumber();
   }
 
   function newNumber() {
-    const emptyCells = [];
+    setGrid((prevGrid) => {
+      const newGrid = prevGrid.map((row) => [...row]);
+      const emptyCells = [];
 
-    // Run through the grid to find empty cells
-    for (let j = 0; j < 4; j++) {
-      for (let i = 0; i < 4; i++) {
-        if (grid[j][i] === 0) {
-          emptyCells.push([j, i]);
+      // Run through the newGrid to find empty cells
+      for (let j = 0; j < 4; j++) {
+        for (let i = 0; i < 4; i++) {
+          if (newGrid[j][i] === 0) {
+            emptyCells.push([j, i]);
+          }
         }
       }
-    }
 
-    // Check if there are empty cells
-    if (emptyCells.length === 0) {
-      gameOver();
-      return;
-    }
+      // Check if there are empty cells
+      if (emptyCells.length === 0) {
+        setGameOver(true);
+        console.log("GAMEOVER");
+        return prevGrid;
+      }
 
-    // Random selection of an empty cell
-    const randomIndex = Math.floor(Math.random() * emptyCells.length);
-    const [newX, newY] = emptyCells[randomIndex];
+      // Random selection of an empty cell
+      const randomIndex = Math.floor(Math.random() * emptyCells.length);
+      const [newX, newY] = emptyCells[randomIndex];
+      console.log("emptyCells: ", emptyCells);
+      console.log("X: ", newX, "Y: ", newY);
+      newGrid[newX][newY] = 2;
 
-    // Set the new number in the random cell
-    const newGrid = [...grid];
-    newGrid[newX][newY] = 2;
-    setGrid(newGrid);
+      return newGrid;
+    });
   }
 
   function getPoints() {
@@ -336,22 +347,26 @@ export default function MergePets({ onAddMoney }) {
     grid.forEach((row) => {
       row.forEach((point) => (sum += point));
     });
+    console.log("SUM: ", sum);
     return sum;
   }
 
-  function gameOver() {
-    const points = getPoints();
-    const money = Math.floor(points / 8);
-    setConfirmationPopUpContent({
-      ...confirmationPopUpContent,
-      show: true,
-      message: `Game over, your high score is: ${points}. For this you get ${money} coins!`,
-      onConfirm: () => {
-        onAddMoney(money);
-        router.push(`/pet-detail-page/${id}`);
-      },
-    });
-  }
+  useEffect(() => {
+    if (gameOver) {
+      const newpoints = getPoints();
+      const money = Math.floor(newpoints / 8);
+      console.log("NewPoints ", newpoints);
+      setConfirmationPopUpContent({
+        ...confirmationPopUpContent,
+        show: true,
+        message: `Game over, your high score is: ${newpoints}. For this you get ${money} coins!`,
+        onConfirm: () => {
+          onAddMoney(money);
+          router.push(`/pet-detail-page/${id}`);
+        },
+      });
+    }
+  }, [gameOver]);
 
   function renderSquareContent(value) {
     if (value !== 0) {
@@ -375,9 +390,8 @@ export default function MergePets({ onAddMoney }) {
     let content = [];
 
     Object.entries(petImageMap).forEach(([val, imgUrl], index) => {
-      const backgroundColor = `zahl${val}`;
       content.push(
-        <Square key={index} $squareColor={backgroundColor}>
+        <Square key={index} $squareColor={val}>
           <Image src={imgUrl} alt="Pet Image" width={40} height={40} />
         </Square>
       );
@@ -392,14 +406,13 @@ export default function MergePets({ onAddMoney }) {
 
   const toggleDisplay = () => {
     setAnimalImage(!animalImage);
+    console.log("TEST");
   };
 
   return (
     <>
       <header>
-        <StyledLeftButton onClick={() => router.push(`/pet-detail-page/${id}`)}>
-          Back
-        </StyledLeftButton>
+        <StyledLink href={`/pet-detail-page/${id}`}>Back</StyledLink>
         <h1>Merge Pets</h1>
       </header>
       <main>
@@ -407,10 +420,7 @@ export default function MergePets({ onAddMoney }) {
         <PlayGround>
           {grid.map((row, rowIndex) =>
             row.map((value, colIndex) => (
-              <Square
-                key={`${rowIndex}-${colIndex}`}
-                $squareColor={`zahl${value}`}
-              >
+              <Square key={`${rowIndex}-${colIndex}`} $squareColor={value}>
                 {renderSquareContent(value)}
               </Square>
             ))
