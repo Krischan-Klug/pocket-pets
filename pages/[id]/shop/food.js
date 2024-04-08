@@ -21,7 +21,6 @@ export default function FoodShop({ userStats, onAddFood }) {
   function confirmBuy(value, id) {
     onAddFood(value, id);
     setSelectedFoodId(null);
-    console.log("test");
   }
 
   return (

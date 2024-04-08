@@ -54,6 +54,7 @@ const StyledValueButton = styled(Image)`
 
 const StyledText = styled.span`
   font-size: 25px;
+  padding: 0 5px;
 `;
 
 export default function BuyPopUp({
@@ -82,16 +83,16 @@ export default function BuyPopUp({
           onClick={decrementValue}
           src={arrowLeft}
           alt="subtract one item"
-          width={25}
-          height={25}
+          width={20}
+          height={20}
         />
         <StyledText>{value}</StyledText>
         <StyledValueButton
           onClick={incrementValue}
           src={arrowRight}
           alt="add one item"
-          width={25}
-          height={25}
+          width={20}
+          height={20}
         />
         <BuyButtonWrapper>
           {onBuy != null && (
