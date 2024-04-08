@@ -28,7 +28,6 @@ export default function App({ Component, pageProps }) {
       } else {
         setCurrentTime(0);
       }
-      console.log(currentTime);
     }, 600);
 
     return () => clearInterval(interval);
