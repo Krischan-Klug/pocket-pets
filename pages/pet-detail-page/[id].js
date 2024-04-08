@@ -16,6 +16,7 @@ import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
 import energyImage from "/public/assets/images/interaction/energy.png";
 import graveImage from "/public/assets/images/grave.png";
+import backgroundImage from "public/assets/images/backgrounds/background1.png";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -38,10 +39,73 @@ const StyledPetDetailPageMain = styled.main`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  justify-content: space-between;
+`;
+
+const StyleBackgroundImageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+`;
+
+const timeColor = [
+  "rgb(0, 17, 26)", // 0 Uhr
+  "rgb(0, 17, 26)", // 1 Uhr
+  "rgb(0, 17, 26)", // 2 Uhr
+  "rgb(0, 17, 26)", // 3 Uhr
+  "rgb(0, 17, 26)", // 4 Uhr
+  "rgb(0, 30, 46)", // 5 Uhr
+  "rgb(0, 43, 66)", // 6 Uhr
+  "rgb(0, 61, 94)", // 7 Uhr
+  "rgb(0, 71, 110)", // 8 Uhr
+  "rgb(0, 82, 128)", // 9 Uhr
+  "rgb(0, 98, 153)", // 10 Uhr
+  "rgb(0, 116, 181)", // 11 Uhr
+  "rgb(0, 137, 214)", // 12 Uhr
+  "rgb(0, 153, 240)", // 13 Uhr
+  "rgb(0, 163, 255)", // 14 Uhr
+  "rgb(0, 163, 255)", // 15 Uhr
+  "rgb(0, 163, 255)", // 16 Uhr
+  "rgb(0, 135, 212)", // 17 Uhr
+  "rgb(0, 114, 179)", // 18 Uhr
+  "rgb(0, 86, 135)", // 19 Uhr
+  "rgb(0, 62, 97)", // 20 Uhr
+  "rgb(0, 41, 64)", // 21 Uhr
+  "rgb(0, 17, 26)", // 22 Uhr
+  "rgb(0, 17, 26)", // 23 Uhr
+];
+
+const StyledTimeBackground = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: ${(props) => timeColor[props.currentTime]};
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  z-index: -30;
+`;
+
+const StyledWallBackground = styled.div`
+  background-image: url(${backgroundImage.src});
+  background-size: cover;
+  background-position-x: center;
+  background-attachment: fixed;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background-image: url(${backgroundImage.src});
+  z-index: -10;
 `;
 
 const StyledPetContainer = styled.section`
   position: relative;
+  bottom: 0;
 `;
 
 const StyledPetImage = styled(Image)`
@@ -102,10 +166,23 @@ const StatusBarWrapper = styled.section`
     margin-bottom: 15px;
   }
 `;
+const StyledMoneyHandleSection = styled.section`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+`;
 
-const StyledDiv = styled.div`
+const StyledNameSection = styled.div`
   display: flex;
   justify-content: center;
+  background-color: rgba(255, 255, 255, 0.7);
+`;
+
+const StyledReviewButton = styled(StyledButton)`
+  position: absolute;
+  top: -20px;
 `;
 
 export default function PetDetailPage({
@@ -114,6 +191,7 @@ export default function PetDetailPage({
   onUpdatePet,
   userStats,
   onSubtracMoney,
+  currentTime,
 }) {
   const [currentPet, setCurrentPet] = useState(null);
   const [isInteracting, setIsInteracting] = useState({
@@ -228,129 +306,138 @@ export default function PetDetailPage({
 
   return (
     <>
-      <StyledPetDetailPageHeader>
-        <StyledLeftButton
-          onClick={() => {
-            router.push("/");
-          }}
-        >
-          Back
-        </StyledLeftButton>
+      <StyleBackgroundImageWrapper>
+        <StyledTimeBackground currentTime={currentTime} />
+        <StyledWallBackground />
 
-        <StyledDiv>
-          <h1 onClick={() => router.push(`/edit/${id}`)}>{name}</h1>
-          <StyledEditImage
-            src={editIcon}
-            alt="edit button"
-            height={20}
-            width={20}
-            onClick={() => router.push(`/edit/${id}`)}
-          />
-        </StyledDiv>
-      </StyledPetDetailPageHeader>
-      <StyledPetDetailPageMain>
-        <StatusBarWrapper>
-          <StatusBar text={"Health"} value={currentPet.health} />
-          <StatusBar text={"Hunger"} value={currentPet.hunger} />
-          <StatusBar text={"Happiness"} value={currentPet.happiness} />
-          <StatusBar text={"Energy"} value={currentPet.energy} />
-        </StatusBarWrapper>
-        <StyledGameArea>
-          <SyledInteractionButtonWrapper>
-            <button
-              onClick={() => handleFeed(10)}
-              disabled={isInteracting.duration > 0 || currentPet.isDead}
-            >
-              <Image
-                alt="Hunger"
-                src={hungerImage}
-                width={50}
-                height={50}
-              ></Image>
-            </button>
-            <button
-              onClick={() => handlePlay(10)}
-              disabled={isInteracting.duration > 0 || currentPet.isDead}
-            >
-              <Image
-                alt="Happiness"
-                src={happinessImage}
-                width={50}
-                height={50}
-              ></Image>
-            </button>
-          </SyledInteractionButtonWrapper>
-          <StyledPetContainer>
-            {isInteracting.duration > 0 && (
-              <StyledInteractionImage
-                src={`/assets/images/interaction/${isInteracting.interaction}.png`}
-                alt="interaction icon"
-                height={50}
-                width={50}
-                animationStyle={isInteracting.interaction}
-              />
-            )}
-            <StyledPetImage
-              src={isDead ? graveImage : image}
-              alt={type}
-              height={150}
-              width={150}
-            />
-          </StyledPetContainer>
-          <SyledInteractionButtonWrapper>
-            <button
-              onClick={() => handleSleep(100)}
-              disabled={isInteracting.duration > 0 || currentPet.isDead}
-            >
-              <Image
-                alt="Energy"
-                src={energyImage}
-                width={50}
-                height={50}
-              ></Image>
-            </button>
-          </SyledInteractionButtonWrapper>
-        </StyledGameArea>
-        {isDead && (
-          <StyledButton
+        <StyledPetDetailPageHeader>
+          <StyledLeftButton
             onClick={() => {
-              if (userStats.money >= 200) {
-                setConfirmationPopUpContent({
-                  ...confirmationPopUpContent,
-                  show: true,
-                  message: `Are you sure you want to revive ${name}? `,
-                  onConfirm: () => handleConfirm(200),
-                  onCancel: () =>
-                    setConfirmationPopUpContent({
-                      ...confirmationPopUpContent,
-                      show: false,
-                    }),
-                });
-              } else {
-                setConfirmationPopUpContent({
-                  ...confirmationPopUpContent,
-                  show: true,
-                  message: `You don't have enough money for this. `,
-                  onConfirm: () =>
-                    setConfirmationPopUpContent({
-                      ...confirmationPopUpContent,
-                      show: false,
-                    }),
-                  onCancel: null,
-                });
-              }
+              router.push("/");
             }}
           >
-            Revive {name} costs
-            <MoneyColored cost={200} money={userStats.money} /> <MoneyImage />
-          </StyledButton>
-        )}
-        <StyledButton
-          onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
-        >
-          Obstacle Jumper
-        </StyledButton>
-      </StyledPetDetailPageMain>
+            Back
+          </StyledLeftButton>
+
+          <StyledNameSection>
+            <h1 onClick={() => router.push(`/edit/${id}`)}>{name}</h1>
+            <StyledEditImage
+              src={editIcon}
+              alt="edit button"
+              height={20}
+              width={20}
+              onClick={() => router.push(`/edit/${id}`)}
+            />
+          </StyledNameSection>
+          <StatusBarWrapper>
+            <StatusBar text={"Health"} value={currentPet.health} />
+            <StatusBar text={"Hunger"} value={currentPet.hunger} />
+            <StatusBar text={"Happiness"} value={currentPet.happiness} />
+            <StatusBar text={"Energy"} value={currentPet.energy} />
+          </StatusBarWrapper>
+          <StyledMoneyHandleSection>
+            <StyledButton
+              onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
+            >
+              Obstacle Jumper
+            </StyledButton>
+          </StyledMoneyHandleSection>
+        </StyledPetDetailPageHeader>
+        <StyledPetDetailPageMain>
+          <StyledGameArea>
+            <SyledInteractionButtonWrapper>
+              <button
+                onClick={() => handleFeed(10)}
+                disabled={isInteracting.duration > 0 || currentPet.isDead}
+              >
+                <Image
+                  alt="Hunger"
+                  src={hungerImage}
+                  width={50}
+                  height={50}
+                ></Image>
+              </button>
+              <button
+                onClick={() => handlePlay(10)}
+                disabled={isInteracting.duration > 0 || currentPet.isDead}
+              >
+                <Image
+                  alt="Happiness"
+                  src={happinessImage}
+                  width={50}
+                  height={50}
+                ></Image>
+              </button>
+            </SyledInteractionButtonWrapper>
+            <StyledPetContainer>
+              {isDead && (
+                <StyledReviewButton
+                  onClick={() => {
+                    if (userStats.money >= 200) {
+                      setConfirmationPopUpContent({
+                        ...confirmationPopUpContent,
+                        show: true,
+                        message: `Are you sure you want to revive ${name}? `,
+                        onConfirm: () => handleConfirm(200),
+                        onCancel: () =>
+                          setConfirmationPopUpContent({
+                            ...confirmationPopUpContent,
+                            show: false,
+                          }),
+                      });
+                    } else {
+                      setConfirmationPopUpContent({
+                        ...confirmationPopUpContent,
+                        show: true,
+                        message: `You don't have enough money for this. `,
+                        onConfirm: () =>
+                          setConfirmationPopUpContent({
+                            ...confirmationPopUpContent,
+                            show: false,
+                          }),
+                        onCancel: null,
+                      });
+                    }
+                  }}
+                >
+                  Revive {name} costs
+                  <MoneyColored cost={200} money={userStats.money} />{" "}
+                  <MoneyImage />
+                </StyledReviewButton>
+              )}
+              {isInteracting.duration > 0 && (
+                <StyledInteractionImage
+                  src={`/assets/images/interaction/${isInteracting.interaction}.png`}
+                  alt="interaction icon"
+                  height={50}
+                  width={50}
+                  animationStyle={isInteracting.interaction}
+                />
+              )}
+              <StyledPetImage
+                src={isDead ? graveImage : image}
+                alt={type}
+                height={150}
+                width={150}
+              />
+            </StyledPetContainer>
+            <SyledInteractionButtonWrapper>
+              <button
+                onClick={() => handleSleep(100)}
+                disabled={isInteracting.duration > 0 || currentPet.isDead}
+              >
+                <Image
+                  alt="Energy"
+                  src={energyImage}
+                  width={50}
+                  height={50}
+                ></Image>
+              </button>
+            </SyledInteractionButtonWrapper>
+          </StyledGameArea>
+        </StyledPetDetailPageMain>
+      </StyleBackgroundImageWrapper>
+
       {confirmationPopUpContent.show && (
         <ConfirmationPopup
           message={confirmationPopUpContent.message}

@@ -17,6 +17,21 @@ export default function App({ Component, pageProps }) {
   });
   const [settingPageShow, setSettingPage] = useState(false);
 
+  //Clock
+  const [currentTime, setCurrentTime] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (currentTime < 23) {
+        setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
+      } else {
+        setCurrentTime(0);
+      }
+      console.log(currentTime);
+    }, 600);
+
+    return () => clearInterval(interval);
+  }, [currentTime]);
+
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
     function updatePetsWithNewKeys() {
@@ -107,6 +122,7 @@ export default function App({ Component, pageProps }) {
         onGameUpdate={handleGameUpdate}
         onSubtracMoney={handleSubtracMoney}
         onAddMoney={handleAddMoney}
+        currentTime={currentTime}
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
       {settingPageShow && (
