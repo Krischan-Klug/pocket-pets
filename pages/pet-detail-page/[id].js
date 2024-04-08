@@ -270,7 +270,7 @@ export default function PetDetailPage({
             width={20}
             onClick={() => router.push(`/edit/${id}`)}
           />
-          <StyledXPBar $value={Math.floor(percentageLevelProgress(xp))}>
+          <StyledXPBar $value={percentageLevelProgress(xp)}>
             Level: <span>{calculateLevel(xp)}</span>
           </StyledXPBar>
         </StyledDiv>
