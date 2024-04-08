@@ -66,6 +66,7 @@ export default function BuyPopUp({
   cost,
 }) {
   const [value, setValue] = useState(1);
+  const [budgetLimitReached, setBudgetLimitReached] = useState(false);
 
   const decrementValue = () => {
     setValue((prevValue) => Math.max(prevValue - 1, 1));
@@ -99,10 +100,9 @@ export default function BuyPopUp({
             <BuyPopUpButton
               onClick={() => {
                 if (cost * value < money) {
-                  onBuy(value, id);
-                  console.log("test");
+                  onBuy(value, id, cost);
                 } else {
-                  console.log("cost: ", cost);
+                  setBudgetLimitReached(true);
                 }
               }}
             >
@@ -115,6 +115,11 @@ export default function BuyPopUp({
             </BuyPopUpButton>
           )}
         </BuyButtonWrapper>
+        {budgetLimitReached !== false && (
+          <p>
+            You have not enough money. You can earn money by playing minigames.
+          </p>
+        )}
       </BuyPopUpContent>
     </BuyPopUpOverlay>
   );

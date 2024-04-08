@@ -57,7 +57,8 @@ export default function App({ Component, pageProps }) {
     });
   }
 
-  function handleSubtracMoney(value) {
+  function handleSubtractMoney(value) {
+    console.log("VALUE: ", value);
     setUserStats((prevUserStat) => {
       return { ...prevUserStat, money: prevUserStat.money - value };
     });
@@ -118,7 +119,7 @@ export default function App({ Component, pageProps }) {
         onUpdatePet={handleUpdatePet}
         onDeletePet={handleDeletePet}
         onGameUpdate={handleGameUpdate}
-        onSubtracMoney={handleSubtracMoney}
+        onSubtractMoney={handleSubtractMoney}
         addMoney={handleAddMoney}
         onAddFood={handleAddFood}
       />
