@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import StyledLink from "@/components/StyledComponents/StyledLink";
@@ -196,8 +195,6 @@ export default function MergePets({ onAddMoney }) {
     }
   }, [confirmationPopUpContent.show]);
 
-  console.log("GRID: ", grid);
-
   //Move all filled cells to the left and merge identical fields
   function moveLeft() {
     setGrid((prevGrid) => {
@@ -334,8 +331,6 @@ export default function MergePets({ onAddMoney }) {
       // Random selection of an empty cell
       const randomIndex = Math.floor(Math.random() * emptyCells.length);
       const [newX, newY] = emptyCells[randomIndex];
-      console.log("emptyCells: ", emptyCells);
-      console.log("X: ", newX, "Y: ", newY);
       newGrid[newX][newY] = 2;
 
       return newGrid;
@@ -347,19 +342,17 @@ export default function MergePets({ onAddMoney }) {
     grid.forEach((row) => {
       row.forEach((point) => (sum += point));
     });
-    console.log("SUM: ", sum);
     return sum;
   }
 
   useEffect(() => {
     if (gameOver) {
-      const newpoints = getPoints();
-      const money = Math.floor(newpoints / 8);
-      console.log("NewPoints ", newpoints);
+      const endPoints = getPoints();
+      const money = Math.floor(endPoints / 8);
       setConfirmationPopUpContent({
         ...confirmationPopUpContent,
         show: true,
-        message: `Game over, your high score is: ${newpoints}. For this you get ${money} coins!`,
+        message: `Game over, your high score is: ${endPoints}. For this you get ${money} 🪙!`,
         onConfirm: () => {
           onAddMoney(money);
           router.push(`/pet-detail-page/${id}`);
@@ -406,7 +399,6 @@ export default function MergePets({ onAddMoney }) {
 
   const toggleDisplay = () => {
     setAnimalImage(!animalImage);
-    console.log("TEST");
   };
 
   return (
