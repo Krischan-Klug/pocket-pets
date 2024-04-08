@@ -350,6 +350,13 @@ export default function PetDetailPage({
         >
           Merge Pets
         </StyledButton>
+        <StyledButton
+
+          onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
+        >
+          Obstacle Jumper
+
+        </StyledButton>
       </StyledPetDetailPageMain>
       {confirmationPopUpContent.show && (
         <ConfirmationPopup
