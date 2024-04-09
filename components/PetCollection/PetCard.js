@@ -15,6 +15,7 @@ const StyledPetCard = styled.button`
   justify-content: center;
   transform: scale(1);
   transition: 0.5s;
+  background-color: rgb(255, 255, 255, 0.7);
 
   &:hover {
     transform: scale(1.2);

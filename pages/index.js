@@ -6,6 +6,10 @@ import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 
 import MoneyImage from "@/components/util/MoneyImage";
+import {
+  StyledBackgroundImageWrapper,
+  StyledStaticBackground,
+} from "@/components/StyledComponents/StyledBackgroundImage";
 
 const StyledPetCollectionHeader = styled.header`
   height: 120px;
@@ -31,6 +35,7 @@ const StyledPetCollection = styled.section`
   width: 95vw;
   height: calc(100vh - 120px);
   overflow-y: auto;
+  z-index: 10;
   @media (min-width: 400px) {
     max-width: 700px;
     padding: 20px;
@@ -72,6 +77,7 @@ export default function HomePage({ myPets, onDeletePet, userStats }) {
 
   return (
     <>
+      <StyledStaticBackground />
       <StyledPetCollectionHeader>
         <h1>My Pets</h1>
         <StyledButtonWrapper>

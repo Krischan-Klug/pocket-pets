@@ -17,6 +17,47 @@ export default function App({ Component, pageProps }) {
   });
   const [settingPageShow, setSettingPage] = useState(false);
 
+  //Clock
+  const [currentTime, setCurrentTime] = useLocalStorageState("currentTime", {
+    defaultValue: 0,
+  });
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (currentTime < 23) {
+        setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
+      } else {
+        setCurrentTime(0);
+      }
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [currentTime]);
+
+  //Rain mechanic
+  const [isRaining, setIsRaining] = useLocalStorageState("isRaining", {
+    defaultValue: false,
+  });
+  function getRandomRainTime(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  useEffect(() => {
+    const rainTime = getRandomRainTime(30000, 60000);
+    if (!isRaining) {
+      const startRain = setInterval(() => {
+        setIsRaining(true);
+      }, rainTime);
+      return () => clearInterval(startRain);
+    }
+
+    if (isRaining) {
+      const endRain = setInterval(() => {
+        setIsRaining(false);
+      }, rainTime);
+      return () => clearInterval(endRain);
+    }
+  }, [isRaining]);
+
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
     function updatePetsWithNewKeys() {
@@ -107,6 +148,8 @@ export default function App({ Component, pageProps }) {
         onGameUpdate={handleGameUpdate}
         onSubtracMoney={handleSubtracMoney}
         onAddMoney={handleAddMoney}
+        currentTime={currentTime}
+        isRaining={isRaining}
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
       {settingPageShow && (
