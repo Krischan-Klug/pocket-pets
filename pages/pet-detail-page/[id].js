@@ -99,7 +99,6 @@ const StyledWallBackground = styled.div`
   width: 100vw;
   height: 100vh;
   position: absolute;
-  background-image: url(${backgroundImage.src});
   z-index: -10;
 `;
 
@@ -177,7 +176,6 @@ const StyledMoneyHandleSection = styled.section`
 const StyledNameSection = styled.div`
   display: flex;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.7);
 `;
 
 const StyledReviewButton = styled(StyledButton)`
