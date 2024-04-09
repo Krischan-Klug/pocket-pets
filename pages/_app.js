@@ -43,11 +43,9 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     const rainTime = getRandomRainTime(30000, 60000);
-    console.log("weather change in: ", rainTime / 1000, "s");
     if (!isRaining) {
       const startRain = setInterval(() => {
         setIsRaining(true);
-        console.log("start rain");
       }, rainTime);
       return () => clearInterval(startRain);
     }
@@ -55,7 +53,6 @@ export default function App({ Component, pageProps }) {
     if (isRaining) {
       const endRain = setInterval(() => {
         setIsRaining(false);
-        console.log("end rain");
       }, rainTime);
       return () => clearInterval(endRain);
     }
