@@ -1,25 +1,22 @@
-export function calculateLevel(xp) {
-  let level = 1;
-  let xpToNextLevel = 150;
+let level = 1;
+let xpToNextLevel = 150;
+let xpToThisLevel = 0;
 
-  while (xp >= xpToNextLevel) {
-    level++;
-    xpToNextLevel = Math.floor(xpToNextLevel * 2.1);
-  }
-  return level;
-}
-
-export function percentageLevelProgress(xp) {
-  let xpToThisLevel = 0;
-  let xpToNextLevel = 150;
-  let level = 1;
-
-  // Finding the level reached by the given XP
+function countLevel(xp) {
   while (xp >= xpToNextLevel) {
     level++;
     xpToThisLevel = xpToNextLevel;
     xpToNextLevel = Math.floor(xpToThisLevel * 2.1);
   }
+}
+
+export function calculateLevel(xp) {
+  countLevel(xp);
+  return level;
+}
+
+export function percentageLevelProgress(xp) {
+  countLevel(xp);
 
   const xpNeededForNextLevel = xpToNextLevel - xpToThisLevel;
   const xpGainedTowardsNextLevel = xp - xpToThisLevel;
