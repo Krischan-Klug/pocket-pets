@@ -11,6 +11,7 @@ import StyledButton from "@/components/StyledComponents/StyledButton";
 import MoneyImage from "@/components/util/MoneyImage";
 import MoneyColored from "@/components/util/MoneyColored";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
+import HungerInventoryPopUp from "@/components/DetailPage/HungerInventoryPopUp";
 
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
@@ -126,6 +127,7 @@ export default function PetDetailPage({
     onCancel: null,
     show: false,
   });
+  const [feedButtonPopUp, setFeedButtonPopUp] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -258,8 +260,9 @@ export default function PetDetailPage({
         <StyledGameArea>
           <SyledInteractionButtonWrapper>
             <button
-              onClick={() => handleFeed(10)}
+              // onClick={() => handleFeed(10)}
               disabled={isInteracting.duration > 0 || currentPet.isDead}
+              onClick={() => setFeedButtonPopUp(true)}
             >
               <Image
                 alt="Hunger"
@@ -268,6 +271,17 @@ export default function PetDetailPage({
                 height={50}
               ></Image>
             </button>
+            {feedButtonPopUp !== false && (
+              <HungerInventoryPopUp
+                onFeed={handleFeed}
+                userStats={userStats}
+                // onBuy={confirmBuy}
+                // onCancel={() => setSelectedFoodId(null)}
+                // id={selectedFoodId}
+                // cost={itemCost}
+                // money={userStats.money}
+              />
+            )}
             <button
               onClick={() => handlePlay(10)}
               disabled={isInteracting.duration > 0 || currentPet.isDead}

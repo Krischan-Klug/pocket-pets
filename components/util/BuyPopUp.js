@@ -99,7 +99,7 @@ export default function BuyPopUp({
           {onBuy != null && (
             <BuyPopUpButton
               onClick={() => {
-                if (cost * value < money) {
+                if (cost * value <= money) {
                   onBuy(value, id, cost);
                 } else {
                   setBudgetLimitReached(true);
