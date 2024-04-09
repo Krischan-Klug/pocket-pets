@@ -4,7 +4,7 @@ import trashcanIcon from "/public/assets/icons/round_delete_outline_black.png";
 import graveImage from "/public/assets/images/grave.png";
 
 const StyledPetCard = styled.button`
-  border: solid 2px ${({ deleteMode }) => (deleteMode ? "red" : "black")};
+  border: solid 2px ${({ deleteMode }) => (deleteMode ? "red" : "lightgrey")};
   border-radius: 10px;
   height: 110px;
   width: 110px;

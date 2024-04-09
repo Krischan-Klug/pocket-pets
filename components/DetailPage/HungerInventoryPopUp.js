@@ -1,10 +1,6 @@
 import styled from "styled-components";
-import Image from "next/image";
 import StyledButton from "../StyledComponents/StyledButton";
-import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
-import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { foods } from "@/lib/shop";
 import InventoryContainer from "./InventoryContainer";
 
@@ -53,21 +49,32 @@ const ConfirmButtonWrapper = styled.div`
   padding-top: 10px;
 `;
 
+const StyledErrorMessage = styled.p`
+  color: red;
+`;
+
 export default function HungerInventoryPopUp({
   userStats,
   onFeedButton,
   onCancel,
 }) {
   const [selectedFoodItemId, setSelectedFoodItemId] = useState(0);
-
-  const router = useRouter();
-  const { id } = router.query;
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
 
   const availableFood = userStats.inventory.food.filter((fooditems) => {
     if (fooditems.value > 0) {
       return fooditems;
     }
   });
+
+  function handleConfirmButtonClick() {
+    if (selectedFoodItemId === 0) {
+      setShowErrorMessage(true);
+    } else {
+      onFeedButton(selectedFoodItemId);
+      setSelectedFoodItemId(true);
+    }
+  }
 
   function findFoodValuesById(id) {
     const food = foods.find((food) => food.id === id);
@@ -76,12 +83,13 @@ export default function HungerInventoryPopUp({
 
   function handleClickOnFoodItem(id) {
     setSelectedFoodItemId(id);
+    setShowErrorMessage(false);
   }
 
   return (
     <HungerInventoryPopUpOverlay>
       <HungerInventoryPopUpContent>
-        <p>What food item would you like to feed?</p>
+        <h3>What food item would you like to feed?</h3>
         <StyledHungerInventoryContainer>
           {availableFood.map((fooditem) => (
             <InventoryContainer
@@ -95,15 +103,26 @@ export default function HungerInventoryPopUp({
               onClickOnFoodItem={handleClickOnFoodItem}
             />
           ))}
+          {availableFood.length === 0 && (
+            <p>
+              You need to purchase food items from the shop first before you can
+              feed them to your pet.
+            </p>
+          )}
         </StyledHungerInventoryContainer>
         <ConfirmButtonWrapper>
-          <ConfirmPopUpButton onClick={() => onFeedButton(selectedFoodItemId)}>
+          <ConfirmPopUpButton onClick={handleConfirmButtonClick}>
             Feed
           </ConfirmPopUpButton>
           <ConfirmPopUpButton $red onClick={onCancel}>
             Cancel
           </ConfirmPopUpButton>
         </ConfirmButtonWrapper>
+        {showErrorMessage && (
+          <StyledErrorMessage>
+            You need to select a food item.
+          </StyledErrorMessage>
+        )}
       </HungerInventoryPopUpContent>
     </HungerInventoryPopUpOverlay>
   );

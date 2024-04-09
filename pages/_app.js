@@ -58,7 +58,6 @@ export default function App({ Component, pageProps }) {
   }
 
   function handleSubtractMoney(value) {
-    console.log("VALUE: ", value);
     setUserStats((prevUserStat) => {
       return { ...prevUserStat, money: prevUserStat.money - value };
     });

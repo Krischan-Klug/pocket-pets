@@ -57,6 +57,10 @@ const StyledText = styled.span`
   padding: 0 5px;
 `;
 
+const StyledErrorMessage = styled.p`
+  color: red;
+`;
+
 export default function BuyPopUp({
   message,
   onBuy,
@@ -116,9 +120,9 @@ export default function BuyPopUp({
           )}
         </BuyButtonWrapper>
         {budgetLimitReached !== false && (
-          <p>
-            You have not enough money. You can earn money by playing minigames.
-          </p>
+          <StyledErrorMessage>
+            You have not enough money to buy this many items.
+          </StyledErrorMessage>
         )}
       </BuyPopUpContent>
     </BuyPopUpOverlay>

@@ -7,6 +7,7 @@ const StyledTd = styled.td`
   width: ${(props) => props.width}px;
   text-align: center;
   height: 60px;
+  cursor: pointer;
 `;
 
 const StyledImageContainer = styled.div`

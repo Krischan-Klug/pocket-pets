@@ -1,9 +1,8 @@
 import Image from "next/image";
 import styled from "styled-components";
-import { useState } from "react";
 
 const StyledInventoryContainer = styled.button`
-  border: solid 1.5px ${({ $bordercolor }) => $bordercolor};
+  border: solid 2px ${({ $bordercolor }) => $bordercolor};
   border-radius: 10px;
   height: 87px;
   width: 87px;
@@ -12,6 +11,7 @@ const StyledInventoryContainer = styled.button`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const StyledStats = styled.p`
@@ -36,7 +36,7 @@ export default function InventoryContainer({
 }) {
   return (
     <StyledInventoryContainer
-      $bordercolor={isActive ? "var(--accent-color)" : "black"}
+      $bordercolor={isActive ? "var(--accent-color)" : "lightgrey"}
       onClick={() => {
         onClickOnFoodItem(id);
       }}
