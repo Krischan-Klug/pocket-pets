@@ -28,10 +28,10 @@ export default function App({ Component, pageProps }) {
       } else {
         setCurrentTime(0);
       }
-    }, 60000);
+    }, 600);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currentTime]);
 
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
