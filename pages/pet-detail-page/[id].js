@@ -12,6 +12,7 @@ import MoneyImage from "@/components/util/MoneyImage";
 import MoneyColored from "@/components/util/MoneyColored";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import HungerInventoryPopUp from "@/components/DetailPage/HungerInventoryPopUp";
+import { foods } from "@/lib/shop";
 
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
@@ -115,6 +116,7 @@ export default function PetDetailPage({
   onUpdatePet,
   userStats,
   onSubtracMoney,
+  onInventoryFood,
 }) {
   const [currentPet, setCurrentPet] = useState(null);
   const [isInteracting, setIsInteracting] = useState({
@@ -197,6 +199,12 @@ export default function PetDetailPage({
     }
   }
 
+  function handleFeedButton(foodItemId) {
+    setFeedButtonPopUp(false);
+    onInventoryFood(-1, foodItemId);
+    handleFeed(foods.find((food) => food.id === foodItemId).hunger);
+  }
+
   function handlePlay(toyToGive) {
     if (!currentPet.isDead) {
       const updatedHappiness = currentPet.happiness + toyToGive;
@@ -260,7 +268,6 @@ export default function PetDetailPage({
         <StyledGameArea>
           <SyledInteractionButtonWrapper>
             <button
-              // onClick={() => handleFeed(10)}
               disabled={isInteracting.duration > 0 || currentPet.isDead}
               onClick={() => setFeedButtonPopUp(true)}
             >
@@ -272,7 +279,11 @@ export default function PetDetailPage({
               ></Image>
             </button>
             {feedButtonPopUp !== false && (
-              <HungerInventoryPopUp onFeed={handleFeed} userStats={userStats} />
+              <HungerInventoryPopUp
+                onFeedButton={handleFeedButton}
+                onCancel={() => setFeedButtonPopUp(false)}
+                userStats={userStats}
+              />
             )}
             <button
               onClick={() => handlePlay(10)}

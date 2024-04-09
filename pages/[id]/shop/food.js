@@ -7,7 +7,11 @@ import MoneyCounter from "@/components/util/MoneyCounter";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import BuyPopUp from "@/components/util/BuyPopUp";
 
-export default function FoodShop({ userStats, onAddFood, onSubtractMoney }) {
+export default function FoodShop({
+  userStats,
+  onInventoryFood,
+  onSubtractMoney,
+}) {
   const [selectedFoodId, setSelectedFoodId] = useState(null);
   const [itemCost, setItemCost] = useState(0);
   const router = useRouter();
@@ -19,7 +23,7 @@ export default function FoodShop({ userStats, onAddFood, onSubtractMoney }) {
   }
 
   function confirmBuy(value, id, cost) {
-    onAddFood(value, id);
+    onInventoryFood(value, id);
     setSelectedFoodId(null);
     onSubtractMoney(cost * value);
   }

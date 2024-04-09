@@ -64,14 +64,15 @@ export default function App({ Component, pageProps }) {
     });
   }
 
-  function handleAddFood(value, newFoodId) {
+  function handleInventoryFood(value, newFoodId) {
     setUserStats((prevStats) => {
       const updatedInventory = { ...prevStats.inventory };
       const foodIndex = updatedInventory.food.findIndex(
         (item) => item.id === newFoodId
       );
       if (foodIndex !== -1) {
-        updatedInventory.food[foodIndex].value = value;
+        updatedInventory.food[foodIndex].value =
+          updatedInventory.food[foodIndex].value + value;
       }
       return { ...prevStats, inventory: updatedInventory };
     });
@@ -121,7 +122,7 @@ export default function App({ Component, pageProps }) {
         onGameUpdate={handleGameUpdate}
         onSubtractMoney={handleSubtractMoney}
         addMoney={handleAddMoney}
-        onAddFood={handleAddFood}
+        onInventoryFood={handleInventoryFood}
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
       {settingPageShow && (

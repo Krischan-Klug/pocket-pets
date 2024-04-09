@@ -33,6 +33,14 @@ const HungerInventoryPopUpContent = styled.div`
   text-align: center;
 `;
 
+const StyledHungerInventoryContainer = styled.section`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+`;
+
 const ConfirmPopUpButton = styled(StyledButton)`
   margin: 0 8px;
   background-color: ${({ $red }) => $red && "red"};
@@ -45,34 +53,15 @@ const ConfirmButtonWrapper = styled.div`
   padding-top: 10px;
 `;
 
-// const StyledValueButton = styled(Image)`
-//   transform: scale(1);
-//   transition: 0.5s;
+export default function HungerInventoryPopUp({
+  userStats,
+  onFeedButton,
+  onCancel,
+}) {
+  const [selectedFoodItemId, setSelectedFoodItemId] = useState(0);
 
-//   &:hover {
-//     transform: scale(1.3);
-//     transition: 0.5s;
-//   }
-// `;
-
-// const StyledText = styled.span`
-//   font-size: 25px;
-//   padding: 0 5px;
-// `;
-
-export default function HungerInventoryPopUp({ onFeed, userStats }) {
   const router = useRouter();
   const { id } = router.query;
-
-  // const [value, setValue] = useState(1);
-
-  // const decrementValue = () => {
-  //   setValue((prevValue) => Math.max(prevValue - 1, 1));
-  // };
-
-  // const incrementValue = () => {
-  //   setValue((prevValue) => prevValue + 1);
-  // };
 
   const availableFood = userStats.inventory.food.filter((fooditems) => {
     if (fooditems.value > 0) {
@@ -80,47 +69,38 @@ export default function HungerInventoryPopUp({ onFeed, userStats }) {
     }
   });
 
-  function findImageById(id) {
-    const food = foods.find((food) => food.id === fooditems.id);
-    return food.image;
+  function findFoodValuesById(id) {
+    const food = foods.find((food) => food.id === id);
+    return food;
+  }
+
+  function handleClickOnFoodItem(id) {
+    setSelectedFoodItemId(id);
   }
 
   return (
     <HungerInventoryPopUpOverlay>
       <HungerInventoryPopUpContent>
         <p>What food item would you like to feed?</p>
-        {fooditems.map((fooditem) => (
-          <InventoryContainer
-            key={fooditem.id}
-            name={fooditem.name}
-            hunger={fooditem.hunger}
-            image={fooditem.image}
-            value={fooditem.value}
-          />
-        ))}
-        {/* <StyledValueButton
-          onClick={decrementValue}
-          src={arrowLeft}
-          alt="subtract one item"
-          width={20}
-          height={20}
-        />
-        <StyledText>{value}</StyledText>
-        <StyledValueButton
-          onClick={incrementValue}
-          src={arrowRight}
-          alt="add one item"
-          width={20}
-          height={20}
-        /> */}
+        <StyledHungerInventoryContainer>
+          {availableFood.map((fooditem) => (
+            <InventoryContainer
+              key={fooditem.id}
+              id={fooditem.id}
+              name={findFoodValuesById(fooditem.id).name}
+              hunger={findFoodValuesById(fooditem.id).hunger}
+              image={findFoodValuesById(fooditem.id).image}
+              value={fooditem.value}
+              isActive={fooditem.id === selectedFoodItemId}
+              onClickOnFoodItem={handleClickOnFoodItem}
+            />
+          ))}
+        </StyledHungerInventoryContainer>
         <ConfirmButtonWrapper>
-          <ConfirmPopUpButton onClick={() => onFeed(value * hunger)}>
+          <ConfirmPopUpButton onClick={() => onFeedButton(selectedFoodItemId)}>
             Feed
           </ConfirmPopUpButton>
-          <ConfirmPopUpButton
-            $red
-            onClick={() => router.push(`/pet-detail-page/${id}`)}
-          >
+          <ConfirmPopUpButton $red onClick={onCancel}>
             Cancel
           </ConfirmPopUpButton>
         </ConfirmButtonWrapper>
