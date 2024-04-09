@@ -6,6 +6,7 @@ import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { foods } from "@/lib/shop";
+import InventoryContainer from "./InventoryContainer";
 
 const HungerInventoryPopUpOverlay = styled.div`
   position: fixed;
@@ -73,23 +74,30 @@ export default function HungerInventoryPopUp({ onFeed, userStats }) {
   //   setValue((prevValue) => prevValue + 1);
   // };
 
-  function findImageById(id) {
-    const food = foods.find((food) => food.id === fooditems.id);
-    return food.image;
-  }
-
   const availableFood = userStats.inventory.food.filter((fooditems) => {
     if (fooditems.value > 0) {
       return fooditems;
     }
   });
-  console.log("availableFood: ", availableFood);
+
+  function findImageById(id) {
+    const food = foods.find((food) => food.id === fooditems.id);
+    return food.image;
+  }
 
   return (
     <HungerInventoryPopUpOverlay>
       <HungerInventoryPopUpContent>
         <p>What food item would you like to feed?</p>
-
+        {fooditems.map((fooditem) => (
+          <InventoryContainer
+            key={fooditem.id}
+            name={fooditem.name}
+            hunger={fooditem.hunger}
+            image={fooditem.image}
+            value={fooditem.value}
+          />
+        ))}
         {/* <StyledValueButton
           onClick={decrementValue}
           src={arrowLeft}

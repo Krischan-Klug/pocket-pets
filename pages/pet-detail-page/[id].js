@@ -272,15 +272,7 @@ export default function PetDetailPage({
               ></Image>
             </button>
             {feedButtonPopUp !== false && (
-              <HungerInventoryPopUp
-                onFeed={handleFeed}
-                userStats={userStats}
-                // onBuy={confirmBuy}
-                // onCancel={() => setSelectedFoodId(null)}
-                // id={selectedFoodId}
-                // cost={itemCost}
-                // money={userStats.money}
-              />
+              <HungerInventoryPopUp onFeed={handleFeed} userStats={userStats} />
             )}
             <button
               onClick={() => handlePlay(10)}
