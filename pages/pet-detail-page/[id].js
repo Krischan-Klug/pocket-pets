@@ -116,7 +116,7 @@ export default function PetDetailPage({
   onUpdatePet,
   userStats,
   onSubtracMoney,
-  onInventoryFood,
+  onUpdateInventoryFood,
 }) {
   const [currentPet, setCurrentPet] = useState(null);
   const [isInteracting, setIsInteracting] = useState({
@@ -201,7 +201,7 @@ export default function PetDetailPage({
 
   function handleFeedButton(foodItemId) {
     setFeedButtonPopUp(false);
-    onInventoryFood(-1, foodItemId);
+    onUpdateInventoryFood(-1, foodItemId);
     handleFeed(foods.find((food) => food.id === foodItemId).hunger);
   }
 
@@ -283,6 +283,7 @@ export default function PetDetailPage({
                 onFeedButton={handleFeedButton}
                 onCancel={() => setFeedButtonPopUp(false)}
                 userStats={userStats}
+                petId={id}
               />
             )}
             <button

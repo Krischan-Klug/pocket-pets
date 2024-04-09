@@ -63,7 +63,7 @@ export default function App({ Component, pageProps }) {
     });
   }
 
-  function handleInventoryFood(value, newFoodId) {
+  function handleUpdateInventoryFood(value, newFoodId) {
     setUserStats((prevStats) => {
       const updatedInventory = { ...prevStats.inventory };
       const foodIndex = updatedInventory.food.findIndex(
@@ -121,7 +121,7 @@ export default function App({ Component, pageProps }) {
         onGameUpdate={handleGameUpdate}
         onSubtractMoney={handleSubtractMoney}
         addMoney={handleAddMoney}
-        onInventoryFood={handleInventoryFood}
+        onUpdateInventoryFood={handleUpdateInventoryFood}
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
       {settingPageShow && (

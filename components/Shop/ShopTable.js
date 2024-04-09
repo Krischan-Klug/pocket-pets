@@ -20,34 +20,27 @@ const StyledImageContainer = styled.div`
 
 export default function ShopTable({ data, onItemClick }) {
   return (
-    <>
-      <table>
-        <tbody>
-          {data.map((item) => (
-            <tr key={item.id} onClick={() => onItemClick(item.id, item.cost)}>
-              <StyledTd width={60}>
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  width={50}
-                  height={50}
-                />
-              </StyledTd>
-              <StyledTd width={120}>{item.name}</StyledTd>
-              <StyledTd width={60}>
-                <StyledImageContainer>
-                  {item.hunger} <HungerImage />
-                </StyledImageContainer>
-              </StyledTd>
-              <StyledTd width={60}>
-                <StyledImageContainer>
-                  {item.cost} <MoneyImage />
-                </StyledImageContainer>
-              </StyledTd>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
+    <table>
+      <tbody>
+        {data.map((item) => (
+          <tr key={item.id} onClick={() => onItemClick(item.id, item.cost)}>
+            <StyledTd width={60}>
+              <Image src={item.image} alt={item.name} width={50} height={50} />
+            </StyledTd>
+            <StyledTd width={120}>{item.name}</StyledTd>
+            <StyledTd width={60}>
+              <StyledImageContainer>
+                {item.hunger} <HungerImage />
+              </StyledImageContainer>
+            </StyledTd>
+            <StyledTd width={60}>
+              <StyledImageContainer>
+                {item.cost} <MoneyImage />
+              </StyledImageContainer>
+            </StyledTd>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

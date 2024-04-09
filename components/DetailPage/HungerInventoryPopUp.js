@@ -3,6 +3,7 @@ import StyledButton from "../StyledComponents/StyledButton";
 import { useState } from "react";
 import { foods } from "@/lib/shop";
 import InventoryContainer from "./InventoryContainer";
+import Link from "next/link";
 
 const HungerInventoryPopUpOverlay = styled.div`
   position: fixed;
@@ -57,6 +58,7 @@ export default function HungerInventoryPopUp({
   userStats,
   onFeedButton,
   onCancel,
+  petId,
 }) {
   const [selectedFoodItemId, setSelectedFoodItemId] = useState(0);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -104,10 +106,13 @@ export default function HungerInventoryPopUp({
             />
           ))}
           {availableFood.length === 0 && (
-            <p>
-              You need to purchase food items from the shop first before you can
-              feed them to your pet.
-            </p>
+            <>
+              <p>
+                You need to purchase food items from the shop first before you
+                can feed them to your pet.
+              </p>
+              <Link href={`/${petId}/shop/`}>To Shop</Link>
+            </>
           )}
         </StyledHungerInventoryContainer>
         <ConfirmButtonWrapper>

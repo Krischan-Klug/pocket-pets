@@ -13,11 +13,9 @@ const StyledMoneyCounter = styled.p`
 
 export default function MoneyCounter({ money }) {
   return (
-    <>
-      <StyledMoneyCounter>
-        <MoneyImage />
-        {money}
-      </StyledMoneyCounter>
-    </>
+    <StyledMoneyCounter>
+      <MoneyImage />
+      {money}
+    </StyledMoneyCounter>
   );
 }

@@ -9,7 +9,7 @@ import BuyPopUp from "@/components/util/BuyPopUp";
 
 export default function FoodShop({
   userStats,
-  onInventoryFood,
+  onUpdateInventoryFood,
   onSubtractMoney,
 }) {
   const [selectedFoodId, setSelectedFoodId] = useState(null);
@@ -17,13 +17,13 @@ export default function FoodShop({
   const router = useRouter();
   const { id } = router.query;
 
-  function buyFoodItem(id, cost) {
+  function selectFoodItemToBuy(id, cost) {
     setSelectedFoodId(id);
     setItemCost(cost);
   }
 
   function confirmBuy(value, id, cost) {
-    onInventoryFood(value, id);
+    onUpdateInventoryFood(value, id);
     setSelectedFoodId(null);
     onSubtractMoney(cost * value);
   }
@@ -38,7 +38,7 @@ export default function FoodShop({
         <MoneyCounter money={userStats.money} />
       </StyledDefaultHeader>
       <main>
-        <ShopTable data={foods} onItemClick={buyFoodItem} />
+        <ShopTable data={foods} onItemClick={selectFoodItemToBuy} />
       </main>
 
       {selectedFoodId && (
