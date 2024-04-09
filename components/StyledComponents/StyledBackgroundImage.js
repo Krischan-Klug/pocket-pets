@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import backgroundImage from "public/assets/images/backgrounds/background1.png";
 import staticBackgroundImage from "public/assets/images/backgrounds/background2.png";
+import rainBackground from "public/assets/images/backgrounds/rain.gif";
 
 export const StyledBackgroundImageWrapper = styled.div`
   display: flex;
@@ -73,4 +74,16 @@ export const StyledStaticBackground = styled.div`
   height: 100vh;
   position: absolute;
   z-index: -10;
+`;
+
+export const StyledRainBackground = styled.div`
+  background-image: url(${rainBackground.src});
+  background-size: cover;
+  background-position-x: center;
+  background-position-y: top;
+  background-attachment: fixed;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: -20;
 `;

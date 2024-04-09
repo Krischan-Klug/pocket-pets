@@ -28,10 +28,38 @@ export default function App({ Component, pageProps }) {
       } else {
         setCurrentTime(0);
       }
-    }, 600);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [currentTime]);
+
+  //Rain mechanic
+  const [isRaining, setIsRaining] = useLocalStorageState("isRaining", {
+    defaultValue: false,
+  });
+  function getRandomRainTime(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  useEffect(() => {
+    const rainTime = getRandomRainTime(30000, 60000);
+    console.log("weather change in: ", rainTime / 1000, "s");
+    if (!isRaining) {
+      const startRain = setInterval(() => {
+        setIsRaining(true);
+        console.log("start rain");
+      }, rainTime);
+      return () => clearInterval(startRain);
+    }
+
+    if (isRaining) {
+      const endRain = setInterval(() => {
+        setIsRaining(false);
+        console.log("end rain");
+      }, rainTime);
+      return () => clearInterval(endRain);
+    }
+  }, [isRaining]);
 
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
@@ -124,6 +152,7 @@ export default function App({ Component, pageProps }) {
         onSubtracMoney={handleSubtracMoney}
         onAddMoney={handleAddMoney}
         currentTime={currentTime}
+        isRaining={isRaining}
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
       {settingPageShow && (

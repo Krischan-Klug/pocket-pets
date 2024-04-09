@@ -77,8 +77,8 @@ export default function HomePage({ myPets, onDeletePet, userStats }) {
 
   return (
     <>
+      <StyledStaticBackground />
       <StyledPetCollectionHeader>
-        <StyledStaticBackground />
         <h1>My Pets</h1>
         <StyledButtonWrapper>
           <StyledButton

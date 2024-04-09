@@ -6,6 +6,7 @@ import styled, { keyframes } from "styled-components";
 import StatusBar from "@/components/DetailPage/StatusBar";
 import { useEffect } from "react";
 import { useState } from "react";
+import useLocalStorageState from "use-local-storage-state";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import MoneyImage from "@/components/util/MoneyImage";
@@ -20,6 +21,7 @@ import {
   StyledBackgroundImageWrapper,
   StyledTimeBackground,
   StyledWallBackground,
+  StyledRainBackground,
 } from "@/components/StyledComponents/StyledBackgroundImage";
 
 const StyledEditImage = styled(Image)`
@@ -122,6 +124,11 @@ const StyledNameSection = styled.div`
   justify-content: center;
 `;
 
+const StyledNameWrapper = styled.div`
+  display: flex;
+  background-color: rgb(255, 255, 255, 0.7);
+`;
+
 const StyledReviewButton = styled(StyledButton)`
   position: absolute;
   top: -20px;
@@ -134,6 +141,7 @@ export default function PetDetailPage({
   userStats,
   onSubtracMoney,
   currentTime,
+  isRaining,
 }) {
   const [currentPet, setCurrentPet] = useState(null);
   const [isInteracting, setIsInteracting] = useState({
@@ -250,6 +258,8 @@ export default function PetDetailPage({
     <>
       <StyledBackgroundImageWrapper>
         <StyledTimeBackground currentTime={currentTime} />
+        {isRaining && <StyledRainBackground />}
+
         <StyledWallBackground />
 
         <StyledPetDetailPageHeader>
@@ -262,14 +272,16 @@ export default function PetDetailPage({
           </StyledLeftButton>
 
           <StyledNameSection>
-            <h1 onClick={() => router.push(`/edit/${id}`)}>{name}</h1>
-            <StyledEditImage
-              src={editIcon}
-              alt="edit button"
-              height={20}
-              width={20}
-              onClick={() => router.push(`/edit/${id}`)}
-            />
+            <StyledNameWrapper>
+              <h1 onClick={() => router.push(`/edit/${id}`)}>{name}</h1>
+              <StyledEditImage
+                src={editIcon}
+                alt="edit button"
+                height={20}
+                width={20}
+                onClick={() => router.push(`/edit/${id}`)}
+              />
+            </StyledNameWrapper>
           </StyledNameSection>
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
