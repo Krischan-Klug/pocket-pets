@@ -280,7 +280,6 @@ export default function PetDetailPage({
 
   return (
     <>
-
       <StyledBackgroundImageWrapper>
         <StyledTimeBackground currentTime={currentTime} />
         {isRaining && <StyledRainBackground />}
@@ -289,10 +288,10 @@ export default function PetDetailPage({
 
         <StyledPetDetailPageHeader>
           <StyledLeftButton
-          onClick={() => {
-            router.push("/");
-          }}
-        >
+            onClick={() => {
+              router.push("/");
+            }}
+          >
             Back
           </StyledLeftButton>
 
@@ -307,9 +306,9 @@ export default function PetDetailPage({
                 onClick={() => router.push(`/edit/${id}`)}
               />
             </StyledNameWrapper>
-                      <StyledXPBar $value={percentageLevelProgress(xp)}>
-            Level: <span>{calculateLevel(xp)}</span>
-          </StyledXPBar>
+            <StyledXPBar $value={percentageLevelProgress(xp)}>
+              Level: <span>{calculateLevel(xp)}</span>
+            </StyledXPBar>
           </StyledNameSection>
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
@@ -323,12 +322,11 @@ export default function PetDetailPage({
             >
               Obstacle Jumper
             </StyledButton>
-        <StyledButton
-          onClick={() => router.push(`/${id}/minigames/merge-pets/`)}
-        >
-          Merge Pets
-        </StyledButton>
-
+            <StyledButton
+              onClick={() => router.push(`/${id}/minigames/merge-pets/`)}
+            >
+              Merge Pets
+            </StyledButton>
           </StyledMoneyHandleSection>
         </StyledPetDetailPageHeader>
         <StyledPetDetailPageMain>
