@@ -5,12 +5,12 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import StyledButton from "@/components/StyledComponents/StyledButton";
-import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import {
   InputLabel,
   InputField,
   Label,
 } from "@/components/StyledComponents/StyledInputField";
+import StyledLink from "@/components/StyledComponents/StyledLink";
 
 const StyledEditForm = styled.form`
   display: flex;
@@ -67,9 +67,7 @@ export default function EditPet({ myPets, onUpdatePet }) {
   return (
     <>
       <header>
-        <StyledLeftButton onClick={() => router.push(`/pet-detail-page/${id}`)}>
-          Back
-        </StyledLeftButton>
+        <StyledLink href={`/pet-detail-page/${id}`}>Back</StyledLink>
         <h1>Edit your pet</h1>
       </header>
       <main>

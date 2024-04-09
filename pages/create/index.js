@@ -5,7 +5,6 @@ import Image from "next/image";
 import pets from "@/lib/pet";
 import styled from "styled-components";
 import StyledButton from "@/components/StyledComponents/StyledButton";
-import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import {
   InputLabel,
   InputField,
@@ -15,7 +14,7 @@ import defaultMyPet from "@/lib/myPetTemplate";
 
 import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
 import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
-
+import StyledLink from "@/components/StyledComponents/StyledLink";
 
 const StyledForm = styled.form`
   display: flex;
@@ -44,7 +43,6 @@ export default function Create({ onAddPet }) {
   const router = useRouter();
   const [petType, setPetType] = useState(0);
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -72,9 +70,7 @@ export default function Create({ onAddPet }) {
   return (
     <>
       <header>
-        <StyledLeftButton onClick={() => router.push("/")}>
-          Back
-        </StyledLeftButton>
+        <StyledLink href={"/"}>Back</StyledLink>
         <h1>Add a New Pet</h1>
       </header>
       <main>

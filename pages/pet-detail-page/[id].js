@@ -12,6 +12,11 @@ import StyledButton from "@/components/StyledComponents/StyledButton";
 import MoneyImage from "@/components/util/MoneyImage";
 import MoneyColored from "@/components/util/MoneyColored";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
+import StyledXPBar from "@/components/DetailPage/StyledXPBar";
+import {
+  calculateLevel,
+  percentageLevelProgress,
+} from "@/components/DetailPage/calculateLevel";
 
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
@@ -209,8 +214,18 @@ export default function PetDetailPage({
     );
   }
 
-  const { name, type, image, health, hunger, happiness, energy, isDead } =
-    currentPet;
+  const {
+    name,
+    type,
+    image,
+    health,
+    hunger,
+    happiness,
+    energy,
+    isDead,
+    level,
+    xp,
+  } = currentPet;
 
   function handleFeed(foodToGive) {
     if (!currentPet.isDead) {
@@ -218,6 +233,8 @@ export default function PetDetailPage({
       onUpdatePet({
         ...currentPet,
         hunger: updatedHunger > 100 ? 100 : updatedHunger,
+        xp: currentPet.xp + foodToGive,
+        level: calculateLevel(currentPet.xp),
       });
       setIsInteracting({ interaction: "food", duration: 5 });
     }
@@ -229,6 +246,8 @@ export default function PetDetailPage({
       onUpdatePet({
         ...currentPet,
         happiness: updatedHappiness > 100 ? 100 : updatedHappiness,
+        xp: currentPet.xp + toyToGive,
+        level: calculateLevel(currentPet.xp),
       });
 
       setIsInteracting({ interaction: "toy", duration: 5 });
@@ -237,6 +256,11 @@ export default function PetDetailPage({
 
   function handleSleep() {
     if (!currentPet.isDead) {
+      onUpdatePet({
+        ...currentPet,
+        xp: currentPet.xp + 15,
+        level: calculateLevel(currentPet.xp),
+      });
       setIsInteracting({ interaction: "sleeping", duration: 10 });
     }
   }
@@ -256,6 +280,7 @@ export default function PetDetailPage({
 
   return (
     <>
+
       <StyledBackgroundImageWrapper>
         <StyledTimeBackground currentTime={currentTime} />
         {isRaining && <StyledRainBackground />}
@@ -264,10 +289,10 @@ export default function PetDetailPage({
 
         <StyledPetDetailPageHeader>
           <StyledLeftButton
-            onClick={() => {
-              router.push("/");
-            }}
-          >
+          onClick={() => {
+            router.push("/");
+          }}
+        >
             Back
           </StyledLeftButton>
 
@@ -282,6 +307,9 @@ export default function PetDetailPage({
                 onClick={() => router.push(`/edit/${id}`)}
               />
             </StyledNameWrapper>
+                      <StyledXPBar $value={percentageLevelProgress(xp)}>
+            Level: <span>{calculateLevel(xp)}</span>
+          </StyledXPBar>
           </StyledNameSection>
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
@@ -295,6 +323,12 @@ export default function PetDetailPage({
             >
               Obstacle Jumper
             </StyledButton>
+        <StyledButton
+          onClick={() => router.push(`/${id}/minigames/merge-pets/`)}
+        >
+          Merge Pets
+        </StyledButton>
+
           </StyledMoneyHandleSection>
         </StyledPetDetailPageHeader>
         <StyledPetDetailPageMain>
