@@ -1,8 +1,9 @@
-let level = 1;
-let xpToNextLevel = 150;
-let xpToThisLevel = 0;
+let level, xpToNextLevel, xpToThisLevel;
 
 function countLevel(xp) {
+  level = 1;
+  xpToNextLevel = 150;
+  xpToThisLevel = 0;
   while (xp >= xpToNextLevel) {
     level++;
     xpToThisLevel = xpToNextLevel;
