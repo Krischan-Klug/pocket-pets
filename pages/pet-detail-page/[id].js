@@ -143,7 +143,7 @@ export default function PetDetailPage({
   onGameUpdate,
   onUpdatePet,
   userStats,
-  onSubtracMoney,
+  onSubtractMoney,
   onUpdateInventoryFood,
   currentTime,
   isRaining,
@@ -280,7 +280,7 @@ export default function PetDetailPage({
   }
 
   function handleConfirm(value) {
-    onSubtracMoney(value);
+    onSubtractMoney(value);
     setConfirmationPopUpContent({ ...confirmationPopUpContent, show: false });
     onUpdatePet({
       ...currentPet,

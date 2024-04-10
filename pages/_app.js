@@ -7,6 +7,7 @@ import useLocalStorageState from "use-local-storage-state";
 import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
 import SettingPopUp from "@/components/SettingPage/SettingPopUp";
 import SettingPageButton from "@/components/SettingPage/SettingPageButton";
+import { petEvents, userEvents } from "@/lib/events";
 
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useLocalStorageState("myPets", {
@@ -47,20 +48,24 @@ export default function App({ Component, pageProps }) {
       setEventTime(getRandomDayTime());
       setDailyEvent(true);
 
+      function getRandomArrayIndex(array) {
+        return Math.floor(Math.random() * array.length);
+      }
+
       if (isPetActive) {
-        // active pet events here
+        const petEvent = petEvents[getRandomArrayIndex(petEvents)];
+        petEvent.function();
       }
 
       if (!isPetActive) {
-        // inactive pet events here
+        const userEvent = userEvents[getRandomArrayIndex(userEvents)];
+        userEvent.function();
       }
-
-      console.log("event Started");
     }
     //console.log("event time: ", eventTime);
     //console.log("current time: ", currentTime);
     //console.log("daily event happend: ", dailyEvent);
-    console.log("is pet active: ", isPetActive);
+    //console.log("is pet active: ", isPetActive);
   }, [currentTime]);
 
   //Clock
