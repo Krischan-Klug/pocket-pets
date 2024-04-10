@@ -28,6 +28,20 @@ const StyledShopTableWrapper = styled.section`
   justify-content: center;
 `;
 
+const StyledTableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #f2e8da;
+  }
+
+  &:hover {
+    background-color: #e0d5c4;
+  }
+
+  td {
+    border: 1px solid #d3c0a3;
+  }
+`;
+
 export default function ShopTable({ data, onItemClick, category }) {
   let typeIcon;
 
@@ -45,7 +59,10 @@ export default function ShopTable({ data, onItemClick, category }) {
       <table>
         <tbody>
           {data.map((item) => (
-            <tr key={item.id} onClick={() => onItemClick(item.id, item.cost)}>
+            <StyledTableRow
+              key={item.id}
+              onClick={() => onItemClick(item.id, item.cost)}
+            >
               <StyledTd width={60}>
                 <Image
                   src={item.image}
@@ -65,7 +82,7 @@ export default function ShopTable({ data, onItemClick, category }) {
                   {item.cost} <MoneyImage />
                 </StyledImageContainer>
               </StyledTd>
-            </tr>
+            </StyledTableRow>
           ))}
         </tbody>
       </table>

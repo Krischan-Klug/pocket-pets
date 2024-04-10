@@ -60,20 +60,24 @@ const StyledPetImage = styled(Image)`
 `;
 
 const sleepingAnimation = keyframes`
-0% {transform: translateY(0);}
-50% {transform: translateY(-10px);}
-100% {transform: translateY(0);}
+  0% {transform: translateY(0);}
+  50% {transform: translateY(-10px);}
+  100% {transform: translateY(0);}
 `;
 
 const toyAnimation = keyframes`
-0% {transform: translateY(10px) translateX(-10px) scale(1);}
-50% {transform: translateY(-10px) translateX(10px) scale(0.5);}
-100% {transform: translateY(10px) translateX(-10px) scale(1);}
+  0% {transform: translateY(10px) translateX(-10px) scale(1);}
+  50% {transform: translateY(-10px) translateX(10px) scale(0.5);}
+  100% {transform: translateY(10px) translateX(-10px) scale(1);}
 `;
 
 const foodAnimation = keyframes`
-0% {opacity: 1; transform: translateX(0);}
-100% {opacity: 0; transform: translateX(100);}
+  0% {clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);}
+  20% {clip-path: polygon(0 0, 80% 0, 80% 100%, 0 100%);}
+  40% {clip-path: polygon(0 0, 60% 0, 60% 100%, 0 100%);}
+  60% {clip-path: polygon(0 0, 40% 0, 40% 100%, 0 100%);}
+  80% {clip-path: polygon(0 0, 20% 0, 20% 100%, 0 100%);}
+  100% {clip-path: polygon(0 0, 0% 0, 0% 100%, 0 100%);}
 `;
 
 const StyledInteractionImage = styled(Image)`
@@ -153,6 +157,7 @@ export default function PetDetailPage({
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
     interaction: "",
+    image: "",
   });
   const [confirmationPopUpContent, setConfirmationPopUpContent] = useState({
     message: "",
@@ -230,8 +235,11 @@ export default function PetDetailPage({
     xp,
   } = currentPet;
 
-  function handleFeed(foodToGive) {
+  function handleFeedButton(foodItemId) {
     if (!currentPet.isDead) {
+      setFeedButtonPopUp(false);
+      onUpdateInventoryFood(-1, foodItemId);
+      const foodToGive = foods.find((food) => food.id === foodItemId).value;
       const updatedHunger = currentPet.hunger + foodToGive;
       onUpdatePet({
         ...currentPet,
@@ -239,20 +247,15 @@ export default function PetDetailPage({
         xp: currentPet.xp + foodToGive,
         level: calculateLevel(currentPet.xp),
       });
-      setIsInteracting({ interaction: "food", duration: 5 });
+      const foodImage = foods.find((food) => food.id === foodItemId).image;
+      setIsInteracting({ interaction: "food", duration: 5, image: foodImage });
     }
   }
 
-  function handleFeedButton(foodItemId) {
-    setFeedButtonPopUp(false);
-    onUpdateInventoryFood(-1, foodItemId);
-    handleFeed(foods.find((food) => food.id === foodItemId).value);
-  }
-
   function handlePlayButton(toyItemId) {
-    const toyToGive = toys.find((toy) => toy.id === toyItemId).value;
-    setPlayButtonPopUp(false);
     if (!currentPet.isDead) {
+      const toyToGive = toys.find((toy) => toy.id === toyItemId).value;
+      setPlayButtonPopUp(false);
       const updatedHappiness = currentPet.happiness + toyToGive;
       onUpdatePet({
         ...currentPet,
@@ -260,8 +263,8 @@ export default function PetDetailPage({
         xp: currentPet.xp + toyToGive,
         level: calculateLevel(currentPet.xp),
       });
-
-      setIsInteracting({ interaction: "toy", duration: 5 });
+      const toyImage = toys.find((toy) => toy.id === toyItemId).image;
+      setIsInteracting({ interaction: "toy", duration: 5, image: toyImage });
     }
   }
 
@@ -272,7 +275,11 @@ export default function PetDetailPage({
         xp: currentPet.xp + 15,
         level: calculateLevel(currentPet.xp),
       });
-      setIsInteracting({ interaction: "sleeping", duration: 10 });
+      setIsInteracting({
+        interaction: "sleeping",
+        duration: 10,
+        image: `/assets/images/interaction/sleeping.png`,
+      });
     }
   }
 
@@ -421,7 +428,7 @@ export default function PetDetailPage({
               )}
               {isInteracting.duration > 0 && (
                 <StyledInteractionImage
-                  src={`/assets/images/interaction/${isInteracting.interaction}.png`}
+                  src={isInteracting.image}
                   alt="interaction icon"
                   height={50}
                   width={50}
