@@ -80,9 +80,9 @@ const StyledInteractionImage = styled(Image)`
   top: 0;
   right: 30%;
   animation: ${(props) => {
-      if (props.animationStyle === "sleeping") return sleepingAnimation;
-      if (props.animationStyle === "toy") return toyAnimation;
-      if (props.animationStyle === "food") return foodAnimation;
+      if (props.animationstyle === "sleeping") return sleepingAnimation;
+      if (props.animationstyle === "toy") return toyAnimation;
+      if (props.animationstyle === "food") return foodAnimation;
     }}
     1s ease-in-out infinite;
 `;
@@ -413,7 +413,7 @@ export default function PetDetailPage({
                   alt="interaction icon"
                   height={50}
                   width={50}
-                  animationStyle={isInteracting.interaction}
+                  animationstyle={isInteracting.interaction}
                 />
               )}
               <StyledPetImage
