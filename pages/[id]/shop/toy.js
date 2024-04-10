@@ -5,7 +5,7 @@ import ShopTable from "@/components/Shop/ShopTable";
 import { toys } from "@/lib/shop.js";
 import MoneyCounter from "@/components/util/MoneyCounter";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
-import BuyPopUp from "@/components/util/BuyPopUp";
+import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 
 export default function ToyShop({
   userStats,
@@ -17,15 +17,30 @@ export default function ToyShop({
   const router = useRouter();
   const { id } = router.query;
 
-  function selectToyItemToBuy(id, cost) {
-    setSelectedToyId(id);
+  function isToyPurchased(id) {
+    for (const toy of userStats.inventory.toy) {
+      if (toy.id === id) {
+        return toy.purchased;
+      }
+    }
+    return false;
+  }
+
+  function selectToyItemToBuy(toyId, cost) {
+    if (isToyPurchased(toyId)) {
+      setSelectedToyId(-2);
+    } else if (userStats.money >= cost) {
+      setSelectedToyId(toyId);
+    } else {
+      setSelectedToyId(-1);
+    }
     setItemCost(cost);
   }
 
-  function confirmBuy(value, id, cost) {
-    onUpdateInventoryToy(value, id);
+  function confirmBuy() {
+    onUpdateInventoryToy(selectedToyId);
     setSelectedToyId(null);
-    onSubtractMoney(cost * value);
+    onSubtractMoney(itemCost);
   }
 
   return (
@@ -45,16 +60,26 @@ export default function ToyShop({
         />
       </main>
 
-      {selectedToyId && (
-        <BuyPopUp
-          message={`How many ${
+      {selectedToyId > 0 && (
+        <ConfirmationPopup
+          message={`Would you like to buy a ${
             toys.find((toy) => toy.id === selectedToyId).name
-          }s would you like to buy?`}
-          onBuy={confirmBuy}
+          }?`}
+          onConfirm={confirmBuy}
           onCancel={() => setSelectedToyId(null)}
-          id={selectedToyId}
-          cost={itemCost}
-          money={userStats.money}
+          confirmText={"Buy"}
+        />
+      )}
+      {selectedToyId === -1 && (
+        <ConfirmationPopup
+          message={`You don't have enough money to buy that!`}
+          onConfirm={() => setSelectedToyId(null)}
+        />
+      )}
+      {selectedToyId === -2 && (
+        <ConfirmationPopup
+          message={`You already own this toy!`}
+          onConfirm={() => setSelectedToyId(null)}
         />
       )}
     </>
