@@ -18,7 +18,7 @@ const StyledImageContainer = styled.div`
   gap: 5px;
 `;
 
-export default function ShopTable({ data, onItemClick }) {
+export default function ShopTable({ data, onItemClick, category }) {
   return (
     <table>
       <tbody>
