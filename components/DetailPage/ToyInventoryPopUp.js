@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import StyledButton from "../StyledComponents/StyledButton";
 import { useState } from "react";
-import { foods } from "@/lib/shop";
+import { toys } from "@/lib/shop";
 import InventoryContainer from "./InventoryContainer";
 import Link from "next/link";
 
-const HungerInventoryPopUpOverlay = styled.div`
+const ToyInventoryPopUpOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -20,7 +20,7 @@ const HungerInventoryPopUpOverlay = styled.div`
   z-index: 100;
 `;
 
-const HungerInventoryPopUpContent = styled.div`
+const ToyInventoryPopUpContent = styled.div`
   background-color: var(--background-color);
   padding: 15px;
   max-width: 90vw;
@@ -30,7 +30,7 @@ const HungerInventoryPopUpContent = styled.div`
   text-align: center;
 `;
 
-const StyledHungerInventoryContainer = styled.section`
+const StyledToyInventoryContainer = styled.section`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -54,82 +54,79 @@ const StyledErrorMessage = styled.p`
   color: red;
 `;
 
-export default function HungerInventoryPopUp({
+export default function ToyInventoryPopUp({
   userStats,
-  onFeedButton,
+  onPlayButton,
   onCancel,
   petId,
 }) {
-  const [selectedFoodItemId, setSelectedFoodItemId] = useState(0);
+  const [selectedToyItemId, setSelectedToyItemId] = useState(0);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-  const availableFood = userStats.inventory.food.filter((fooditems) => {
-    if (fooditems.value > 0) {
-      return fooditems;
+  const availableToy = userStats.inventory.toy.filter((toyItems) => {
+    if (toyItems.purchased === true) {
+      return toyItems;
     }
   });
 
   function handleConfirmButtonClick() {
-    if (selectedFoodItemId === 0) {
+    if (selectedToyItemId === 0) {
       setShowErrorMessage(true);
     } else {
-      onFeedButton(selectedFoodItemId);
-      setSelectedFoodItemId(true);
+      onPlayButton(selectedToyItemId);
+      setSelectedToyItemId(true);
     }
   }
 
-  function findFoodValuesById(id) {
-    const food = foods.find((food) => food.id === id);
-    return food;
+  function findToyValuesById(id) {
+    const toy = toys.find((toy) => toy.id === id);
+    return toy;
   }
 
-  function handleClickOnFoodItem(id) {
-    setSelectedFoodItemId(id);
+  function handleClickOnToyItem(id) {
+    setSelectedToyItemId(id);
     setShowErrorMessage(false);
   }
 
   return (
-    <HungerInventoryPopUpOverlay>
-      <HungerInventoryPopUpContent>
-        <h3>What food item would you like to feed?</h3>
-        <StyledHungerInventoryContainer>
-          {availableFood.map((fooditem) => (
+    <ToyInventoryPopUpOverlay>
+      <ToyInventoryPopUpContent>
+        <h3>Which toy do you like to use?</h3>
+        <StyledToyInventoryContainer>
+          {availableToy.map((toyItem) => (
             <InventoryContainer
-              key={fooditem.id}
-              id={fooditem.id}
-              name={findFoodValuesById(fooditem.id).name}
-              value={findFoodValuesById(fooditem.id).value}
-              image={findFoodValuesById(fooditem.id).image}
-              quantity={fooditem.value}
-              isActive={fooditem.id === selectedFoodItemId}
-              onClickOnItem={handleClickOnFoodItem}
-              type="Hunger"
+              key={toyItem.id}
+              id={toyItem.id}
+              name={findToyValuesById(toyItem.id).name}
+              value={findToyValuesById(toyItem.id).value}
+              image={findToyValuesById(toyItem.id).image}
+              isActive={toyItem.id === selectedToyItemId}
+              onClickOnItem={handleClickOnToyItem}
+              type="Happiness"
             />
           ))}
-          {availableFood.length === 0 && (
+          {availableToy.length === 0 && (
             <>
               <p>
-                You need to purchase food items from the shop first before you
-                can feed them to your pet.
+                You need to purchase Toys from the shop first before you can
+                playwith your pet.
               </p>
               <Link href={`/${petId}/shop/`}>To Shop</Link>
             </>
           )}
-        </StyledHungerInventoryContainer>
+        </StyledToyInventoryContainer>
         <ConfirmButtonWrapper>
           <ConfirmPopUpButton onClick={handleConfirmButtonClick}>
-            Feed
+            Play
           </ConfirmPopUpButton>
           <ConfirmPopUpButton $red onClick={onCancel}>
             Cancel
           </ConfirmPopUpButton>
         </ConfirmButtonWrapper>
         {showErrorMessage && (
-          <StyledErrorMessage>
-            You need to select a food item.
-          </StyledErrorMessage>
+          <StyledErrorMessage>You need to select a toy.</StyledErrorMessage>
         )}
-      </HungerInventoryPopUpContent>
-    </HungerInventoryPopUpOverlay>
+      </ToyInventoryPopUpContent>
+    </ToyInventoryPopUpOverlay>
   );
 }

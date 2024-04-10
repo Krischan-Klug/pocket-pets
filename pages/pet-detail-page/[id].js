@@ -11,7 +11,8 @@ import MoneyImage from "@/components/util/MoneyImage";
 import MoneyColored from "@/components/util/MoneyColored";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import HungerInventoryPopUp from "@/components/DetailPage/HungerInventoryPopUp";
-import { foods } from "@/lib/shop";
+import ToyInventoryPopUp from "@/components/DetailPage/ToyInventoryPopUp";
+import { foods, toys } from "@/lib/shop";
 import StyledXPBar from "@/components/DetailPage/StyledXPBar";
 import {
   calculateLevel,
@@ -160,6 +161,7 @@ export default function PetDetailPage({
     show: false,
   });
   const [feedButtonPopUp, setFeedButtonPopUp] = useState(false);
+  const [playButtonPopUp, setPlayButtonPopUp] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -244,10 +246,12 @@ export default function PetDetailPage({
   function handleFeedButton(foodItemId) {
     setFeedButtonPopUp(false);
     onUpdateInventoryFood(-1, foodItemId);
-    handleFeed(foods.find((food) => food.id === foodItemId).hunger);
+    handleFeed(foods.find((food) => food.id === foodItemId).value);
   }
 
-  function handlePlay(toyToGive) {
+  function handlePlayButton(toyItemId) {
+    const toyToGive = toys.find((toy) => toy.id === toyItemId).value;
+    setPlayButtonPopUp(false);
     if (!currentPet.isDead) {
       const updatedHappiness = currentPet.happiness + toyToGive;
       onUpdatePet({
@@ -360,7 +364,7 @@ export default function PetDetailPage({
                 />
               )}
               <button
-                onClick={() => handlePlay(10)}
+                onClick={() => setPlayButtonPopUp(true)}
                 disabled={isInteracting.duration > 0 || currentPet.isDead}
               >
                 <Image
@@ -370,6 +374,14 @@ export default function PetDetailPage({
                   height={50}
                 ></Image>
               </button>
+              {playButtonPopUp !== false && (
+                <ToyInventoryPopUp
+                  onPlayButton={handlePlayButton}
+                  onCancel={() => setPlayButtonPopUp(false)}
+                  userStats={userStats}
+                  petId={id}
+                />
+              )}
             </SyledInteractionButtonWrapper>
             <StyledPetContainer>
               {isDead && (
