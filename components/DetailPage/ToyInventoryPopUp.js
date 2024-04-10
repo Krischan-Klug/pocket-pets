@@ -5,38 +5,9 @@ import { toys } from "@/lib/shop";
 import InventoryContainer from "./InventoryContainer";
 import Link from "next/link";
 
-const ToyInventoryPopUpOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  //the height of the Z index should ensure that this popup is always the top element.
-  //Since we work with the z-index in steps of 10, I have chosen 100 here.
-  z-index: 100;
-`;
-
-const ToyInventoryPopUpContent = styled.div`
-  background-color: var(--background-color);
-  padding: 15px;
-  max-width: 90vw;
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: var(--text-color);
-  text-align: center;
-`;
-
-const StyledToyInventoryContainer = styled.section`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-`;
+import StyledPopUpOverlay from "@/components/StyledComponents/StyledPopUpOverlay";
+import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent";
+import StyledInventoryContainer from "@/components/StyledComponents/StyledInventoryContainer";
 
 const ConfirmPopUpButton = styled(StyledButton)`
   margin: 0 8px;
@@ -89,10 +60,10 @@ export default function ToyInventoryPopUp({
   }
 
   return (
-    <ToyInventoryPopUpOverlay>
-      <ToyInventoryPopUpContent>
+    <StyledPopUpOverlay>
+      <StyledPopUpContent>
         <h3>Which toy do you like to use?</h3>
-        <StyledToyInventoryContainer>
+        <StyledInventoryContainer>
           {availableToy.map((toyItem) => (
             <InventoryContainer
               key={toyItem.id}
@@ -114,7 +85,7 @@ export default function ToyInventoryPopUp({
               <Link href={`/${petId}/shop/`}>To Shop</Link>
             </>
           )}
-        </StyledToyInventoryContainer>
+        </StyledInventoryContainer>
         <ConfirmButtonWrapper>
           <ConfirmPopUpButton onClick={handleConfirmButtonClick}>
             Play
@@ -126,7 +97,7 @@ export default function ToyInventoryPopUp({
         {showErrorMessage && (
           <StyledErrorMessage>You need to select a toy.</StyledErrorMessage>
         )}
-      </ToyInventoryPopUpContent>
-    </ToyInventoryPopUpOverlay>
+      </StyledPopUpContent>
+    </StyledPopUpOverlay>
   );
 }
