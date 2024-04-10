@@ -6,6 +6,20 @@ import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import MoneyCounter from "@/components/util/MoneyCounter";
+import MoneyImage from "@/components/util/MoneyImage";
+import {
+  StyledBackgroundImageWrapper,
+  StyledStaticBackground,
+} from "@/components/StyledComponents/StyledBackgroundImage";
+
+const StyledPetCollectionHeader = styled.header`
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+`;
 
 const StyledButtonWrapper = styled.section`
   display: flex;
@@ -22,6 +36,7 @@ const StyledPetCollection = styled.section`
   width: 95vw;
   height: calc(100vh - 120px);
   overflow-y: auto;
+  z-index: 10;
   @media (min-width: 400px) {
     max-width: 700px;
     padding: 20px;
@@ -53,7 +68,8 @@ export default function HomePage({ myPets, onDeletePet, userStats }) {
 
   return (
     <>
-      <StyledDefaultHeader>
+      <StyledStaticBackground />
+      <StyledPetCollectionHeader>
         <h1>My Pets</h1>
         <StyledButtonWrapper>
           <StyledButton
@@ -73,7 +89,7 @@ export default function HomePage({ myPets, onDeletePet, userStats }) {
           </StyledButton>
         </StyledButtonWrapper>
         <MoneyCounter money={userStats.money} />
-      </StyledDefaultHeader>
+      </StyledPetCollectionHeader>
       <main>
         <StyledPetCollection>
           {myPets.map((myPet) => (

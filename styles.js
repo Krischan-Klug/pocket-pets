@@ -19,6 +19,10 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html, body{
+    overscroll-behavior: none;
+  }
+
   body {
     margin: 0;
     padding: 0;

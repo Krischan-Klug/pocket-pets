@@ -4,7 +4,7 @@ import trashcanIcon from "/public/assets/icons/round_delete_outline_black.png";
 import graveImage from "/public/assets/images/grave.png";
 
 const StyledPetCard = styled.button`
-  border: solid 2px ${({ deleteMode }) => (deleteMode ? "red" : "lightgrey")};
+  border: solid 2px ${({ $color }) => $color};
   border-radius: 10px;
   height: 110px;
   width: 110px;
@@ -15,6 +15,7 @@ const StyledPetCard = styled.button`
   justify-content: center;
   transform: scale(1);
   transition: 0.5s;
+  background-color: rgb(255, 255, 255, 0.7);
 
   &:hover {
     transform: scale(1.2);
@@ -41,7 +42,7 @@ export default function PetCard({ myPet, deleteMode, handleClickOnPetCard }) {
         onClick={() => {
           handleClickOnPetCard(myPet.id);
         }}
-        deleteMode={deleteMode}
+        $color={deleteMode ? "red" : "lightgrey"}
       >
         {deleteMode && (
           <StyledDeleteIcon
