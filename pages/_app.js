@@ -17,18 +17,49 @@ export default function App({ Component, pageProps }) {
   });
   const [settingPageShow, setSettingPage] = useState(false);
 
-  //Clock
   const [currentTime, setCurrentTime] = useLocalStorageState("currentTime", {
     defaultValue: 0,
   });
+
+  // daily event
+  const [isPetActive, setIsPetActive] = useState(false);
+  const [dailyEvent, setDailyEvent] = useState(false);
+  const [eventTime, setEventTime] = useState(20);
+  function getRandomDayTime() {
+    return Math.floor(Math.random() * 24);
+  }
+
+  useEffect(() => {
+    if (!dailyEvent && eventTime === currentTime) {
+      setEventTime(getRandomDayTime());
+      setDailyEvent(true);
+
+      if (isPetActive) {
+        // active pet events here
+      }
+
+      if (!isPetActive) {
+        // inactive pet events here
+      }
+
+      console.log("event Started");
+    }
+    console.log("event time: ", eventTime);
+    console.log("current time: ", currentTime);
+    console.log("daily event happend: ", dailyEvent);
+  }, [currentTime]);
+
+  //Clock
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (currentTime < 23) {
         setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
       } else {
         setCurrentTime(0);
+        setDailyEvent(false);
       }
-    }, 60000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, [currentTime]);
