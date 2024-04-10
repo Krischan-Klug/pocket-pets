@@ -6,8 +6,6 @@ import styled, { keyframes } from "styled-components";
 import StatusBar from "@/components/DetailPage/StatusBar";
 import { useEffect } from "react";
 import { useState } from "react";
-import useLocalStorageState from "use-local-storage-state";
-import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import MoneyImage from "@/components/util/MoneyImage";
 import MoneyColored from "@/components/util/MoneyColored";
@@ -19,6 +17,7 @@ import {
   calculateLevel,
   percentageLevelProgress,
 } from "@/components/DetailPage/calculateLevel";
+import StyledLink from "@/components/StyledComponents/StyledLink";
 
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
@@ -40,11 +39,6 @@ const StyledEditImage = styled(Image)`
     transition: 0.5s;
     cursor: pointer;
   }
-`;
-
-const StyledPetDetailPageHeader = styled.header`
-  padding: 20px;
-  width: 100%;
 `;
 
 const StyledPetDetailPageMain = styled.main`
@@ -124,6 +118,7 @@ const StyledMoneyHandleSection = styled.section`
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+  gap: 10px;
 `;
 
 const StyledNameSection = styled.div`
@@ -134,6 +129,8 @@ const StyledNameSection = styled.div`
 const StyledNameWrapper = styled.div`
   display: flex;
   background-color: rgb(255, 255, 255, 0.7);
+  padding: 0 5px;
+  border-radius: var(--border-radius);
 `;
 
 const StyledReviewButton = styled(StyledButton)`
@@ -296,14 +293,8 @@ export default function PetDetailPage({
 
         <StyledWallBackground />
 
-        <StyledPetDetailPageHeader>
-          <StyledLeftButton
-            onClick={() => {
-              router.push("/");
-            }}
-          >
-            Back
-          </StyledLeftButton>
+        <header>
+          <StyledLink href={"/"}>Back</StyledLink>
 
           <StyledNameSection>
             <StyledNameWrapper>
@@ -327,13 +318,13 @@ export default function PetDetailPage({
             <StatusBar text={"Energy"} value={currentPet.energy} />
           </StatusBarWrapper>
           <StyledMoneyHandleSection>
-          <StyledButton
-          onClick={() => {
-            router.push(`/${id}/shop/`);
-          }}
-        >
-          Shop
-        </StyledButton>
+            <StyledButton
+              onClick={() => {
+                router.push(`/${id}/shop/`);
+              }}
+            >
+              Shop
+            </StyledButton>
             <StyledButton
               onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
             >
@@ -345,28 +336,29 @@ export default function PetDetailPage({
               Merge Pets
             </StyledButton>
           </StyledMoneyHandleSection>
-        </StyledPetDetailPageHeader>
+        </header>
         <StyledPetDetailPageMain>
           <StyledGameArea>
             <SyledInteractionButtonWrapper>
-               <button
-              disabled={isInteracting.duration > 0 || currentPet.isDead}
-              onClick={() => setFeedButtonPopUp(true)}
-            >
-              <Image
-                alt="Hunger"
-                src={hungerImage}
-                width={50}
-                height={50}
-              ></Image>
-            </button>
-            {feedButtonPopUp !== false && (
-              <HungerInventoryPopUp
-                onFeedButton={handleFeedButton}
-                onCancel={() => setFeedButtonPopUp(false)}
-                userStats={userStats}
-              />
-            )}
+              <button
+                disabled={isInteracting.duration > 0 || currentPet.isDead}
+                onClick={() => setFeedButtonPopUp(true)}
+              >
+                <Image
+                  alt="Hunger"
+                  src={hungerImage}
+                  width={50}
+                  height={50}
+                ></Image>
+              </button>
+              {feedButtonPopUp !== false && (
+                <HungerInventoryPopUp
+                  onFeedButton={handleFeedButton}
+                  onCancel={() => setFeedButtonPopUp(false)}
+                  userStats={userStats}
+                  petId={id}
+                />
+              )}
               <button
                 onClick={() => handlePlay(10)}
                 disabled={isInteracting.duration > 0 || currentPet.isDead}

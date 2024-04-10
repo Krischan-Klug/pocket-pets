@@ -19,11 +19,11 @@ const StyledSettingPopUp = styled.div`
   //Since we work with the z-index in steps of 10, I have chosen 90 here.
   z-index: 90;
   gap: 10px;
-  margin-top: 20px;
+  padding-top: 20px;
 `;
 const StyledCloseButton = styled(StyledButton)`
   position: absolute;
-  top: 0;
+  top: 20px;
   right: 20px;
 `;
 
