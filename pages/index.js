@@ -4,7 +4,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
-
+import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
+import MoneyCounter from "@/components/util/MoneyCounter";
 import MoneyImage from "@/components/util/MoneyImage";
 import {
   StyledBackgroundImageWrapper,
@@ -40,16 +41,6 @@ const StyledPetCollection = styled.section`
     max-width: 700px;
     padding: 20px;
   }
-`;
-
-const MoneyCounter = styled.p`
-  position: absolute;
-  bottom: -10px;
-  left: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
 `;
 
 export default function HomePage({ myPets, onDeletePet, userStats }) {
@@ -97,10 +88,7 @@ export default function HomePage({ myPets, onDeletePet, userStats }) {
             Delete Pet
           </StyledButton>
         </StyledButtonWrapper>
-        <MoneyCounter>
-          <MoneyImage />
-          {userStats.money}
-        </MoneyCounter>
+        <MoneyCounter money={userStats.money} />
       </StyledPetCollectionHeader>
       <main>
         <StyledPetCollection>

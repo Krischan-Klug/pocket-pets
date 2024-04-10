@@ -98,9 +98,23 @@ export default function App({ Component, pageProps }) {
     });
   }
 
-  function handleSubtracMoney(value) {
+  function handleSubtractMoney(value) {
     setUserStats((prevUserStat) => {
       return { ...prevUserStat, money: prevUserStat.money - value };
+    });
+  }
+
+  function handleUpdateInventoryFood(value, newFoodId) {
+    setUserStats((prevStats) => {
+      const updatedInventory = { ...prevStats.inventory };
+      const foodIndex = updatedInventory.food.findIndex(
+        (item) => item.id === newFoodId
+      );
+      if (foodIndex !== -1) {
+        updatedInventory.food[foodIndex].value =
+          updatedInventory.food[foodIndex].value + value;
+      }
+      return { ...prevStats, inventory: updatedInventory };
     });
   }
 
@@ -146,7 +160,8 @@ export default function App({ Component, pageProps }) {
         onUpdatePet={handleUpdatePet}
         onDeletePet={handleDeletePet}
         onGameUpdate={handleGameUpdate}
-        onSubtracMoney={handleSubtracMoney}
+        onSubtractMoney={handleSubtractMoney}
+        onUpdateInventoryFood={handleUpdateInventoryFood}
         onAddMoney={handleAddMoney}
         currentTime={currentTime}
         isRaining={isRaining}

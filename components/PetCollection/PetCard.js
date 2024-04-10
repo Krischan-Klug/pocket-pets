@@ -42,7 +42,7 @@ export default function PetCard({ myPet, deleteMode, handleClickOnPetCard }) {
         onClick={() => {
           handleClickOnPetCard(myPet.id);
         }}
-        $color={deleteMode ? "red" : "black"}
+        $color={deleteMode ? "red" : "lightgrey"}
       >
         {deleteMode && (
           <StyledDeleteIcon
