@@ -147,8 +147,10 @@ export default function PetDetailPage({
   onUpdateInventoryFood,
   currentTime,
   isRaining,
+  onEnablePetIsActive,
+  currentPet,
+  onSetCurrentPet,
 }) {
-  const [currentPet, setCurrentPet] = useState(null);
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
     interaction: "",
@@ -164,6 +166,11 @@ export default function PetDetailPage({
   const router = useRouter();
   const { id } = router.query;
 
+  //enable pet active events
+  useEffect(() => {
+    onEnablePetIsActive();
+  }, []);
+
   //Gameloop 1.000ms Cycle
   useEffect(() => {
     if (!id) return;
@@ -171,7 +178,7 @@ export default function PetDetailPage({
     const pet = myPets.find((myPet) => myPet.id == id);
     if (!pet) return;
 
-    setCurrentPet(pet);
+    onSetCurrentPet(pet);
 
     if (pet.isDead) return;
 

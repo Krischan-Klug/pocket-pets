@@ -12,6 +12,7 @@ export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useLocalStorageState("myPets", {
     defaultValue: initialMyPets,
   });
+  const [currentPet, setCurrentPet] = useState(null);
   const [userStats, setUserStats] = useLocalStorageState("userStats", {
     defaultValue: defaultUserStats,
   });
@@ -21,10 +22,22 @@ export default function App({ Component, pageProps }) {
     defaultValue: 0,
   });
 
+  function handleSetCurrentPet(myPet) {
+    setCurrentPet(myPet);
+  }
+
   // daily event
   const [isPetActive, setIsPetActive] = useState(false);
   const [dailyEvent, setDailyEvent] = useState(false);
   const [eventTime, setEventTime] = useState(20);
+
+  function handleEnablePetIsActive() {
+    setIsPetActive(true);
+  }
+
+  function handleDisablePetIsActive() {
+    setIsPetActive(false);
+  }
   function getRandomDayTime() {
     return Math.floor(Math.random() * 24);
   }
@@ -44,9 +57,10 @@ export default function App({ Component, pageProps }) {
 
       console.log("event Started");
     }
-    console.log("event time: ", eventTime);
-    console.log("current time: ", currentTime);
-    console.log("daily event happend: ", dailyEvent);
+    //console.log("event time: ", eventTime);
+    //console.log("current time: ", currentTime);
+    //console.log("daily event happend: ", dailyEvent);
+    console.log("is pet active: ", isPetActive);
   }, [currentTime]);
 
   //Clock
@@ -196,6 +210,10 @@ export default function App({ Component, pageProps }) {
         onAddMoney={handleAddMoney}
         currentTime={currentTime}
         isRaining={isRaining}
+        onEnablePetIsActive={handleEnablePetIsActive}
+        onDisablePetIsActive={handleDisablePetIsActive}
+        onSetCurrentPet={handleSetCurrentPet}
+        currentPet={currentPet}
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
       {settingPageShow && (
