@@ -7,7 +7,6 @@ import useLocalStorageState from "use-local-storage-state";
 import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
 import SettingPopUp from "@/components/SettingPage/SettingPopUp";
 import SettingPageButton from "@/components/SettingPage/SettingPageButton";
-import { petEvents, userEvents } from "@/lib/events";
 
 export default function App({ Component, pageProps }) {
   const [myPets, setMyPets] = useLocalStorageState("myPets", {
@@ -51,21 +50,59 @@ export default function App({ Component, pageProps }) {
       function getRandomArrayIndex(array) {
         return Math.floor(Math.random() * array.length);
       }
+      //will be outsourced in future, problems with access on functions, i know zustand is the way to go
+      const petEvents = [
+        {
+          id: 1,
+          eventName: "Your pet is sick",
+          description: "Your pet is sick. You need to pay 100 medical costs.",
+          event: () => {
+            handleSubtractMoney(100);
+          },
+        },
+      ];
+
+      const userEvents = [
+        {
+          id: 1,
+          eventName: "Sample USER event",
+          description: "BLABLABLA",
+          event: () => {
+            console.log("USER EVENT 1 happend");
+          },
+        },
+        {
+          id: 2,
+          eventName: "Sample USER event",
+          description: "BLABLABLA",
+          event: () => {
+            console.log("USER EVENT 2 happend");
+          },
+        },
+        {
+          id: 3,
+          eventName: "Sample USER event",
+          description: "BLABLABLA",
+          event: () => {
+            console.log("USER EVENT 3 happend");
+          },
+        },
+      ];
 
       if (isPetActive) {
         const petEvent = petEvents[getRandomArrayIndex(petEvents)];
-        petEvent.function();
+        petEvent.event();
       }
 
       if (!isPetActive) {
         const userEvent = userEvents[getRandomArrayIndex(userEvents)];
-        userEvent.function();
+        userEvent.event();
       }
     }
-    //console.log("event time: ", eventTime);
-    //console.log("current time: ", currentTime);
-    //console.log("daily event happend: ", dailyEvent);
-    //console.log("is pet active: ", isPetActive);
+    console.log("event time: ", eventTime);
+    console.log("current time: ", currentTime);
+    console.log("daily event happend: ", dailyEvent);
+    console.log("is pet active: ", isPetActive);
   }, [currentTime]);
 
   //Clock
