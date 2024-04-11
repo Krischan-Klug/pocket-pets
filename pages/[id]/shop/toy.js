@@ -18,12 +18,9 @@ export default function ToyShop({
   const { id } = router.query;
 
   function isToyPurchased(id) {
-    for (const toy of userStats.inventory.toy) {
-      if (toy.id === id) {
-        return toy.purchased;
-      }
-    }
-    return false;
+    return userStats.inventory.toy.some(
+      (toy) => toy.id === id && toy.purchased
+    );
   }
 
   function selectToyItemToBuy(toyId, cost) {

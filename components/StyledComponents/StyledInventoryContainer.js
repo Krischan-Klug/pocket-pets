@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledInventoryContainer = styled.section`
+const StyledInventoryContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;

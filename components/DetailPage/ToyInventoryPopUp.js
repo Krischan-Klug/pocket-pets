@@ -31,7 +31,7 @@ export default function ToyInventoryPopUp({
   onCancel,
   petId,
 }) {
-  const [selectedToyItemId, setSelectedToyItemId] = useState(0);
+  const [selectedToyItemId, setSelectedToyItemId] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
   const availableToy = userStats.inventory.toy.filter((toyItems) => {
@@ -41,11 +41,11 @@ export default function ToyInventoryPopUp({
   });
 
   function handleConfirmButtonClick() {
-    if (selectedToyItemId === 0) {
+    if (selectedToyItemId === null) {
       setShowErrorMessage(true);
     } else {
       onPlayButton(selectedToyItemId);
-      setSelectedToyItemId(true);
+      setSelectedToyItemId(null);
     }
   }
 
@@ -62,7 +62,7 @@ export default function ToyInventoryPopUp({
   return (
     <StyledPopUpOverlay>
       <StyledPopUpContent>
-        <h3>Which toy do you like to use?</h3>
+        <h3>Which toy would you like to use?</h3>
         <StyledInventoryContainer>
           {availableToy.map((toyItem) => (
             <InventoryContainer

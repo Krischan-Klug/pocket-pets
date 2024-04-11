@@ -19,7 +19,7 @@ const StyledImageContainer = styled.div`
   gap: 5px;
 `;
 
-const StyledShopTableWrapper = styled.section`
+const StyledShopTableWrapper = styled.div`
   height: calc(100vh - 120px);
   overflow-y: auto;
   padding-bottom: 60px;
@@ -51,6 +51,9 @@ export default function ShopTable({ data, onItemClick, category }) {
       break;
     case "toy":
       typeIcon = <ToyImage />;
+      break;
+    default:
+      typeIcon = null;
       break;
   }
 
