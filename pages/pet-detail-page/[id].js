@@ -60,20 +60,24 @@ const StyledPetImage = styled(Image)`
 `;
 
 const sleepingAnimation = keyframes`
-0% {transform: translateY(0);}
-50% {transform: translateY(-10px);}
-100% {transform: translateY(0);}
+  0% {transform: translateY(0);}
+  50% {transform: translateY(-10px);}
+  100% {transform: translateY(0);}
 `;
 
 const toyAnimation = keyframes`
-0% {transform: translateY(10px) translateX(-10px) scale(1);}
-50% {transform: translateY(-10px) translateX(10px) scale(0.5);}
-100% {transform: translateY(10px) translateX(-10px) scale(1);}
+  0% {transform: translateY(10px) translateX(-10px) scale(1);}
+  50% {transform: translateY(-10px) translateX(10px) scale(0.5);}
+  100% {transform: translateY(10px) translateX(-10px) scale(1);}
 `;
 
 const foodAnimation = keyframes`
-0% {opacity: 1; transform: translateX(0);}
-100% {opacity: 0; transform: translateX(100);}
+  0% {clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);}
+  20% {clip-path: polygon(0 0, 80% 0, 80% 100%, 0 100%);}
+  40% {clip-path: polygon(0 0, 60% 0, 60% 100%, 0 100%);}
+  60% {clip-path: polygon(0 0, 40% 0, 40% 100%, 0 100%);}
+  80% {clip-path: polygon(0 0, 20% 0, 20% 100%, 0 100%);}
+  100% {clip-path: polygon(0 0, 0% 0, 0% 100%, 0 100%);}
 `;
 
 const StyledInteractionImage = styled(Image)`
