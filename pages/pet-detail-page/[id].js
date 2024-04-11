@@ -150,6 +150,9 @@ export default function PetDetailPage({
   onEnablePetIsActive,
   currentPet,
   onSetCurrentPet,
+  petEvent,
+  isEventPopUpActive,
+  onDisableIsEventPopUpActive,
 }) {
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
@@ -451,6 +454,12 @@ export default function PetDetailPage({
           message={confirmationPopUpContent.message}
           onConfirm={confirmationPopUpContent.onConfirm}
           onCancel={confirmationPopUpContent.onCancel}
+        />
+      )}
+      {isEventPopUpActive && (
+        <ConfirmationPopup
+          onConfirm={onDisableIsEventPopUpActive}
+          message={`${petEvent.description}`}
         />
       )}
     </>

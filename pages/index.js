@@ -48,6 +48,9 @@ export default function HomePage({
   onDeletePet,
   userStats,
   onDisablePetIsActive,
+  onDisableIsEventPopUpActive,
+  isEventPopUpActive,
+  userEvent,
 }) {
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedPetId, setSelectedPetId] = useState(null);
@@ -118,6 +121,12 @@ export default function HomePage({
           }?`}
           onConfirm={handleConfirmDelete}
           onCancel={() => setSelectedPetId(null)}
+        />
+      )}
+      {isEventPopUpActive && (
+        <ConfirmationPopup
+          onConfirm={onDisableIsEventPopUpActive}
+          message={`${userEvent.description}`}
         />
       )}
     </>
