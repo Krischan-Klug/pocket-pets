@@ -55,8 +55,10 @@ export default function App({ Component, pageProps }) {
         {
           id: 1,
           eventName: "Your pet is sick",
-          description: "Your pet is sick. You need to pay 100 medical costs.",
+          description:
+            "Your pet is sick. You need to pay 100 medical costs. and your pet lost 20 engergy.",
           event: () => {
+            handleUpdatePetEnergy(-20);
             handleSubtractMoney(100);
           },
         },
@@ -99,6 +101,7 @@ export default function App({ Component, pageProps }) {
         userEvent.event();
       }
     }
+    console.log("---------");
     console.log("event time: ", eventTime);
     console.log("current time: ", currentTime);
     console.log("daily event happend: ", dailyEvent);
@@ -115,7 +118,7 @@ export default function App({ Component, pageProps }) {
         setCurrentTime(0);
         setDailyEvent(false);
       }
-    }, 6000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [currentTime]);
@@ -173,6 +176,39 @@ export default function App({ Component, pageProps }) {
     setMyPets(
       myPets.map((myPet) => (myPet.id === updatedPet.id ? updatedPet : myPet))
     );
+  }
+
+  function handleUpdatePetEnergy(energyToUpdate) {
+    if (!currentPet.isDead) {
+      const updatedEnergy = currentPet.energy + energyToUpdate;
+
+      handleUpdatePet({
+        ...currentPet,
+        energy: Math.min(Math.max(updatedEnergy, 0), 100),
+      });
+    }
+  }
+
+  function handleUpdatePetHappiness(HappinessToUpdate) {
+    if (!currentPet.isDead) {
+      const updatedHappiness = currentPet.happiness + HappinessToUpdate;
+
+      handleUpdatePet({
+        ...currentPet,
+        happiness: Math.min(Math.max(updatedHappiness, 0), 100),
+      });
+    }
+  }
+
+  function handleUpdatePetHunger(HungerToUpdate) {
+    if (!currentPet.isDead) {
+      const updatedHunger = currentPet.hunger + HungerToUpdate;
+
+      handleUpdatePet({
+        ...currentPet,
+        hunger: Math.min(Math.max(updatedHunger, 0), 100),
+      });
+    }
   }
 
   function handleDeletePet(id) {
