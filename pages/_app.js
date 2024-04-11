@@ -68,6 +68,7 @@ export default function App({ Component, pageProps }) {
         });
       });
     }
+    //TODO: Object auf allen untergeordneten Ebenen überprüfen ob sich etwas geändert hat zum Save
     function updateUserStatsWithNewKeys() {
       setUserStats((prevUserStat) => {
         return { ...defaultUserStats, ...prevUserStat };
@@ -118,6 +119,19 @@ export default function App({ Component, pageProps }) {
     });
   }
 
+  function handleUpdateInventoryToy(newToyId) {
+    setUserStats((prevStats) => {
+      const updatedInventory = { ...prevStats.inventory };
+      const toyIndex = updatedInventory.toy.findIndex(
+        (item) => item.id === newToyId
+      );
+      if (toyIndex !== -1) {
+        updatedInventory.toy[toyIndex].purchased = true;
+      }
+      return { ...prevStats, inventory: updatedInventory };
+    });
+  }
+
   function handleSettingPageClose() {
     setSettingPage(false);
   }
@@ -162,6 +176,7 @@ export default function App({ Component, pageProps }) {
         onGameUpdate={handleGameUpdate}
         onSubtractMoney={handleSubtractMoney}
         onUpdateInventoryFood={handleUpdateInventoryFood}
+        onUpdateInventoryToy={handleUpdateInventoryToy}
         onAddMoney={handleAddMoney}
         currentTime={currentTime}
         isRaining={isRaining}

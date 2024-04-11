@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import StyledButton from "../StyledComponents/StyledButton";
 import { useState } from "react";
-import { foods } from "@/lib/shop";
+import { toys } from "@/lib/shop";
 import InventoryContainer from "./InventoryContainer";
 import Link from "next/link";
 
@@ -25,63 +25,62 @@ const StyledErrorMessage = styled.p`
   color: red;
 `;
 
-export default function HungerInventoryPopUp({
+export default function ToyInventoryPopUp({
   userStats,
-  onFeedButton,
+  onPlayButton,
   onCancel,
   petId,
 }) {
-  const [selectedFoodItemId, setSelectedFoodItemId] = useState(0);
+  const [selectedToyItemId, setSelectedToyItemId] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-  const availableFood = userStats.inventory.food.filter((fooditems) => {
-    if (fooditems.value > 0) {
-      return fooditems;
+  const availableToy = userStats.inventory.toy.filter((toyItems) => {
+    if (toyItems.purchased === true) {
+      return toyItems;
     }
   });
 
   function handleConfirmButtonClick() {
-    if (selectedFoodItemId === 0) {
+    if (selectedToyItemId === null) {
       setShowErrorMessage(true);
     } else {
-      onFeedButton(selectedFoodItemId);
-      setSelectedFoodItemId(true);
+      onPlayButton(selectedToyItemId);
+      setSelectedToyItemId(null);
     }
   }
 
-  function findFoodValuesById(id) {
-    const food = foods.find((food) => food.id === id);
-    return food;
+  function findToyValuesById(id) {
+    const toy = toys.find((toy) => toy.id === id);
+    return toy;
   }
 
-  function handleClickOnFoodItem(id) {
-    setSelectedFoodItemId(id);
+  function handleClickOnToyItem(id) {
+    setSelectedToyItemId(id);
     setShowErrorMessage(false);
   }
 
   return (
     <StyledPopUpOverlay>
       <StyledPopUpContent>
-        <h3>What food item would you like to feed?</h3>
+        <h3>Which toy would you like to use?</h3>
         <StyledInventoryContainer>
-          {availableFood.map((fooditem) => (
+          {availableToy.map((toyItem) => (
             <InventoryContainer
-              key={fooditem.id}
-              id={fooditem.id}
-              name={findFoodValuesById(fooditem.id).name}
-              value={findFoodValuesById(fooditem.id).value}
-              image={findFoodValuesById(fooditem.id).image}
-              quantity={fooditem.value}
-              isActive={fooditem.id === selectedFoodItemId}
-              onClickOnItem={handleClickOnFoodItem}
-              type="Hunger"
+              key={toyItem.id}
+              id={toyItem.id}
+              name={findToyValuesById(toyItem.id).name}
+              value={findToyValuesById(toyItem.id).value}
+              image={findToyValuesById(toyItem.id).image}
+              isActive={toyItem.id === selectedToyItemId}
+              onClickOnItem={handleClickOnToyItem}
+              type="Happiness"
             />
           ))}
-          {availableFood.length === 0 && (
+          {availableToy.length === 0 && (
             <>
               <p>
-                You need to purchase food items from the shop first before you
-                can feed them to your pet.
+                You need to purchase Toys from the shop first before you can
+                playwith your pet.
               </p>
               <Link href={`/${petId}/shop/`}>To Shop</Link>
             </>
@@ -89,16 +88,14 @@ export default function HungerInventoryPopUp({
         </StyledInventoryContainer>
         <ConfirmButtonWrapper>
           <ConfirmPopUpButton onClick={handleConfirmButtonClick}>
-            Feed
+            Play
           </ConfirmPopUpButton>
           <ConfirmPopUpButton $red onClick={onCancel}>
             Cancel
           </ConfirmPopUpButton>
         </ConfirmButtonWrapper>
         {showErrorMessage && (
-          <StyledErrorMessage>
-            You need to select a food item.
-          </StyledErrorMessage>
+          <StyledErrorMessage>You need to select a toy.</StyledErrorMessage>
         )}
       </StyledPopUpContent>
     </StyledPopUpOverlay>

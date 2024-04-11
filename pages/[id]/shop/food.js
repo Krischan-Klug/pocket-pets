@@ -38,7 +38,11 @@ export default function FoodShop({
         <MoneyCounter money={userStats.money} />
       </StyledDefaultHeader>
       <main>
-        <ShopTable data={foods} onItemClick={selectFoodItemToBuy} />
+        <ShopTable
+          data={foods}
+          onItemClick={selectFoodItemToBuy}
+          category={"food"}
+        />
       </main>
 
       {selectedFoodId && (

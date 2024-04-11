@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import styled from "styled-components";
 import HungerImage from "@/components/util/HungerImage";
+import ToyImage from "@/components/util/ToyImage";
 
 const StyledShopCategoryButton = styled.button`
   display: flex;
@@ -31,6 +32,12 @@ export default function Shop() {
         >
           <HungerImage height={120} width={120} />
           Food
+        </StyledShopCategoryButton>
+        <StyledShopCategoryButton
+          onClick={() => router.push(`/${id}/shop/toy`)}
+        >
+          <ToyImage height={120} width={120} />
+          Toys
         </StyledShopCategoryButton>
       </main>
     </>

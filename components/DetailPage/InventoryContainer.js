@@ -21,29 +21,35 @@ const StyledStats = styled.p`
   width: 80px;
 `;
 
-const StyledStatsValue = styled(StyledStats)`
+const StyledStatsQuantity = styled(StyledStats)`
   font-weight: bold;
 `;
 
 export default function InventoryContainer({
   id,
   name,
-  hunger,
-  image,
   value,
+  image,
+  quantity,
   isActive,
-  onClickOnFoodItem,
+  onClickOnItem,
+  type,
 }) {
   return (
     <StyledInventoryContainer
       $bordercolor={isActive ? "var(--accent-color)" : "lightgrey"}
       onClick={() => {
-        onClickOnFoodItem(id);
+        onClickOnItem(id);
       }}
     >
-      <Image src={image} alt={name} width={50} height={50} />
-      <StyledStatsValue>items: {value}</StyledStatsValue>
-      <StyledStats>hunger: {hunger}</StyledStats>
+      <Image src={image} alt={name} width={45} height={45} />
+      {quantity !== undefined && (
+        <StyledStatsQuantity>quantity: {quantity}</StyledStatsQuantity>
+      )}
+
+      <StyledStats>
+        {type}: {value}
+      </StyledStats>
     </StyledInventoryContainer>
   );
 }
