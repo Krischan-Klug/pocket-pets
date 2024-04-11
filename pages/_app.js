@@ -243,11 +243,6 @@ export default function App({ Component, pageProps }) {
         userEvent.event();
       }
     }
-    //console.log("---------");
-    //console.log("event time: ", eventTime);
-    //console.log("current time: ", currentTime);
-    //console.log("daily event happend: ", dailyEvent);
-    //console.log("is pet active: ", isPetActive);
   }, [currentTime]);
 
   //Clock
