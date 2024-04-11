@@ -1,12 +1,11 @@
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
 import styled from "styled-components";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 
-const StyledGameScreen = styled.div`
+const StyledGameScreen = styled.canvas`
   /* background-color: rgb(159, 197, 98); */
   background-color: rgb(134, 189, 61);
   border: 4px solid rgb(194, 140, 90);
@@ -46,7 +45,7 @@ export default function SundayWalks() {
   });
 
   const StyledGameScreenRef = useRef();
-  const router = useRouter();
+  const router = useRouter(null);
   const { id } = router.query;
 
   function startGame() {}
@@ -84,22 +83,54 @@ export default function SundayWalks() {
 
   // everything that happens in my GameScreen & Game Over:
   useEffect(() => {
-    const gameScreenActivity = StyledGameScreenRef.current.getContext("2d");
-    gameScreenActivity.setTransform(scale, 0, 0);
-    //     if (gameOver) {
-    //       const endPoints = getPoints();
-    //       const money = Math.floor(endPoints / 8);
-    //       setConfirmationPopUpContent({
-    //         ...confirmationPopUpContent,
-    //         show: true,
-    //         message: `Game over, your high score is: ${endPoints}. For this you get ${money} 🪙!`,
-    //         onConfirm: () => {
-    //           onAddMoney(money);
-    //           router.push(`/pet-detail-page/${id}`);
-    //         },
-    //       });
-    //     }
+    const gameScreenRef = StyledGameScreenRef.current;
+    if (gameScreenRef) {
+      const gameScreenActivity = gameScreenRef.getContext("2d"); // 2D means drawing in 2D instead e.g. in 3D
+      if (gameScreenActivity) {
+        gameScreenActivity.setTransform(scale, 0, 0, scale, 0, 0); // each render cycle the scale is set back to 0. this prevents the scale value from adding up
+        gameScreenActivity.clearRect(
+          0,
+          0,
+          window.innerWidth,
+          window.innerHeight
+        ); // clears the gameScreen befor it is rendered again
+
+        gameScreenActivity.fillStyle = "red"; // currentPet on gameScreen
+        currentPet.forEach(([x, y]) => gameScreenActivity.fillRect(x, y, 1, 1)); // 1px is enough because the scale value defines the size on the gameScreen
+
+        gameScreenActivity.fillStyle = "blue"; // newPet on gameScreen
+        gameScreenActivity.fillRect(newPet[0], newPet[1], 1, 1);
+      }
+    }
   }, [currentPet, newPet, gameOver]);
+
+  //   useEffect(() => {
+  //     const gameScreenActivity = StyledGameScreenRef.current.getContext("2d");
+  //     gameScreenActivity.setTransform(scale, 0, 0, scale, 0, 0);
+  //     gameScreenActivity.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+  //     gameScreenActivity.fillStyle = "red";
+  //     currentPet.forEach(([x, y]) => gameScreenActivity.fillRect(x, y, 1, 1));
+
+  //     gameScreenActivity.fillStyle = "blue";
+  //     newPet.fillRect(newPet[0], newPet[1], 1, 1);
+
+  //     //MARKUS CODE FÜR GAME OVER:
+  //     //     if (gameOver) {
+  //     //       const endPoints = getPoints();
+  //     //       const money = Math.floor(endPoints / 8);
+  //     //       setConfirmationPopUpContent({
+  //     //         ...confirmationPopUpContent,
+  //     //         show: true,
+  //     //         message: `Game over, your high score is: ${endPoints}. For this you get ${money} 🪙!`,
+  //     //         onConfirm: () => {
+  //     //           onAddMoney(money);
+  //     //           router.push(`/pet-detail-page/${id}`);
+  //     //         },
+  //     //       });
+  //     //     }
+  //     //MARKUS CODE ENDE.
+  //   }, [currentPet, newPet, gameOver]);
 
   return (
     <div
