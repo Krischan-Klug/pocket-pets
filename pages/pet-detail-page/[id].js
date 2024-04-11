@@ -337,6 +337,13 @@ export default function PetDetailPage({
               Shop
             </StyledButton>
             <StyledButton
+              onClick={() => {
+                router.push(`/${id}/inventory`);
+              }}
+            >
+              inventory
+            </StyledButton>
+            <StyledButton
               onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
             >
               Obstacle Jumper
