@@ -2,6 +2,7 @@ import Image from "next/image";
 import styled from "styled-components";
 
 const StyledItemCard = styled.button`
+  position: relative;
   border: solid 2px lightgray;
   border-radius: 10px;
   height: 100px;
@@ -34,14 +35,15 @@ export default function ItemCard({
   type,
   description,
 }) {
-  console.log(id, name, value, image, quantity, type);
   return (
-    <StyledItemCard title={`${name}\n${description}`}>
-      <Image src={image} alt={name} width={40} height={40} />
-      <StyledName>{name}</StyledName>
-      {quantity !== undefined && (
-        <StyledStats>quantity: {quantity}</StyledStats>
-      )}
-    </StyledItemCard>
+    <>
+      <StyledItemCard title={`${name}\n${description}`}>
+        <Image src={image} alt={name} width={40} height={40} />
+        <StyledName>{name}</StyledName>
+        {quantity !== undefined && (
+          <StyledStats>quantity: {quantity}</StyledStats>
+        )}
+      </StyledItemCard>
+    </>
   );
 }

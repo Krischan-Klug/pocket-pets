@@ -4,6 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { foods, toys } from "@/lib/shop";
 import Link from "next/link";
+import { useEffect } from "react";
 
 import ItemCard from "@/components/Inventory/ItemCard";
 
@@ -14,12 +15,12 @@ const TabContainer = styled.div`
 `;
 
 const Tab = styled.div`
-  flex: 1;
   text-align: center;
   padding: 10px;
   cursor: pointer;
   border: 2px solid lightgrey;
   border-radius: var(--border-radius);
+  height: 44px;
 
   ${({ active }) =>
     active === "true" &&
@@ -34,26 +35,37 @@ const ContentContainer = styled.div`
 `;
 
 const Content = styled.div`
-  display: ${({ active }) => (active ? "flex" : "none")};
+  display: ${({ active }) => (active === "true" ? "flex" : "none")};
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  max-height: 400px;
+  max-height: calc(100vh - ${({ $headerheight }) => $headerheight}px - 70px);
+
   width: 100%;
   overflow-y: auto;
 `;
 
 export default function Inventory({ userStats }) {
   const [activeTab, setActiveTab] = useState(0);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const router = useRouter();
   const { id } = router.query;
+
+  useEffect(() => {
+    const headerElement = document.querySelector("header");
+
+    if (headerElement) {
+      setHeaderHeight(headerElement.offsetHeight);
+    }
+  }, []);
 
   const availableFood = userStats.inventory.food.filter((fooditem) => {
     if (fooditem.value > 0) {
       return fooditem;
     }
   });
+
   const availableToys = userStats.inventory.toy.filter((toyitem) => {
     if (toyitem.purchased === true) {
       return toyitem;
@@ -68,6 +80,7 @@ export default function Inventory({ userStats }) {
     const food = foods.find((food) => food.id === id);
     return food;
   }
+
   function findToyValuesById(id) {
     const toy = toys.find((toy) => toy.id === id);
     return toy;
@@ -95,7 +108,10 @@ export default function Inventory({ userStats }) {
           </Tab>
         </TabContainer>
         <ContentContainer>
-          <Content active={activeTab === 0}>
+          <Content
+            active={activeTab === 0 ? "true" : ""}
+            $headerheight={headerHeight}
+          >
             {availableFood.map((fooditem) => (
               <ItemCard
                 key={fooditem.id}
@@ -118,7 +134,10 @@ export default function Inventory({ userStats }) {
               </>
             )}
           </Content>
-          <Content active={activeTab === 1}>
+          <Content
+            active={activeTab === 1 ? "true" : ""}
+            $headerheight={headerHeight}
+          >
             {availableToys.map((toyitem) => (
               <ItemCard
                 key={toyitem.id}
@@ -133,8 +152,8 @@ export default function Inventory({ userStats }) {
             {availableFood.length === 0 && (
               <>
                 <p>
-                  You need to purchase food items from the shop first before you
-                  can feed them to your pet.
+                  You need to purchase toy items from the shop first before you
+                  can play with your pet.
                 </p>
                 <Link href={`/${id}/shop/`}>To Shop</Link>
               </>
