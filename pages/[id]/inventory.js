@@ -46,6 +46,7 @@ const Content = styled.div`
 
   width: 100%;
   overflow-y: auto;
+  padding: 0 20px;
 `;
 
 export default function Inventory({ userStats }) {
@@ -146,7 +147,7 @@ export default function Inventory({ userStats }) {
                 description={findToyValuesById(toyitem.id).description}
               />
             ))}
-            {availableFood.length === 0 && (
+            {availableToys.length === 0 && (
               <>
                 <p>
                   You need to purchase toy items from the shop first before you
