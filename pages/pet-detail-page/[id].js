@@ -30,6 +30,7 @@ import {
   StyledWallBackground,
   StyledRainBackground,
 } from "@/components/StyledComponents/StyledBackgroundImage";
+import { useMoneyStore } from "@/components/stores/moneyStore";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -148,7 +149,6 @@ export default function PetDetailPage({
   onGameUpdate,
   onUpdatePet,
   userStats,
-  onSubtractMoney,
   onUpdateInventoryFood,
   currentTime,
   isRaining,
@@ -159,6 +159,7 @@ export default function PetDetailPage({
   isEventPopUpActive,
   onDisableIsEventPopUpActive,
 }) {
+  const subtractMoney = useMoneyStore((state) => state.subtractMoney);
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
     interaction: "",
@@ -294,7 +295,7 @@ export default function PetDetailPage({
   }
 
   function handleConfirm(value) {
-    onSubtractMoney(value);
+    subtractMoney(value);
     setConfirmationPopUpContent({ ...confirmationPopUpContent, show: false });
     onUpdatePet({
       ...currentPet,

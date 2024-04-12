@@ -6,12 +6,10 @@ import { toys } from "@/lib/shop.js";
 import MoneyCounter from "@/components/util/MoneyCounter";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
+import { useMoneyStore } from "@/components/stores/moneyStore";
 
-export default function ToyShop({
-  userStats,
-  onUpdateInventoryToy,
-  onSubtractMoney,
-}) {
+export default function ToyShop({ userStats, onUpdateInventoryToy }) {
+  const subtractMoney = useMoneyStore((state) => state.subtractMoney);
   const [selectedToyId, setSelectedToyId] = useState(null);
   const [itemCost, setItemCost] = useState(0);
   const router = useRouter();
@@ -37,7 +35,7 @@ export default function ToyShop({
   function confirmBuy() {
     onUpdateInventoryToy(selectedToyId);
     setSelectedToyId(null);
-    onSubtractMoney(itemCost);
+    subtractMoney(itemCost);
   }
 
   return (

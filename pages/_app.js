@@ -8,8 +8,13 @@ import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
 import SettingPopUp from "@/components/SettingPage/SettingPopUp";
 import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 import { useRouter } from "next/router";
+import { useMoneyStore } from "@/components/stores/moneyStore";
 
 export default function App({ Component, pageProps }) {
+  const money = useMoneyStore((state) => state.money);
+  const addMoney = useMoneyStore((state) => state.addMoney);
+  const subtractMoney = useMoneyStore((state) => state.subtractMoney);
+
   const router = useRouter();
   const [myPets, setMyPets] = useLocalStorageState("myPets", {
     defaultValue: initialMyPets,
@@ -73,7 +78,7 @@ export default function App({ Component, pageProps }) {
             description: `${currentPet.name} is sick. You need to pay 100 medical costs. and ${currentPet.name} lost 20 engergy.`,
             event: () => {
               handleUpdatePetEnergy(-20);
-              handleSubtractMoney(100);
+              subtractMoney(100);
             },
           },
 
@@ -85,7 +90,7 @@ export default function App({ Component, pageProps }) {
               handleUpdatePetHappiness(100);
               handleUpdatePetHunger(100);
               handleUpdatePetEnergy(-30);
-              handleSubtractMoney(50);
+              subtractMoney(50);
             },
           },
           {
@@ -123,7 +128,7 @@ export default function App({ Component, pageProps }) {
             eventName: "Archaeological find",
             description: `${currentPet.name} digs up an archaeological find. You sell it for 1200 pet coins.`,
             event: () => {
-              handleAddMoney(1200);
+              addMoney(1200);
             },
           },
           {
@@ -164,7 +169,7 @@ export default function App({ Component, pageProps }) {
             eventName: "piece of sh**",
             description: `${currentPet.name} accidentally destroys your favorite piece of furniture. You lose 90 pet coins for repairs.`,
             event: () => {
-              handleSubtractMoney(90);
+              subtractMoney(90);
             },
           },
           {
@@ -188,7 +193,7 @@ export default function App({ Component, pageProps }) {
             eventName: "Coin hunter",
             description: `${currentPet.name} finds a forgotten stash of coins hidden in the couch cushions. You gain 100 pet coins in a stroke of luck.`,
             event: () => {
-              handleAddMoney(100);
+              addMoney(100);
             },
           },
         ];
@@ -206,7 +211,7 @@ export default function App({ Component, pageProps }) {
             description:
               "You bought the wrong cryptocurrency. You lose 20% of your money.",
             event: () => {
-              handleSubtractMoney(Math.floor((userStats.money * 20) / 100));
+              subtractMoney(Math.floor((money * 20) / 100));
             },
           },
           {
@@ -215,7 +220,7 @@ export default function App({ Component, pageProps }) {
             description:
               "Elon Musk tweets something about your pet coin. Your wealth grows by 20%.",
             event: () => {
-              handleAddMoney(Math.floor((userStats.money * 20) / 100));
+              addMoney(Math.floor((money * 20) / 100));
             },
           },
           {
@@ -224,7 +229,7 @@ export default function App({ Component, pageProps }) {
             description:
               "Your pet becomes second to last in the beauty contest. You  receive 100 pet coins consolation money.",
             event: () => {
-              handleAddMoney(100);
+              addMoney(100);
             },
           },
           {
@@ -233,7 +238,7 @@ export default function App({ Component, pageProps }) {
             description:
               "You have lost your keys and now have to pay 100 coins to replace them",
             event: () => {
-              handleSubtractMoney(100);
+              subtractMoney(100);
             },
           },
         ];
@@ -358,18 +363,6 @@ export default function App({ Component, pageProps }) {
     setMyPets(myPets.filter((myPet) => myPet.id !== id));
   }
 
-  function handleAddMoney(value) {
-    setUserStats((prevUserStat) => {
-      return { ...prevUserStat, money: prevUserStat.money + value };
-    });
-  }
-
-  function handleSubtractMoney(value) {
-    setUserStats((prevUserStat) => {
-      return { ...prevUserStat, money: prevUserStat.money - value };
-    });
-  }
-
   function handleUpdateInventoryFood(value, newFoodId) {
     setUserStats((prevStats) => {
       const updatedInventory = { ...prevStats.inventory };
@@ -439,10 +432,8 @@ export default function App({ Component, pageProps }) {
         onUpdatePet={handleUpdatePet}
         onDeletePet={handleDeletePet}
         onGameUpdate={handleGameUpdate}
-        onSubtractMoney={handleSubtractMoney}
         onUpdateInventoryFood={handleUpdateInventoryFood}
         onUpdateInventoryToy={handleUpdateInventoryToy}
-        onAddMoney={handleAddMoney}
         currentTime={currentTime}
         isRaining={isRaining}
         onEnablePetIsActive={handleEnablePetIsActive}
