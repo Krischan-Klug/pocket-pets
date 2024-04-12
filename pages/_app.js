@@ -65,7 +65,7 @@ export default function App({ Component, pageProps }) {
       }
       //will be outsourced in future, problems with access on functions, i know zustand is the way to go
 
-      if (isPetActive) {
+      if (isPetActive && !currentPet.isDead) {
         const petEvents = [
           {
             id: 1,
