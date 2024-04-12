@@ -117,13 +117,10 @@ export default function Inventory({ userStats }) {
             {availableFood.map((fooditem) => (
               <ItemCard
                 key={fooditem.id}
-                id={fooditem.id}
                 name={findFoodValuesById(fooditem.id).name}
-                value={findFoodValuesById(fooditem.id).value}
                 image={findFoodValuesById(fooditem.id).image}
                 description={findFoodValuesById(fooditem.id).description}
                 quantity={fooditem.value}
-                type="Hunger"
               />
             ))}
             {availableFood.length === 0 && (
@@ -144,12 +141,9 @@ export default function Inventory({ userStats }) {
             {availableToys.map((toyitem) => (
               <ItemCard
                 key={toyitem.id}
-                id={toyitem.id}
                 name={findToyValuesById(toyitem.id).name}
-                value={findToyValuesById(toyitem.id).value}
                 image={findToyValuesById(toyitem.id).image}
                 description={findToyValuesById(toyitem.id).description}
-                type="Play"
               />
             ))}
             {availableFood.length === 0 && (

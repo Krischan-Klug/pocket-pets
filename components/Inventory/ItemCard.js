@@ -26,15 +26,7 @@ const StyledName = styled.span`
   font-weight: bold;
 `;
 
-export default function ItemCard({
-  id,
-  name,
-  value,
-  image,
-  quantity,
-  type,
-  description,
-}) {
+export default function ItemCard({ name, image, quantity, description }) {
   return (
     <>
       <StyledItemCard title={`${name}\n${description}`}>
