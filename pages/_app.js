@@ -200,6 +200,7 @@ export default function App({ Component, pageProps }) {
         onUpdateInventoryToy={handleUpdateInventoryToy}
         onAddMoney={handleAddMoney}
         currentTime={currentTime}
+        currentDay={currentDay}
         currentSeason={currentSeason}
         isRaining={isRaining}
       />
