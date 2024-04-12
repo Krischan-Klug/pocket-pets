@@ -1,10 +1,9 @@
 import { useRouter } from "next/router";
 import StyledLink from "@/components/StyledComponents/StyledLink";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { foods, toys } from "@/lib/shop";
 import Link from "next/link";
-import { useEffect } from "react";
 
 import ItemCard from "@/components/Inventory/ItemCard";
 
@@ -20,7 +19,6 @@ const Tab = styled.div`
   cursor: pointer;
   border: 2px solid lightgrey;
   border-radius: var(--border-radius);
-  height: 44px;
 
   ${({ active }) =>
     active === "true" &&
@@ -40,7 +38,11 @@ const Content = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  max-height: calc(100vh - ${({ $headerheight }) => $headerheight}px - 70px);
+  max-height: calc(
+    100vh -
+      ${({ $headerheight, $tabcontainerheight }) =>
+        $headerheight + $tabcontainerheight}px - 30px
+  );
 
   width: 100%;
   overflow-y: auto;
@@ -49,15 +51,15 @@ const Content = styled.div`
 export default function Inventory({ userStats }) {
   const [activeTab, setActiveTab] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [tabContainerHeight, setTabContainerHeight] = useState(0);
   const router = useRouter();
   const { id } = router.query;
+  const headerRef = useRef(null);
+  const tabContainerRef = useRef(null);
 
   useEffect(() => {
-    const headerElement = document.querySelector("header");
-
-    if (headerElement) {
-      setHeaderHeight(headerElement.offsetHeight);
-    }
+    setHeaderHeight(headerRef.current.offsetHeight);
+    setTabContainerHeight(tabContainerRef.current.offsetHeight);
   }, []);
 
   const availableFood = userStats.inventory.food.filter((fooditem) => {
@@ -85,15 +87,14 @@ export default function Inventory({ userStats }) {
     const toy = toys.find((toy) => toy.id === id);
     return toy;
   }
-
   return (
     <>
-      <header>
+      <header ref={headerRef}>
         <StyledLink href={`/pet-detail-page/${id}`}>Back</StyledLink>
         <h1>Inventory</h1>
       </header>
       <main>
-        <TabContainer>
+        <TabContainer ref={tabContainerRef}>
           <Tab
             active={activeTab === 0 ? "true" : "false"}
             onClick={() => handleTabClick(0)}
@@ -111,6 +112,7 @@ export default function Inventory({ userStats }) {
           <Content
             active={activeTab === 0 ? "true" : ""}
             $headerheight={headerHeight}
+            $tabcontainerheight={tabContainerHeight}
           >
             {availableFood.map((fooditem) => (
               <ItemCard
@@ -137,6 +139,7 @@ export default function Inventory({ userStats }) {
           <Content
             active={activeTab === 1 ? "true" : ""}
             $headerheight={headerHeight}
+            $tabcontainerheight={tabContainerHeight}
           >
             {availableToys.map((toyitem) => (
               <ItemCard
