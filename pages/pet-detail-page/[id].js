@@ -151,6 +151,7 @@ export default function PetDetailPage({
   onSubtracMoney,
   onUpdateInventoryFood,
   currentTime,
+  currentSeason,
   isRaining,
 }) {
   const [currentPet, setCurrentPet] = useState(null);
@@ -299,8 +300,16 @@ export default function PetDetailPage({
   return (
     <>
       <StyledBackgroundImageWrapper>
-        <StyledTimeBackground currentTime={currentTime} />
-        {isRaining && <StyledRainBackground />}
+        <StyledTimeBackground
+          currenttime={currentTime}
+          currentseason={currentSeason}
+        />
+        {isRaining && (
+          <StyledRainBackground
+            iswinter={currentSeason === 3}
+            currentseason={currentSeason}
+          />
+        )}
 
         <StyledWallBackground />
 

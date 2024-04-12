@@ -45,7 +45,7 @@ export default function App({ Component, pageProps }) {
         setCurrentTime(0);
         setCurrentDay((prevCurrentDay) => prevCurrentDay + 1);
         if ((currentDay + 1) % 8 === 0) {
-          setCurrentSeason((prevSeason) => (prevSeason + 1) % 3);
+          setCurrentSeason((prevSeason) => (prevSeason + 1) % 4);
         }
       }
     }, 1000);
@@ -57,6 +57,7 @@ export default function App({ Component, pageProps }) {
   const [isRaining, setIsRaining] = useLocalStorageState("isRaining", {
     defaultValue: false,
   });
+
   function getRandomRainTime(min, max) {
     return Math.random() * (max - min) + min;
   }
@@ -199,6 +200,7 @@ export default function App({ Component, pageProps }) {
         onUpdateInventoryToy={handleUpdateInventoryToy}
         onAddMoney={handleAddMoney}
         currentTime={currentTime}
+        currentSeason={currentSeason}
         isRaining={isRaining}
       />
       <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
