@@ -31,6 +31,7 @@ import {
   StyledRainBackground,
 } from "@/components/StyledComponents/StyledBackgroundImage";
 import Calendar from "@/components/util/Calendar";
+import Clock from "@/components/util/Clock";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -334,7 +335,8 @@ export default function PetDetailPage({
               Level: <span>{calculateLevel(xp)}</span>
             </StyledXPBar>
           </StyledNameSection>
-          <Calendar day={currentDay} season={currentSeason}></Calendar>
+          <Calendar day={currentDay} season={currentSeason} />
+          <Clock hour={currentTime} />
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
             <StatusBar text={"Hunger"} value={currentPet.hunger} />
