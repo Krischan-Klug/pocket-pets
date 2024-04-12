@@ -1,123 +1,43 @@
-import { useRouter } from "next/router";
 import { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
+import { useRouter } from "next/router";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import StyledButton from "@/components/StyledComponents/StyledButton";
-import ConfirmationPopup from "@/components/util/ConfirmPopUp";
+import styled from "styled-components";
 
-const gameScreenSize = [800, 800];
+const gameScreenSize = [400, 400];
 
 const StyledGameScreen = styled.canvas`
   /* background-color: rgb(159, 197, 98); */
-  /* background-color: rgb(134, 189, 61); */
+  background-color: rgb(134, 189, 61);
   border: 4px solid rgb(194, 140, 90);
-  /* height: 800px; */
-  /* width: 800px; */
   width: ${gameScreenSize[0]}px;
   height: ${gameScreenSize[1]}px;
 `;
 
 export default function SundayWalks() {
-  const currentPetStart = [
+  const petStart = [
     [8, 7],
     [8, 8],
   ];
-  const newPetStart = [8, 3];
-  const scale = 40; // Pixel width & height of currentPet
-  const defaultSpeed = 100;
-  const directions = {
-    38: [0, -1], // Up –> not moving on the x-axis but 1 up on the y-axis
-    40: [0, 1], // Down
-    37: [-1, 0], // Left
-    39: [1, 0], // Right
+  const petFriendStart = [8, 3];
+  const scale = 20; // Pixel width & height of each pet
+  const defaultSpeed = 500;
+  const DIRECTIONS = {
+    38: [0, -1], // up -> not moving on the x-axis but 1 up on the y-axis
+    40: [0, 1], // down
+    37: [-1, 0], // left
+    39: [1, 0], // right
   };
 
-  const [currentPet, setCurrentPet] = useState(currentPetStart);
-  const [newPet, setNewPet] = useState(newPetStart);
-  const [direction, setDirection] = useState([0, -1]); // first move of currentPet is UP
-  const [speed, setSpeed] = useState(null); // OR (null) which would mean currentPet does not move before the Start button is clicked
+  const [pet, setPet] = useState(petStart);
+  const [friend, setFriend] = useState(petFriendStart);
+  const [dir, setDir] = useState([0, -1]); // first move of currentPet is UP
+  const [speed, setSpeed] = useState(null); // pet does not move before the Start button is clicked
   const [gameOver, setGameOver] = useState(false);
-  const [startPopUpContent, setStartPopUpContent] = useState({
-    message:
-      "The aim of the game is to meet as many of your pet friends and family members to enjoy a nice day in the park. But be careful that nobody harms himself/herself on the park fences or stumbles over a beloved one. To do this, either press the arrow keys or swipe across the display. Have a nice stroll!",
-    onConfirm: () => {
-      setStartPopUpContent({ ...startPopUpContent, show: false });
-    },
-    onCancel: null,
-    show: true,
-    confirmText: "Start Game",
-  });
 
-  const StyledGameScreenRef = useRef();
+  const canvasRef = useRef();
   const router = useRouter();
   const { id } = router.query;
-
-  function startGame() {
-    setCurrentPet(currentPetStart);
-    setNewPet(newPetStart);
-    setDirection([0, -1]);
-    setSpeed(defaultSpeed);
-    setGameOver(false);
-  }
-
-  function endGame() {
-    setSpeed(null);
-    setGameOver(true);
-  }
-
-  function moveCurrentPet({ keyCode }) {
-    keyCode >= 37 && keyCode <= 40 && setDirection(directions[keyCode]);
-  } // as soon as a key is pressed the key becomes the keyCode
-
-  function createNewPet() {
-    newPet.map((_, i) =>
-      Math.floor((Math.random() * gameScreenSize[i]) / scale)
-    );
-  }
-
-  function checkCollisionFence(headOfThePetLine, pet = currentPet) {
-    if (
-      headOfThePetLine[0] * scale > gameScreenSize[0] ||
-      headOfThePetLine[0] < 0 ||
-      headOfThePetLine[1] * scale >= gameScreenSize[1] ||
-      headOfThePetLine[1] < 0
-    )
-      return true;
-
-    for (const segment of pet) {
-      if (
-        headOfThePetLine[0] === segment[0] &&
-        headOfThePetLine[1] === segment[1]
-      )
-        return true;
-    }
-    return false;
-  }
-
-  function checkCollisionPetFriends(newAnimal) {
-    if (newAnimal[0][0] === newPet[0] && newAnimal[0][1] === newPet[1]) {
-      let newPetFriend = createNewPet();
-      while (checkCollisionFence(newPetFriend, newAnimal)) {
-        newPetFriend = createNewPet();
-      }
-      setNewPet(newPetFriend);
-      return true;
-    }
-    return false;
-  }
-
-  function gameLoop() {
-    const currentPetCopy = JSON.parse(JSON.stringify(currentPet)); // the complete line of pets
-    const petHead = [
-      currentPetCopy[0][0] + direction[0],
-      currentPetCopy[0][1] + direction[1],
-    ]; // first we take the x-coordinate, than the y-coordinate
-    currentPetCopy.unshift(petHead);
-    if (checkCollisionFence(petHead)) endGame();
-    if (!checkCollisionPetFriends(currentPetCopy));
-    currentPetCopy.pop(); // will delete first element of array
-    setNewPet(currentPetCopy);
-  }
 
   // Invtervall function using custom hook by Dan Abramov
   function useInterval(callback, delay) {
@@ -138,70 +58,88 @@ export default function SundayWalks() {
     }, [delay]);
   }
 
-  // everything that happens in my GameScreen & Game Over:
-  useEffect(() => {
-    const gameScreenRef = StyledGameScreenRef.current;
-    if (gameScreenRef) {
-      const context = gameScreenRef.getContext("2d"); // 2d means drawing in 2D instead e.g. in 3D
-      if (context) {
-        context.setTransform(scale, 0, 0, scale, 0, 0); // each render cycle the scale is set back to 0. this prevents the scale value from adding up
-        context.clearRect(0, 0, gameScreenRef.width, gameScreenRef.height); // clears the gameScreen befor it is rendered again
+  useInterval(() => gameLoop(), speed); // to start the game loop
 
-        context.fillStyle = "red"; // currentPet on gameScreen
-        currentPet.forEach(([x, y]) =>
-          context.fillRect(x * scale, y * scale, scale, scale)
-        );
-        console.log("CURRENTPET: ", currentPet);
+  function endGame() {
+    setSpeed(null);
+    setGameOver(true);
+  }
 
-        context.fillStyle = "blue"; // newPet on gameScreen
-        context.fillRect(newPet[0] * scale, newPet[1] * scale, scale, scale);
-        console.log("NEWPET: ", newPet);
-      }
+  const movePet = ({ keyCode }) =>
+    keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode]); // as soon as a key is pressed the key becomes the keyCode
+
+  const createFriend = () =>
+    friend.map((_a, i) =>
+      Math.floor(Math.random() * (gameScreenSize[i] / scale))
+    );
+
+  const checkCollision = (piece, snk = pet) => {
+    if (
+      piece[0] * scale >= gameScreenSize[0] ||
+      piece[0] < 0 ||
+      piece[1] * scale >= gameScreenSize[1] ||
+      piece[1] < 0
+    )
+      return true;
+
+    for (const segment of snk) {
+      if (piece[0] === segment[0] && piece[1] === segment[1]) return true;
     }
-  }, [currentPet, newPet, gameOver]);
+    return false;
+  };
 
-  //   //MARKUS CODE FÜR GAME OVER:
-  //   //     if (gameOver) {
-  //   //       const endPoints = getPoints();
-  //   //       const money = Math.floor(endPoints / 8);
-  //   //       setConfirmationPopUpContent({
-  //   //         ...confirmationPopUpContent,
-  //   //         show: true,
-  //   //         message: `Game over, your high score is: ${endPoints}. For this you get ${money} 🪙!`,
-  //   //         onConfirm: () => {
-  //   //           onAddMoney(money);
-  //   //           router.push(`/pet-detail-page/${id}`);
-  //   //         },
-  //   //       });
-  //   //     }
+  function checkFriendCollision(newPet) {
+    if (newPet[0][0] === friend[0] && newPet[0][1] === friend[1]) {
+      let newFriend = createFriend();
+      while (checkCollision(newFriend, newPet)) {
+        newFriend = createFriend();
+      }
+      setFriend(newFriend);
+      return true;
+    }
+    return false;
+  }
 
-  // to start the game loop
-  useInterval(() => gameLoop(), speed);
+  function gameLoop() {
+    const petCopy = JSON.parse(JSON.stringify(pet)); // the complete line of pets
+    const newPetHead = [petCopy[0][0] + dir[0], petCopy[0][1] + dir[1]]; // first take the x-coordinate than the y-coordinate
+    petCopy.unshift(newPetHead);
+    if (checkCollision(newPetHead)) endGame();
+    if (!checkFriendCollision(petCopy)) petCopy.pop(); // will delete first element of array
+    setPet(petCopy);
+  }
+
+  function startGame() {
+    setPet(petStart);
+    setFriend(petFriendStart);
+    setDir([0, -1]);
+    setSpeed(defaultSpeed);
+    setGameOver(false);
+  }
+
+  // everything that happens within gameScreen:
+  useEffect(() => {
+    const context = canvasRef.current.getContext("2d"); // 2d means drawing in 2D instead of e.g. in 3D
+    context.setTransform(scale, 0, 0, scale, 0, 0); // each render cycle the scale is set back to 0. this prevents the scale value from adding up
+    context.clearRect(0, 0, window.innerWidth, window.innerHeight); // clears the gameScreen befor it is rendered again
+    context.fillStyle = "pink"; // pet appearance on gameScreen
+    pet.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
+    context.fillStyle = "lightblue"; // friend appearance on gameScreen
+    context.fillRect(friend[0], friend[1], 1, 1);
+  }, [pet, friend, gameOver]);
 
   return (
-    <div
-      role="button"
-      tabIndex="0"
-      onKeyDown={(event) => moveCurrentPet(event)}
-    >
+    <div role="button" tabIndex="0" onKeyDown={(e) => movePet(e)}>
       <header>
         <StyledLink href={`/pet-detail-page/${id}`}>Back</StyledLink>
         <h1>Sunday Walks</h1>
       </header>
       <main>
         {/* <p>Current highscore {points} / Current earned {coins}</p> */}
-        <StyledGameScreen ref={StyledGameScreenRef}></StyledGameScreen>
-        <StyledButton>Cancel</StyledButton>
+        <StyledGameScreen ref={canvasRef} />
+        {gameOver && <div>GAME OVER!</div>}
+        <StyledButton onClick={startGame}>Start Game</StyledButton>
       </main>
-      {gameOver && <p>GAME OVER!</p>}
-      {/* {startPopUpContent.show && (
-        <ConfirmationPopup
-          message={startPopUpContent.message}
-          onConfirm={startPopUpContent.onConfirm}
-          onCancel={startPopUpContent.onCancel}
-          confirmText={startPopUpContent.confirmText}
-        />
-      )} */}
     </div>
   );
 }
