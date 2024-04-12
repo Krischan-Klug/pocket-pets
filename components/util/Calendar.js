@@ -25,7 +25,8 @@ const CalendarDay = styled.div`
   margin-top: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
   height: 35px;
 `;
 
@@ -56,14 +57,16 @@ export default function Calendar({ day, season }) {
     }
   };
 
+  const currentDayInSeason = ((day - 1) % 8) + 1;
+
   return (
     <>
       <SyledCalendarWrapper>
         <CalendarSeason>{seasonText()}</CalendarSeason>
-        <BlackDecoration positionleft={9} />
+        <BlackDecoration positionleft={7} />
         <BlackDecoration positionleft={24} />
-        <BlackDecoration positionleft={41} />
-        <CalendarDay>{day}</CalendarDay>
+        <BlackDecoration positionleft={40} />
+        <CalendarDay>{currentDayInSeason}</CalendarDay>
       </SyledCalendarWrapper>
     </>
   );
