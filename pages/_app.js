@@ -21,14 +21,34 @@ export default function App({ Component, pageProps }) {
   const [currentTime, setCurrentTime] = useLocalStorageState("currentTime", {
     defaultValue: 0,
   });
+  //Day
+  const [currentDay, setCurrentDay] = useLocalStorageState("currentDay", {
+    defaultValue: 0,
+  });
+  //Season
+  const [currentSeason, setCurrentSeason] = useLocalStorageState(
+    "currentSeason",
+    {
+      defaultValue: 0,
+    }
+  );
+  console.log("Hour: ", currentTime);
+  console.log("Day: ", currentDay);
+  console.log("Season: ", currentSeason);
+
+  //Interval 60.000
   useEffect(() => {
     const interval = setInterval(() => {
       if (currentTime < 23) {
         setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
       } else {
         setCurrentTime(0);
+        setCurrentDay((prevCurrentDay) => prevCurrentDay + 1);
+        if ((currentDay + 1) % 8 === 0) {
+          setCurrentSeason((prevSeason) => (prevSeason + 1) % 3);
+        }
       }
-    }, 60000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [currentTime]);
