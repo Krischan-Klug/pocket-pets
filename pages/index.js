@@ -12,6 +12,8 @@ import {
   StyledStaticBackground,
 } from "@/components/StyledComponents/StyledBackgroundImage";
 
+import { useMoneyStore } from "@/components/stores/moneyStore";
+
 const StyledPetCollectionHeader = styled.header`
   height: 120px;
   display: flex;
@@ -55,6 +57,8 @@ export default function HomePage({
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedPetId, setSelectedPetId] = useState(null);
   const router = useRouter();
+
+  const money = useMoneyStore((state) => state.money);
 
   useEffect(() => {
     onDisablePetIsActive();
@@ -100,7 +104,7 @@ export default function HomePage({
             Delete Pet
           </StyledButton>
         </StyledButtonWrapper>
-        <MoneyCounter money={userStats.money} />
+        <MoneyCounter money={money} />
       </StyledPetCollectionHeader>
       <main>
         <StyledPetCollection>
