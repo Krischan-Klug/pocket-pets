@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
+// import Image from "next/image";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import styled from "styled-components";
@@ -30,12 +30,9 @@ const petImages = {
   11: "/assets/images/pets/dragon.png",
 };
 
-export default function SundayWalks() {
-  const petStart = [
-    [8, 7],
-    [8, 8],
-  ];
-  const petFriendStart = [8, 3];
+export default function SundayWalks({ myPets }) {
+  const petStart = [[12, 16]];
+  const petFriendStart = [12, 7];
   const scale = 20; // Pixel width & height of each pet
   const defaultSpeed = 500;
   const defaultDirections = {
@@ -107,8 +104,8 @@ export default function SundayWalks() {
     )
       return true;
 
-    for (const segment of newPet) {
-      if (head[0] === segment[0] && head[1] === segment[1]) return true;
+    for (const body of newPet) {
+      if (head[0] === body[0] && head[1] === body[1]) return true;
     }
     return false;
   };
@@ -156,14 +153,29 @@ export default function SundayWalks() {
   useEffect(() => {
     const context = canvasRef.current.getContext("2d"); // 2d means drawing in 2D instead of e.g. in 3D
     context.setTransform(scale, 0, 0, scale, 0, 0); // each render cycle the scale is set back to 0. this prevents the scale value from adding up
-    context.clearRect(0, 0, window.innerWidth, window.innerHeight); // clears the gameScreen befor it is rendered again
+    context.clearRect(0, 0, window.innerWidth, window.innerHeight); // clears the gameScreen before it is rendered again
 
+    // create pet image:
+    const currentPet = myPets.find((myPet) => myPet.id === id);
+    console.log("currentPet: ", currentPet);
+
+    const petImage = new Image();
+    petImage.onload = () => {
+      context.drawImage(petImage, pet[0] * 1, pet[1] * 1, 1, 1);
+    };
+    petImage.src = currentPet.image;
     context.fillStyle = "pink"; // pet appearance on gameScreen
     pet.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
 
-    const friendImage = Image;
-    console.log("FriendImage: ", friendImage);
-    context.fillStyle = "lightblue"; // friend appearance on gameScreen. instead of "lightblue" it should show the image of the pet
+    // create friend image:
+    const friendImage = new Image();
+    friendImage.onload = () => {
+      context.drawImage(friendImage, friend[0] * 1, friend[1] * 1, 1, 1);
+    };
+    const randomIndex =
+      Math.floor(Math.random() * Object.keys(petImages).length) + 1;
+    friendImage.src = petImages[randomIndex];
+    context.fillStyle = "rgb(134, 189, 61)";
     context.fillRect(friend[0], friend[1], 1, 1);
   }, [pet, friend, gameOver]);
 
@@ -174,8 +186,12 @@ export default function SundayWalks() {
         <h1>Sunday Walks</h1>
       </header>
       <main>
-        {/* <p>Current highscore {points} / Current earned {coins}</p> */}
-        <StyledGameScreen ref={canvasRef} />
+        <p>{/* Current highscore {points} / Current earned {coins} */}</p>
+        <StyledGameScreen
+          ref={canvasRef}
+          width={gameScreenSize[0]}
+          height={gameScreenSize[1]}
+        />
         {gameOver && <div>GAME OVER!</div>}
         <StyledButton onClick={startGame}>Start Game</StyledButton>
       </main>
