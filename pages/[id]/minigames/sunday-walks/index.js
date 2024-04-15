@@ -15,6 +15,21 @@ const StyledGameScreen = styled.canvas`
   height: ${gameScreenSize[1]}px;
 `;
 
+// object of pet images to use for random new petFriend
+const petImages = {
+  1: "/assets/images/pets/duck.png",
+  2: "/assets/images/pets/hen.png",
+  3: "/assets/images/pets/chameleon.png",
+  4: "/assets/images/pets/jellyfish.png",
+  5: "/assets/images/pets/cat.png",
+  6: "/assets/images/pets/beaver.png",
+  7: "/assets/images/pets/owl.png",
+  8: "/assets/images/pets/bear.png",
+  9: "/assets/images/pets/elephant.png",
+  10: "/assets/images/pets/whale.png",
+  11: "/assets/images/pets/dragon.png",
+};
+
 export default function SundayWalks() {
   const petStart = [
     [8, 7],
@@ -23,7 +38,7 @@ export default function SundayWalks() {
   const petFriendStart = [8, 3];
   const scale = 20; // Pixel width & height of each pet
   const defaultSpeed = 500;
-  const DIRECTIONS = {
+  const defaultDirections = {
     38: [0, -1], // up -> not moving on the x-axis but 1 up on the y-axis
     40: [0, 1], // down
     37: [-1, 0], // left
@@ -32,7 +47,7 @@ export default function SundayWalks() {
 
   const [pet, setPet] = useState(petStart);
   const [friend, setFriend] = useState(petFriendStart);
-  const [dir, setDir] = useState([0, -1]); // first move of currentPet is UP
+  const [direction, setDirection] = useState([0, -1]); // first move of currentPet is UP
   const [speed, setSpeed] = useState(null); // pet does not move before the Start button is clicked
   const [gameOver, setGameOver] = useState(false);
 
@@ -61,21 +76,29 @@ export default function SundayWalks() {
 
   useInterval(() => gameLoop(), speed); // to start the game loop
 
+  function startGame() {
+    setPet(petStart);
+    setFriend(petFriendStart);
+    setDirection([0, -1]);
+    setSpeed(defaultSpeed);
+    setGameOver(false);
+  }
+
   function endGame() {
     setSpeed(null);
     setGameOver(true);
   }
 
   const movePet = ({ keyCode }) =>
-    keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode]); // as soon as a key is pressed the key becomes the keyCode
+    keyCode >= 37 && keyCode <= 40 && setDirection(defaultDirections[keyCode]); // as soon as a key is pressed the key becomes the keyCode
 
   const createFriend = () =>
-    friend.map((_x, i) =>
+    friend.map((_, i) =>
       Math.floor(Math.random() * (gameScreenSize[i] / scale))
     );
 
   // ceck collision park fence or with pet crew
-  const checkCollision = (head, snk = pet) => {
+  const checkCollision = (head, newPet = pet) => {
     if (
       head[0] * scale >= gameScreenSize[0] ||
       head[0] < 0 ||
@@ -84,7 +107,7 @@ export default function SundayWalks() {
     )
       return true;
 
-    for (const segment of snk) {
+    for (const segment of newPet) {
       if (head[0] === segment[0] && head[1] === segment[1]) return true;
     }
     return false;
@@ -105,19 +128,18 @@ export default function SundayWalks() {
 
   function gameLoop() {
     const petCopy = JSON.parse(JSON.stringify(pet)); // the complete line of pets
-    const newPetHead = [petCopy[0][0] + dir[0], petCopy[0][1] + dir[1]]; // first take the x-coordinate than the y-coordinate
+    const newPetHead = [
+      petCopy[0][0] + direction[0],
+      petCopy[0][1] + direction[1],
+    ]; // first take the x-coordinate than the y-coordinate
     petCopy.unshift(newPetHead);
-    if (checkCollision(newPetHead)) endGame();
-    if (!checkFriendCollision(petCopy)) petCopy.pop(); // will delete first element of array
+    if (checkCollision(newPetHead)) {
+      endGame();
+    }
+    if (!checkFriendCollision(petCopy)) {
+      petCopy.pop();
+    } // delete first element of array
     setPet(petCopy);
-  }
-
-  function startGame() {
-    setPet(petStart);
-    setFriend(petFriendStart);
-    setDir([0, -1]);
-    setSpeed(defaultSpeed);
-    setGameOver(false);
   }
 
   // everything that happens within gameScreen:
