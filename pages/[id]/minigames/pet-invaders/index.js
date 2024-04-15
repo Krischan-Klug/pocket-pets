@@ -101,11 +101,55 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
           tileWidth: 48,
           tileHeight: 48,
           tiles: {
-            "!": () => [k.sprite("largealien"), k.scale(0.04)],
-            "&": () => [k.sprite("enemie1"), k.scale(0.094)],
+            "!": () => [
+              k.sprite("largealien"),
+              k.scale(0.04),
+              k.area(),
+              "space-invader",
+            ],
+            "&": () => [
+              k.sprite("enemie1"),
+              k.scale(0.094),
+              k.area(),
+              "space-invader",
+            ],
           },
         }
       );
+
+      function spawnBullet(pos) {
+        const bullet = k.add([
+          k.rect(6, 18),
+          k.pos(pos),
+          k.area(),
+          k.color(0.5, 0.5, 1),
+          k.offscreen({ destroy: true }),
+          k.move(-90, BULLET_SPEED),
+          "bullet",
+        ]);
+      }
+
+      k.onKeyPress("space", () => {
+        spawnBullet(player.pos.add(51, -25));
+      });
+
+      k.onCollide("bullet", "space-invader", (enemy) => {
+        console.log("test", enemy);
+        //k.shake(4);
+        k.destroy(enemy);
+        //k.destroy(s);
+        score.value++;
+        score.text = score.value;
+      });
+
+      const score = k.add([
+        k.text("0"),
+        k.pos(50, 50),
+        k.scale(2),
+        {
+          value: 0,
+        },
+      ]);
 
       /*
       layer(["obj", "ui"], "obj");
