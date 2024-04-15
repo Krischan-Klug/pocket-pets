@@ -30,6 +30,8 @@ import {
   StyledWallBackground,
   StyledRainBackground,
 } from "@/components/StyledComponents/StyledBackgroundImage";
+import Calendar from "@/components/util/Calendar";
+import Clock from "@/components/util/Clock";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -111,6 +113,7 @@ const StatusBarWrapper = styled.section`
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding: 0 30px;
   align-items: center;
 
   & > :first-child {
@@ -151,6 +154,8 @@ export default function PetDetailPage({
   onSubtractMoney,
   onUpdateInventoryFood,
   currentTime,
+  currentDay,
+  currentSeason,
   isRaining,
   onEnablePetIsActive,
   currentPet,
@@ -309,8 +314,16 @@ export default function PetDetailPage({
   return (
     <>
       <StyledBackgroundImageWrapper>
-        <StyledTimeBackground currentTime={currentTime} />
-        {isRaining && <StyledRainBackground />}
+        <StyledTimeBackground
+          currenttime={currentTime}
+          currentseason={currentSeason}
+        />
+        {isRaining && (
+          <StyledRainBackground
+            iswinter={currentSeason === 3 ? "true" : "false"}
+            currentseason={currentSeason}
+          />
+        )}
 
         <StyledWallBackground />
 
@@ -332,6 +345,8 @@ export default function PetDetailPage({
               Level: <span>{calculateLevel(xp)}</span>
             </StyledXPBar>
           </StyledNameSection>
+          <Calendar day={currentDay} season={currentSeason} />
+          <Clock hour={currentTime} />
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
             <StatusBar text={"Hunger"} value={currentPet.hunger} />

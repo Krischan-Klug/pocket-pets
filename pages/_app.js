@@ -24,6 +24,33 @@ export default function App({ Component, pageProps }) {
     defaultValue: 0,
   });
 
+  //Day
+  const [currentDay, setCurrentDay] = useLocalStorageState("currentDay", {
+    defaultValue: 0,
+  });
+  //Season
+  const [currentSeason, setCurrentSeason] = useLocalStorageState(
+    "currentSeason",
+    {
+      defaultValue: 0,
+    }
+  );
+
+  //Interval 60.000
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (currentTime < 23) {
+        setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
+      } else {
+        setCurrentTime(0);
+        setCurrentDay((prevCurrentDay) => prevCurrentDay + 1);
+        if ((currentDay + 1) % 8 === 0) {
+          setCurrentSeason((prevSeason) => (prevSeason + 1) % 4);
+        }
+      }
+    }, 1000);
+
+
   function handleSetCurrentPet(myPet) {
     setCurrentPet(myPet);
   }
@@ -198,6 +225,7 @@ export default function App({ Component, pageProps }) {
         petEvent.event();
       }
 
+
       if (!isPetActive) {
         const userEvents = [
           {
@@ -269,6 +297,7 @@ export default function App({ Component, pageProps }) {
   const [isRaining, setIsRaining] = useLocalStorageState("isRaining", {
     defaultValue: false,
   });
+
   function getRandomRainTime(min, max) {
     return Math.random() * (max - min) + min;
   }
@@ -444,6 +473,8 @@ export default function App({ Component, pageProps }) {
         onUpdateInventoryToy={handleUpdateInventoryToy}
         onAddMoney={handleAddMoney}
         currentTime={currentTime}
+        currentDay={currentDay}
+        currentSeason={currentSeason}
         isRaining={isRaining}
         onEnablePetIsActive={handleEnablePetIsActive}
         onDisablePetIsActive={handleDisablePetIsActive}
