@@ -20,13 +20,13 @@ export default function App({ Component, pageProps }) {
   });
   const [settingPageShow, setSettingPage] = useState(false);
 
+  //Hour
   const [currentTime, setCurrentTime] = useLocalStorageState("currentTime", {
     defaultValue: 0,
   });
-
   //Day
   const [currentDay, setCurrentDay] = useLocalStorageState("currentDay", {
-    defaultValue: 0,
+    defaultValue: 1,
   });
   //Season
   const [currentSeason, setCurrentSeason] = useLocalStorageState(
@@ -35,21 +35,6 @@ export default function App({ Component, pageProps }) {
       defaultValue: 0,
     }
   );
-
-  //Interval 60.000
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (currentTime < 23) {
-        setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
-      } else {
-        setCurrentTime(0);
-        setCurrentDay((prevCurrentDay) => prevCurrentDay + 1);
-        if ((currentDay + 1) % 8 === 0) {
-          setCurrentSeason((prevSeason) => (prevSeason + 1) % 4);
-        }
-      }
-    }, 1000);
-  }, []);
 
   function handleSetCurrentPet(myPet) {
     setCurrentPet(myPet);
@@ -285,8 +270,12 @@ export default function App({ Component, pageProps }) {
         } else {
           setCurrentTime(0);
           setDailyEvent(false);
+          setCurrentDay((prevCurrentDay) => prevCurrentDay + 1);
+          if ((currentDay + 1) % 8 === 0) {
+            setCurrentSeason((prevSeason) => (prevSeason + 1) % 4);
+          }
         }
-      }, 3000);
+      }, 60000);
 
       return () => clearInterval(interval);
     }

@@ -166,7 +166,9 @@ export const StyledStaticBackground = styled.div`
 
 export const StyledRainBackground = styled.div`
   background-image: ${({ iswinter }) =>
-    iswinter ? `url(${snowBackground.src})` : `url(${rainBackground.src})`};
+    iswinter === "true"
+      ? `url(${snowBackground.src})`
+      : `url(${rainBackground.src})`};
   background-size: cover;
   background-position-x: center;
   background-position-y: top;
