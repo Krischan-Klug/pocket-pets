@@ -15,6 +15,40 @@ const StyledGameScreen = styled.canvas`
   height: ${gameScreenSize[1]}px;
 `;
 
+const StyledMobileControlsContainer = styled.section`
+  padding: 0%;
+`;
+
+const ControlButton = styled.button`
+  /* background-color: var(--accent-color); */
+  color: var(--button-text-color);
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  border: none;
+  padding: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 70px;
+  font-size: 20px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  gap: 20px;
+`;
+
+const StyledButtonContainer2 = styled.div`
+  display: flex;
+  align-content: center;
+  gap: 60px;
+`;
+
 // object of pet images to use for random new petFriend
 const petImages = {
   1: "/assets/images/pets/duck.png",
@@ -47,10 +81,23 @@ export default function SundayWalks({ myPets }) {
   const [direction, setDirection] = useState([0, -1]); // first move of currentPet is UP
   const [speed, setSpeed] = useState(null); // pet does not move before the Start button is clicked
   const [gameOver, setGameOver] = useState(false);
+  const [showMobileControls, setShowMobileControls] = useState(false);
 
   const canvasRef = useRef();
   const router = useRouter();
   const { id } = router.query;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setShowMobileControls(window.innerWidth < 600);
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // Invtervall function using custom hook by Dan Abramov
   function useInterval(callback, delay) {
@@ -88,6 +135,12 @@ export default function SundayWalks({ myPets }) {
 
   const movePet = ({ keyCode }) =>
     keyCode >= 37 && keyCode <= 40 && setDirection(defaultDirections[keyCode]); // as soon as a key is pressed the key becomes the keyCode
+
+  function movePetMobile(event, keyCode) {
+    if (keyCode >= 37 && keyCode <= 40) {
+      setDirection(defaultDirections[keyCode]);
+    }
+  }
 
   const createFriend = () =>
     friend.map((_, i) =>
@@ -194,6 +247,40 @@ export default function SundayWalks({ myPets }) {
         />
         {gameOver && <div>GAME OVER!</div>}
         <StyledButton onClick={startGame}>Start Game</StyledButton>
+        {showMobileControls && (
+          <StyledMobileControlsContainer>
+            <ButtonContainer>
+              <ControlButton
+                type="button"
+                onClick={(event) => movePetMobile(event, 38)}
+              >
+                Up
+              </ControlButton>
+            </ButtonContainer>
+            <ButtonContainer>
+              <ControlButton
+                type="button"
+                onClick={(event) => movePetMobile(event, 37)}
+              >
+                Left
+              </ControlButton>
+              <ControlButton
+                type="button"
+                onClick={(event) => movePetMobile(event, 39)}
+              >
+                Right
+              </ControlButton>
+            </ButtonContainer>
+            <ButtonContainer>
+              <ControlButton
+                type="button"
+                onClick={(event) => movePetMobile(event, 40)}
+              >
+                Down
+              </ControlButton>
+            </ButtonContainer>
+          </StyledMobileControlsContainer>
+        )}
       </main>
     </div>
   );
