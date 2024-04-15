@@ -356,6 +356,11 @@ export default function PetDetailPage({
             >
               Merge Pets
             </StyledButton>
+            <StyledButton
+              onClick={() => router.push(`/${id}/minigames/pet-invaders`)}
+            >
+              Pet Invaders
+            </StyledButton>
           </StyledMoneyHandleSection>
         </header>
         <StyledPetDetailPageMain>
