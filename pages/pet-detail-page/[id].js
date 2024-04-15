@@ -31,6 +31,7 @@ import {
   StyledRainBackground,
 } from "@/components/StyledComponents/StyledBackgroundImage";
 import { useMoneyStore } from "@/components/stores/moneyStore";
+import { usePetStore } from "@/components/stores/petStore";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -145,21 +146,22 @@ const StyledReviewButton = styled(StyledButton)`
 `;
 
 export default function PetDetailPage({
-  myPets,
   onGameUpdate,
-  onUpdatePet,
   userStats,
   onUpdateInventoryFood,
   currentTime,
   isRaining,
   onEnablePetIsActive,
-  currentPet,
-  onSetCurrentPet,
   petEvent,
   isEventPopUpActive,
   onDisableIsEventPopUpActive,
 }) {
+  const myPets = usePetStore((state) => state.myPets);
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);
+  const onUpdatePet = usePetStore((state) => state.onUpdatePet);
+  const currentPet = usePetStore((state) => state.currentPet);
+  const onSetCurrentPet = usePetStore((state) => state.onSetCurrentPet);
+
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
     interaction: "",

@@ -2,12 +2,14 @@ import kaboom from "kaboom";
 import { useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useMoneyStore } from "@/components/stores/moneyStore";
-export default function ObstacleJumper({ myPets }) {
+import { usePetStore } from "@/components/stores/petStore";
+export default function ObstacleJumper({}) {
   const router = useRouter();
   const id = router.query.id;
   const canvasRef = useRef(null);
 
   const addMoney = useMoneyStore((state) => state.addMoney);
+  const myPets = usePetStore((state) => state.myPets);
 
   useEffect(() => {
     const k = kaboom({
