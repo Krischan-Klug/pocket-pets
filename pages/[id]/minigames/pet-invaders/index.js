@@ -1,0 +1,287 @@
+import kaboom from "kaboom";
+import { useRef, useEffect } from "react";
+import { useRouter } from "next/router";
+
+export default function ObstacleJumper({ onAddMoney, myPets }) {
+  const router = useRouter();
+  const id = router.query.id;
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const k = kaboom({
+      fullscreen: true,
+      scale: 1,
+      global: false,
+      background: [214, 210, 210],
+      canvas: canvasRef.current,
+    });
+
+    const actualPet = myPets.find((myPet) => myPet.id === id);
+
+    if (!actualPet) {
+      return;
+    }
+
+    let score = 0;
+
+    //Scene Management
+
+    k.scene("start", () => {
+      const space = k.add([
+        k.text("Press SPACE"),
+        k.pos(k.center().x, k.center().y - 100),
+        k.anchor("center"),
+        k.area(),
+      ]);
+
+      const start = k.add([
+        k.text("to Start"),
+        k.pos(k.center().x, k.center().y - 50),
+        k.anchor("center"),
+        k.area(),
+      ]);
+
+      start.onKeyPress("space", () => {
+        k.go("game");
+      });
+
+      start.onTouchStart(() => {
+        k.go("game");
+      });
+    });
+
+    k.scene("game", () => {
+      //Globals
+      const MOVE_SPEED = 200;
+      const INVADER_SPEED = 100;
+      let CURRENT_SPEED = INVADER_SPEED;
+      const LEVEL_DOWN = 200;
+      const TIME_LEFT = 30;
+      const BULLET_SPEED = 400;
+
+      k.loadSprite("largealien", "/assets/images/pet-invaders/LargeAlien.png");
+      k.loadSprite("enemie1", "/assets/images/pets/bear.png");
+
+      //Player
+      k.loadSprite("player", actualPet.image);
+      const player = k.add([
+        k.sprite("player"),
+        k.pos(k.width() / 2 - 51, 400),
+        k.area(),
+        k.body(),
+        k.scale(0.2),
+      ]);
+
+      k.onKeyDown("left", () => {
+        player.move(-MOVE_SPEED, 0);
+      });
+
+      k.onKeyDown("right", () => {
+        player.move(MOVE_SPEED, 0);
+      });
+
+      k.onClick(() => {
+        player.move(MOVE_SPEED, 0);
+      });
+
+      // UI
+      k.add([k.text("Pet Invaders"), k.pos(40, 20)]);
+
+      k.addLevel(
+        [
+          "        ",
+          " &&&&&& ",
+          " &&&&&& ",
+          " &&&&&& ",
+          " &&&&&& ",
+          "        ",
+          "        ",
+        ],
+        {
+          tileWidth: 48,
+          tileHeight: 48,
+          tiles: {
+            "!": () => [k.sprite("largealien"), k.scale(0.04)],
+            "&": () => [k.sprite("enemie1"), k.scale(0.094)],
+          },
+        }
+      );
+
+      /*
+      layer(["obj", "ui"], "obj");
+
+      addLevel(
+        [
+          "!^^^^^^^^^^^^    &",
+          "!^^^^^^^^^^^^    &",
+          "!^^^^^^^^^^^^    &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+        ],
+        {
+          width: 30,
+          height: 22,
+          "^": [sprite("space-invader"), scale(0.7), "space-invader"],
+          "!": [sprite("wall"), "left-wall"],
+          "&": [sprite("wall"), "right-wall"],
+        }
+      );
+
+      const player = add([
+        sprite("space-ship"),
+        pos(width() / 2, height() / 2),
+        origin("center"),
+      ]);
+
+      keyDown("left", () => {
+        player.move(-MOVE_SPEED, 0);
+      });
+
+      keyDown("right", () => {
+        player.move(MOVE_SPEED, 0);
+      });
+
+      function spawnBullet(p) {
+        add([
+          rect(6, 18),
+          pos(p),
+          origin("center"),
+          color(0.5, 0.5, 1),
+          "bullet",
+        ]);
+      }
+
+      keyPress("space", () => {
+        spawnBullet(player.pos.add(0, -25));
+      });
+
+      action("bullet", (b) => {
+        b.move(0, -BULLET_SPEED);
+        if (b.pos.y < 0) {
+          destroy(b);
+        }
+      });
+
+      collides("bullet", "space-invader", (b, s) => {
+        camShake(4);
+        destroy(b);
+        destroy(s);
+        score.value++;
+        score.text = score.value;
+      });
+
+      const score = add([
+        text("0"),
+        pos(50, 50),
+        layer("ui"),
+        scale(3),
+        {
+          value: 0,
+        },
+      ]);
+
+      const timer = add([
+        text("0"),
+        pos(100, 50),
+        scale(2),
+        layer("ui"),
+        {
+          time: TIME_LEFT,
+        },
+      ]);
+
+      timer.action(() => {
+        timer.time -= dt();
+        timer.text = timer.time.toFixed(2);
+        if (timer.time <= 0) {
+          go("lose", { score: score.value });
+        }
+      });
+
+      action("space-invader", (s) => {
+        s.move(CURRENT_SPEED, 0);
+      });
+
+      collides("space-invader", "right-wall", () => {
+        CURRENT_SPEED = -INVADER_SPEED;
+        every("space-invader", (s) => {
+          s.move(0, LEVEL_DOWN);
+        });
+      });
+
+      player.overlaps("space-invader", () => {
+        go("lose", { score: score.value });
+      });
+
+      action("space-invader", (s) => {
+        if (s.pos.y >= 12 * 22) {
+          // if (s.pos.y >= height() /2) {
+          go("lose", { score: score.value });
+        }
+      });
+
+      */
+    });
+
+    k.scene("gameover", () => {
+      const moneyToAdd = Math.floor(score * 1.1);
+      const gameOver = k.add([
+        k.text("Game Over!"),
+        k.pos(k.center().x, k.center().y - 100),
+        k.anchor("center"),
+      ]);
+      const scoreText = k.add([
+        k.text("Score: " + score),
+        k.pos(k.center().x, k.center().y),
+        k.anchor("center"),
+      ]);
+
+      const moneyEarnText = k.add([
+        k.text("You earned: "),
+        k.pos(k.center().x, k.center().y + 100),
+        k.anchor("center"),
+      ]);
+      const moneyEarnCount = k.add([
+        k.text(moneyToAdd + " Coins"),
+        k.pos(k.center().x, k.center().y + 150),
+        k.anchor("center"),
+      ]);
+
+      const endText = k.add([
+        k.text("Press SPACE to End"),
+        k.pos(k.center().x, k.center().y + 200),
+        k.anchor("center"),
+      ]);
+
+      function endGame() {
+        onAddMoney(moneyToAdd);
+
+        //Router wont work here, reload is needed!
+        window.location.href = `/pet-detail-page/${id}`;
+      }
+
+      k.onKeyPress("space", () => {
+        endGame();
+      });
+
+      k.onTouchStart(() => {
+        endGame();
+      });
+    });
+    // Init game
+    k.go("start");
+  }, []);
+
+  if (!canvasRef.current) {
+    return null;
+  }
+
+  return <canvas ref={canvasRef}></canvas>;
+}

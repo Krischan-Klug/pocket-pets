@@ -373,6 +373,11 @@ export default function PetDetailPage({
             >
               Treasure Hunt
             </StyledButton>
+            <StyledButton
+              onClick={() => router.push(`/${id}/minigames/treasure-hunt/`)}
+            >
+              Treasure Hunt
+            </StyledButton>
           </StyledMoneyHandleSection>
         </header>
         <StyledPetDetailPageMain>
