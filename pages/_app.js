@@ -49,7 +49,7 @@ export default function App({ Component, pageProps }) {
         }
       }
     }, 1000);
-
+  }, []);
 
   function handleSetCurrentPet(myPet) {
     setCurrentPet(myPet);
@@ -224,7 +224,6 @@ export default function App({ Component, pageProps }) {
         handleEnableIsEventPopUpActive();
         petEvent.event();
       }
-
 
       if (!isPetActive) {
         const userEvents = [
