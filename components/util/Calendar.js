@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const SyledCalendarWrapper = styled.div`
+const StyledCalendarWrapper = styled.div`
   position: absolute;
   left: 10px;
   top: 80px;
@@ -61,13 +61,13 @@ export default function Calendar({ day, season }) {
 
   return (
     <>
-      <SyledCalendarWrapper>
+      <StyledCalendarWrapper>
         <CalendarSeason>{seasonText()}</CalendarSeason>
         <BlackDecoration positionleft={7} />
         <BlackDecoration positionleft={24} />
         <BlackDecoration positionleft={40} />
         <CalendarDay>{currentDayInSeason}</CalendarDay>
-      </SyledCalendarWrapper>
+      </StyledCalendarWrapper>
     </>
   );
 }

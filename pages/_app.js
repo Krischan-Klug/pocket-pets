@@ -32,9 +32,6 @@ export default function App({ Component, pageProps }) {
       defaultValue: 0,
     }
   );
-  console.log("Hour: ", currentTime);
-  console.log("Day: ", currentDay);
-  console.log("Season: ", currentSeason);
 
   //Interval 60.000
   useEffect(() => {
