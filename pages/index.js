@@ -1,6 +1,6 @@
 import PetCard from "@/components/PetCollection/PetCard";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
@@ -43,10 +43,22 @@ const StyledPetCollection = styled.section`
   }
 `;
 
-export default function HomePage({ myPets, onDeletePet, userStats }) {
+export default function HomePage({
+  myPets,
+  onDeletePet,
+  userStats,
+  onDisablePetIsActive,
+  onDisableIsEventPopUpActive,
+  isEventPopUpActive,
+  userEvent,
+}) {
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedPetId, setSelectedPetId] = useState(null);
   const router = useRouter();
+
+  useEffect(() => {
+    onDisablePetIsActive();
+  });
 
   function handleToggleDelete() {
     setDeleteMode((prevDeleteMode) => !prevDeleteMode);
@@ -109,6 +121,12 @@ export default function HomePage({ myPets, onDeletePet, userStats }) {
           }?`}
           onConfirm={handleConfirmDelete}
           onCancel={() => setSelectedPetId(null)}
+        />
+      )}
+      {isEventPopUpActive && (
+        <ConfirmationPopup
+          onConfirm={onDisableIsEventPopUpActive}
+          message={`${userEvent.description}`}
         />
       )}
     </>

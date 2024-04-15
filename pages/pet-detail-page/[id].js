@@ -151,14 +151,19 @@ export default function PetDetailPage({
   onGameUpdate,
   onUpdatePet,
   userStats,
-  onSubtracMoney,
+  onSubtractMoney,
   onUpdateInventoryFood,
   currentTime,
   currentDay,
   currentSeason,
   isRaining,
+  onEnablePetIsActive,
+  currentPet,
+  onSetCurrentPet,
+  petEvent,
+  isEventPopUpActive,
+  onDisableIsEventPopUpActive,
 }) {
-  const [currentPet, setCurrentPet] = useState(null);
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
     interaction: "",
@@ -176,6 +181,11 @@ export default function PetDetailPage({
   const router = useRouter();
   const { id } = router.query;
 
+  //enable pet active events
+  useEffect(() => {
+    onEnablePetIsActive();
+  }, []);
+
   //Gameloop 1.000ms Cycle
   useEffect(() => {
     if (!id) return;
@@ -183,7 +193,7 @@ export default function PetDetailPage({
     const pet = myPets.find((myPet) => myPet.id == id);
     if (!pet) return;
 
-    setCurrentPet(pet);
+    onSetCurrentPet(pet);
 
     if (pet.isDead) return;
 
@@ -289,7 +299,7 @@ export default function PetDetailPage({
   }
 
   function handleConfirm(value) {
-    onSubtracMoney(value);
+    onSubtractMoney(value);
     setConfirmationPopUpContent({ ...confirmationPopUpContent, show: false });
     onUpdatePet({
       ...currentPet,
@@ -350,6 +360,13 @@ export default function PetDetailPage({
               }}
             >
               Shop
+            </StyledButton>
+            <StyledButton
+              onClick={() => {
+                router.push(`/${id}/inventory`);
+              }}
+            >
+              inventory
             </StyledButton>
             <StyledButton
               onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
@@ -478,6 +495,12 @@ export default function PetDetailPage({
           message={confirmationPopUpContent.message}
           onConfirm={confirmationPopUpContent.onConfirm}
           onCancel={confirmationPopUpContent.onCancel}
+        />
+      )}
+      {isEventPopUpActive && (
+        <ConfirmationPopup
+          onConfirm={onDisableIsEventPopUpActive}
+          message={`${petEvent.description}`}
         />
       )}
     </>

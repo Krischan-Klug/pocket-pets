@@ -5,30 +5,8 @@ import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
 import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
 import { useState } from "react";
 
-const BuyPopUpOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  //the height of the Z index should ensure that this popup is always the top element.
-  //Since we work with the z-index in steps of 10, I have chosen 100 here.
-  z-index: 100;
-`;
-
-const BuyPopUpContent = styled.div`
-  background-color: var(--background-color);
-  padding: 15px;
-  max-width: 90vw;
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: var(--text-color);
-  text-align: center;
-`;
+import StyledPopUpOverlay from "@/components/StyledComponents/StyledPopUpOverlay";
+import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent";
 
 const BuyPopUpButton = styled(StyledButton)`
   margin: 0 8px;
@@ -81,8 +59,8 @@ export default function BuyPopUp({
   };
 
   return (
-    <BuyPopUpOverlay>
-      <BuyPopUpContent>
+    <StyledPopUpOverlay>
+      <StyledPopUpContent>
         <p>{message}</p>
         <StyledValueButton
           onClick={decrementValue}
@@ -124,7 +102,7 @@ export default function BuyPopUp({
             You have not enough money to buy this many items.
           </StyledErrorMessage>
         )}
-      </BuyPopUpContent>
-    </BuyPopUpOverlay>
+      </StyledPopUpContent>
+    </StyledPopUpOverlay>
   );
 }
