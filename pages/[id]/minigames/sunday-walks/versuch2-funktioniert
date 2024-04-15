@@ -135,13 +135,9 @@ export default function SundayWalks() {
     const context = canvasRef.current.getContext("2d"); // 2d means drawing in 2D instead of e.g. in 3D
     context.setTransform(scale, 0, 0, scale, 0, 0); // each render cycle the scale is set back to 0. this prevents the scale value from adding up
     context.clearRect(0, 0, window.innerWidth, window.innerHeight); // clears the gameScreen befor it is rendered again
-
     context.fillStyle = "pink"; // pet appearance on gameScreen
     pet.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
-
-    const friendImage = Image;
-    console.log("FriendImage: ", friendImage);
-    context.fillStyle = "lightblue"; // friend appearance on gameScreen. instead of "lightblue" it should show the image of the pet
+    context.fillStyle = "lightblue"; // friend appearance on gameScreen
     context.fillRect(friend[0], friend[1], 1, 1);
   }, [pet, friend, gameOver]);
 
