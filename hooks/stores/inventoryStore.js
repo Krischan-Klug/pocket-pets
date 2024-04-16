@@ -1,11 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { initialFoods } from "@/lib/defaultInventory";
+import { initialFoods, initialToys } from "@/lib/defaultInventory";
 
 export const useMoneyStore = create((set) => ({
-  foods: [],
-  toys: [],
+  foods: initialFoods,
+  toys: initialToys,
   onFood: (value, newFoodId) => {
     set((state) => ({
       foods: state.foods.map((food) =>
