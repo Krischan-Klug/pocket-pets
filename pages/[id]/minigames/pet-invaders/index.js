@@ -23,8 +23,6 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
     }
 
     let score = 0;
-    let timeElapsed = 0;
-    let playermovement = 0;
 
     //Scene Management
     k.scene("start", () => {
@@ -55,18 +53,11 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       //Globals
       const MOVE_SPEED = 200;
       let MOVE_DOWN = 72;
+      const TIME_LEFT = 30;
       const BULLET_SPEED = 400;
 
-      k.loadSprite("enemie1", "/assets/images/pet-invaders/space-invader.png");
-      k.loadSprite("wall", "/assets/images/pet-invaders/wall.png");
-      k.loadSprite("ufo-image", "/assets/images/pet-invaders/ufo.png");
-      k.loadSprite("player-image", actualPet.image);
-      k.loadSprite("Arrow-Left", "/assets/icons/round_arrow_back_white.png");
-      k.loadSprite(
-        "Arrow-Right",
-        "/assets/icons/round_arrow_forward_white.png"
-      );
-      k.loadSprite("shoot", "/assets/icons/round_shoot.png");
+      k.loadSprite("largealien", "/assets/images/pet-invaders/LargeAlien.png");
+      k.loadSprite("enemie1", "/assets/images/pets/bear.png");
 
       //Player
       const player = k.add([
@@ -91,63 +82,10 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
         k.sprite("wall"),
         k.pos(k.width() / 2 + 180, 485),
         k.area(),
-        k.body({ isStatic: true }),
-        "rightBorder",
+        k.body(),
+        k.scale(0.2),
+        "player",
       ]);
-
-      const level = [
-        "!          ?",
-        "!  &&&&&&&&?",
-        "!  &&&&&&&&?",
-        "!  &&&&&&&&?",
-        "!  &&&&&&&&?",
-        "!  &&&&&&&&?",
-        "!  &&&&&&&&?",
-        "!          ?",
-        "!          ?",
-        "!          ?",
-        "!          ?",
-        "!          ?",
-        "!          ?",
-        "!          ?",
-      ];
-
-      k.addLevel(level, {
-        tileWidth: 36,
-        tileHeight: 36,
-        pos: k.vec2(k.width() / 2 - 216, 0),
-        tiles: {
-          "!": () => [k.sprite("wall"), k.area(), "wall-left"],
-          "?": () => [k.sprite("wall"), k.area(), "wall-right"],
-          "&": () => [
-            k.sprite("enemie1"),
-            k.scale(0.13),
-            k.area(),
-            patrol(),
-            "space-invader",
-          ],
-        },
-      });
-
-      function patrol(INVADER_SPEED = 120, dir = 1) {
-        return {
-          id: "patrol",
-          require: ["area"],
-          add() {
-            k.onCollide("wall-right", "space-invader", () => {
-              dir = -1;
-              this.move(0, MOVE_DOWN);
-            });
-            k.onCollide("wall-left", "space-invader", () => {
-              dir = 1;
-              this.move(0, MOVE_DOWN);
-            });
-          },
-          update() {
-            this.move(INVADER_SPEED * dir, 0);
-          },
-        };
-      }
 
       k.onKeyDown("left", () => {
         player.move(-MOVE_SPEED, 0);
@@ -156,6 +94,43 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       k.onKeyDown("right", () => {
         player.move(MOVE_SPEED, 0);
       });
+
+      k.onClick(() => {
+        player.move(MOVE_SPEED, 0);
+      });
+
+      // UI
+      k.add([k.text("Pet Invaders"), k.pos(40, 20)]);
+
+      k.addLevel(
+        [
+          "        ",
+          " &&&&&& ",
+          " &&&&&& ",
+          " &&&&&& ",
+          " &&&&&& ",
+          "        ",
+          "        ",
+        ],
+        {
+          tileWidth: 48,
+          tileHeight: 48,
+          tiles: {
+            "!": () => [
+              k.sprite("largealien"),
+              k.scale(0.04),
+              k.area(),
+              "space-invader",
+            ],
+            "&": () => [
+              k.sprite("enemie1"),
+              k.scale(0.094),
+              k.area(),
+              "space-invader",
+            ],
+          },
+        }
+      );
 
       function spawnBullet(pos) {
         const bullet = k.add([
@@ -177,135 +152,138 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
         k.shake(1);
         k.destroy(bullet);
         k.destroy(enemy);
-        score++;
-        scoreText.text = `Score:${score}`;
+        //k.destroy(s);
+        score.value++;
+        score.text = score.value;
       });
 
-      k.onCollide("player", "space-invader", (bullet, enemy) => {
-        k.shake(5);
-        k.go("gameover");
-      });
-
-      const btnleft = k.add([
-        k.pos(20, 580),
-        k.opacity(0.5),
-        k.area(),
-        k.scale(0.8),
-        k.sprite("Arrow-Left"),
-      ]);
-      const btnright = k.add([
-        k.pos(120, 580),
-        k.opacity(0.5),
-        k.area(),
-        k.scale(0.8),
-        k.sprite("Arrow-Right"),
-      ]);
-      const btnshoot = k.add([
-        k.pos(270, 580),
-        k.opacity(0.5),
-        k.area(),
-        k.scale(0.8),
-        k.sprite("shoot"),
+      const score = k.add([
+        k.text("0"),
+        k.pos(50, 50),
+        k.scale(2),
+        {
+          value: 0,
+        },
       ]);
 
-      k.onTouchStart((id, pos) => {
-        if (
-          pos.clientX > 20 &&
-          pos.clientX < 90 &&
-          pos.clientY > 580 &&
-          pos.clientY < 650
-        ) {
-          playermovement = -1;
-        } else if (
-          pos.clientX > 120 &&
-          pos.clientX < 190 &&
-          pos.clientY > 580 &&
-          pos.clientY < 650
-        ) {
-          playermovement = 1;
-        } else {
-          spawnBullet(player.pos.add(20, -25));
+      /*
+      layer(["obj", "ui"], "obj");
+
+      addLevel(
+        [
+          "!^^^^^^^^^^^^    &",
+          "!^^^^^^^^^^^^    &",
+          "!^^^^^^^^^^^^    &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+          "!                &",
+        ],
+        {
+          width: 30,
+          height: 22,
+          "^": [sprite("space-invader"), scale(0.7), "space-invader"],
+          "!": [sprite("wall"), "left-wall"],
+          "&": [sprite("wall"), "right-wall"],
         }
-      });
-      k.onTouchEnd((id, pos) => {
-        if (
-          (pos.clientX > 20 &&
-            pos.clientX < 120 &&
-            pos.clientY > 600 &&
-            pos.clientY < 670) ||
-          (pos.clientX > 150 &&
-            pos.clientX < 250 &&
-            pos.clientY > 600 &&
-            pos.clientY < 670)
-        ) {
-          playermovement = 0;
-        }
+      );
+
+      const player = add([
+        sprite("space-ship"),
+        pos(width() / 2, height() / 2),
+        origin("center"),
+      ]);
+
+      keyDown("left", () => {
+        player.move(-MOVE_SPEED, 0);
       });
 
-      const scoreText = k.add([k.text("Score:0"), k.pos(10, 10), k.scale(1)]);
+      keyDown("right", () => {
+        player.move(MOVE_SPEED, 0);
+      });
 
-      const timer = k.add([k.text("Time:0"), k.pos(10, 50), k.scale(1)]);
-
-      function customTime() {
-        timeElapsed += k.dt();
-        timer.text = `Time:${timeElapsed.toFixed(2)}`;
+      function spawnBullet(p) {
+        add([
+          rect(6, 18),
+          pos(p),
+          origin("center"),
+          color(0.5, 0.5, 1),
+          "bullet",
+        ]);
       }
 
-      k.onUpdate(() => {
-        customTime();
-        if (playermovement != 0) {
-          player.move(playermovement * MOVE_SPEED, 0);
-        }
-        if (score == 48) {
-          k.go("win");
-        }
-      });
-    });
-
-    k.scene("win", () => {
-      const moneyToAdd = Math.floor(score * 2);
-      k.add([
-        k.text("Win!"),
-        k.pos(k.center().x, k.center().y - 100),
-        k.anchor("center"),
-      ]);
-      k.add([
-        k.text("Score: " + score),
-        k.pos(k.center().x, k.center().y),
-        k.anchor("center"),
-      ]);
-
-      k.add([
-        k.text("You earned: "),
-        k.pos(k.center().x, k.center().y + 100),
-        k.anchor("center"),
-      ]);
-      k.add([
-        k.text(moneyToAdd + " Coins"),
-        k.pos(k.center().x, k.center().y + 150),
-        k.anchor("center"),
-      ]);
-
-      k.add([
-        k.scale(0.7),
-        k.text("Press SPACE to End"),
-        k.pos(k.center().x, k.center().y + 200),
-        k.anchor("center"),
-      ]);
-
-      function endGame() {
-        onAddMoney(moneyToAdd);
-
-        //Router wont work here, reload is needed!
-        window.location.href = `/pet-detail-page/${id}`;
-      }
-
-      k.onKeyPress("space", () => {
-        endGame();
+      keyPress("space", () => {
+        spawnBullet(player.pos.add(0, -25));
       });
 
-      k.onTouchStart(() => {
-        endGame();
+      action("bullet", (b) => {
+        b.move(0, -BULLET_SPEED);
+        if (b.pos.y < 0) {
+          destroy(b);
+        }
+      });
+
+      collides("bullet", "space-invader", (b, s) => {
+        camShake(4);
+        destroy(b);
+        destroy(s);
+        score.value++;
+        score.text = score.value;
+      });
+
+      const score = add([
+        text("0"),
+        pos(50, 50),
+        layer("ui"),
+        scale(3),
+        {
+          value: 0,
+        },
+      ]);
+
+      const timer = add([
+        text("0"),
+        pos(100, 50),
+        scale(2),
+        layer("ui"),
+        {
+          time: TIME_LEFT,
+        },
+      ]);
+
+      timer.action(() => {
+        timer.time -= dt();
+        timer.text = timer.time.toFixed(2);
+        if (timer.time <= 0) {
+          go("lose", { score: score.value });
+        }
+      });
+
+      action("space-invader", (s) => {
+        s.move(CURRENT_SPEED, 0);
+      });
+
+      collides("space-invader", "right-wall", () => {
+        CURRENT_SPEED = -INVADER_SPEED;
+        every("space-invader", (s) => {
+          s.move(0, LEVEL_DOWN);
+        });
+      });
+
+      player.overlaps("space-invader", () => {
+        go("lose", { score: score.value });
+      });
+
+      action("space-invader", (s) => {
+        if (s.pos.y >= 12 * 22) {
+          // if (s.pos.y >= height() /2) {
+          go("lose", { score: score.value });
+        }
       });
     });
 
@@ -333,8 +311,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
         k.anchor("center"),
       ]);
 
-      k.add([
-        k.scale(0.7),
+      const endText = k.add([
         k.text("Press SPACE to End"),
         k.pos(k.center().x, k.center().y + 200),
         k.anchor("center"),
