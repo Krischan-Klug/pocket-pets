@@ -285,7 +285,6 @@ export default function App({ Component, pageProps }) {
         }
       }, 60000);
 
-
       return () => clearInterval(interval);
     }
   }, [currentTime, router.pathname, setCurrentTime]);
@@ -363,6 +362,7 @@ export default function App({ Component, pageProps }) {
     setSettingPage(true);
   }
 
+  //TODO:
   function handleGameReset() {
     setUserStats(defaultUserStats);
     setMyPets([]);
