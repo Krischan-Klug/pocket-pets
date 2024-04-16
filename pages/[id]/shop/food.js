@@ -6,7 +6,7 @@ import { foods } from "@/lib/shop.js";
 import MoneyCounter from "@/components/util/MoneyCounter";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import BuyPopUp from "@/components/util/BuyPopUp";
-import { useMoneyStore } from "@/components/stores/moneyStore";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
 
 export default function FoodShop({ onUpdateInventoryFood }) {
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);

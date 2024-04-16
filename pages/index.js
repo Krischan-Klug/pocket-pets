@@ -6,8 +6,8 @@ import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import MoneyCounter from "@/components/util/MoneyCounter";
 import { StyledStaticBackground } from "@/components/StyledComponents/StyledBackgroundImage";
-import { useMoneyStore } from "@/components/stores/moneyStore";
-import { usePetStore } from "@/components/stores/petStore";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { usePetStore } from "@/hooks/stores/petStore";
 
 const StyledPetCollectionHeader = styled.header`
   height: 120px;

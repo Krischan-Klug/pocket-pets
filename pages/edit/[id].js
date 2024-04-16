@@ -11,7 +11,7 @@ import {
   Label,
 } from "@/components/StyledComponents/StyledInputField";
 import StyledLink from "@/components/StyledComponents/StyledLink";
-import { usePetStore } from "@/components/stores/petStore";
+import { usePetStore } from "@/hooks/stores/petStore";
 
 const StyledEditForm = styled.form`
   display: flex;

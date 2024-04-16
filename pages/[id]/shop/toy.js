@@ -6,7 +6,7 @@ import { toys } from "@/lib/shop.js";
 import MoneyCounter from "@/components/util/MoneyCounter";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
-import { useMoneyStore } from "@/components/stores/moneyStore";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
 
 export default function ToyShop({ userStats, onUpdateInventoryToy }) {
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);

@@ -5,7 +5,7 @@ import Image from "next/image";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import StyledLink from "@/components/StyledComponents/StyledLink";
-import { useMoneyStore } from "@/components/stores/moneyStore";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
 
 const PlayGround = styled.div`
   display: grid;

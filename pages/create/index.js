@@ -15,7 +15,7 @@ import defaultMyPet from "@/lib/myPetTemplate";
 import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
 import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
 import StyledLink from "@/components/StyledComponents/StyledLink";
-import { usePetStore } from "@/components/stores/petStore";
+import { usePetStore } from "@/hooks/stores/petStore";
 
 const StyledForm = styled.form`
   display: flex;

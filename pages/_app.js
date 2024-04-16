@@ -6,8 +6,8 @@ import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
 import SettingPopUp from "@/components/SettingPage/SettingPopUp";
 import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 import { useRouter } from "next/router";
-import { useMoneyStore } from "@/components/stores/moneyStore";
-import { usePetStore } from "@/components/stores/petStore";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { usePetStore } from "@/hooks/stores/petStore";
 
 export default function App({ Component, pageProps }) {
   const money = useMoneyStore((state) => state.money);

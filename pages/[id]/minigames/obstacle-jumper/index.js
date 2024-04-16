@@ -1,8 +1,8 @@
 import kaboom from "kaboom";
 import { useRef, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useMoneyStore } from "@/components/stores/moneyStore";
-import { usePetStore } from "@/components/stores/petStore";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { usePetStore } from "@/hooks/stores/petStore";
 export default function ObstacleJumper({}) {
   const router = useRouter();
   const id = router.query.id;

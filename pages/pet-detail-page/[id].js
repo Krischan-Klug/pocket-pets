@@ -30,8 +30,8 @@ import {
   StyledWallBackground,
   StyledRainBackground,
 } from "@/components/StyledComponents/StyledBackgroundImage";
-import { useMoneyStore } from "@/components/stores/moneyStore";
-import { usePetStore } from "@/components/stores/petStore";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { usePetStore } from "@/hooks/stores/petStore";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
