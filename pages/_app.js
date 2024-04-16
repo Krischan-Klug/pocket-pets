@@ -8,11 +8,10 @@ import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 import { useRouter } from "next/router";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { usePetStore } from "@/hooks/stores/petStore";
+import { petEvents, userEvents } from "@/lib/events";
 
 export default function App({ Component, pageProps }) {
-  const money = useMoneyStore((state) => state.money);
   const addMoney = useMoneyStore((state) => state.addMoney);
-  const subtractMoney = useMoneyStore((state) => state.subtractMoney);
 
   const currentPet = usePetStore((state) => state.currentPet);
   const updatePetsWithNewKeys = usePetStore(
@@ -86,181 +85,28 @@ export default function App({ Component, pageProps }) {
       }
 
       if (isPetActive && !currentPet.isDead) {
-        const petEvents = [
-          {
-            id: 1,
-            eventName: "Your pet is sick",
-            description: `your pet is sick. You need to pay 100 medical costs. and your pet lost 20 engergy.`,
-            event: () => {
-              onUpdatePetEnergy(-20);
-              subtractMoney(100);
-            },
-          },
-
-          {
-            id: 2,
-            eventName: "Birthday Party",
-            description: `It's your pet birthday and you're throwing a big party with all of his pet friends. Pay 50 pet coins.`,
-            event: () => {
-              onUpdatePetHappiness(100);
-              onUpdatePetHunger(100);
-              onUpdatePetEnergy(-30);
-              subtractMoney(50);
-            },
-          },
-          {
-            id: 3,
-            eventName: "Big walk",
-            description: `After a long walk your pet is very happy. However, all the playing and exploring also made your pet tired and hungry. Your happiness increases by 80 but you lose 20 energy and 10 hunger.`,
-            event: () => {
-              onUpdatePetHappiness(80);
-              onUpdatePetHunger(-10);
-              onUpdatePetEnergy(-20);
-            },
-          },
-          {
-            id: 4,
-            eventName: "Sleepy pet",
-            description: `After a good sleep your pet is full of energy again but also really hungry. You win 60 energy and lose 20 hunger.`,
-            event: () => {
-              onUpdatePetHappiness(80);
-              onUpdatePetHunger(-10);
-              onUpdatePetEnergy(-20);
-            },
-          },
-          {
-            id: 5,
-            eventName: "Sad news",
-            description: `The doorbell rings and you find yourself face to face with a police officer. Unfortunately, she has to tell you that your pet was hit by a car. Your pet dies.`,
-            event: () => {
-              onUpdatePetHappiness(-100);
-              onUpdatePetHunger(-100);
-              onUpdatePetEnergy(-100);
-            },
-          },
-          {
-            id: 6,
-            eventName: "Archaeological find",
-            description: `your pet digs up an archaeological find. You sell it for 1200 pet coins.`,
-            event: () => {
-              addMoney(1200);
-            },
-          },
-          {
-            id: 7,
-            eventName: "Mr/s barking",
-            description: `your pet stays up all night barking at the neighbor's cat. Energy decreases by 30.`,
-            event: () => {
-              onUpdatePetEnergy(-30);
-            },
-          },
-
-          {
-            id: 8,
-            eventName: "baking hour",
-            description: `your pet smells freshly baked cookies and begs for a treat. Hunger increases by 15.`,
-            event: () => {
-              onUpdatePetHunger(-15);
-            },
-          },
-          {
-            id: 9,
-            eventName: "Lost toy",
-            description: `your pet favorite toy gets lost. Happiness decreases by 40.`,
-            event: () => {
-              onUpdatePetHappiness(-40);
-            },
-          },
-          {
-            id: 10,
-            eventName: "a nice friend",
-            description: `your pet receives cuddles and belly rubs from a loved one. Happiness increases by 60.`,
-            event: () => {
-              onUpdatePetHappiness(60);
-            },
-          },
-          {
-            id: 11,
-            eventName: "piece of sh**",
-            description: `your pet accidentally destroys your favorite piece of furniture. You lose 90 pet coins for repairs.`,
-            event: () => {
-              subtractMoney(90);
-            },
-          },
-          {
-            id: 12,
-            eventName: "Bye bye my friend",
-            description: `your pet best friend moves away. Happiness decreases by 50.`,
-            event: () => {
-              onUpdatePetHappiness(-50);
-            },
-          },
-          {
-            id: 13,
-            eventName: "Bad sleep",
-            description: `your pet has a restless night due to thunderstorms. Energy decreases by 40.`,
-            event: () => {
-              onUpdatePetEnergy(-40);
-            },
-          },
-          {
-            id: 14,
-            eventName: "Coin hunter",
-            description: `your pet finds a forgotten stash of coins hidden in the couch cushions. You gain 100 pet coins in a stroke of luck.`,
-            event: () => {
-              addMoney(100);
-            },
-          },
-        ];
-        const petEvent = petEvents[getRandomArrayIndex(petEvents)];
-        setPetEvent(petEvent);
+        console.log("pet event", petEvents);
+        const localPetEvent = petEvents[getRandomArrayIndex(petEvents)];
+        setPetEvent(localPetEvent);
+        console.log("pet event", petEvent);
         handleEnableIsEventPopUpActive();
-        petEvent.event();
+        onUpdatePetEnergy(petEvent.eventValues.energy);
+        onUpdatePetHappiness(petEvent.eventValues.happiness);
+        onUpdatePetHunger(petEvent.eventValues.hunger);
+        addMoney(petEvent.eventValues.money);
       }
 
       if (!isPetActive) {
-        const userEvents = [
-          {
-            id: 1,
-            eventName: "Wrong investment",
-            description:
-              "You bought the wrong cryptocurrency. You lose 20% of your money.",
-            event: () => {
-              subtractMoney(Math.floor((money * 20) / 100));
-            },
-          },
-          {
-            id: 2,
-            eventName: "Right investment",
-            description:
-              "Elon Musk tweets something about your pet coin. Your wealth grows by 20%.",
-            event: () => {
-              addMoney(Math.floor((money * 20) / 100));
-            },
-          },
-          {
-            id: 3,
-            eventName: "Winner winner chicken dinner",
-            description:
-              "Your pet becomes second to last in the beauty contest. You  receive 100 pet coins consolation money.",
-            event: () => {
-              addMoney(100);
-            },
-          },
-          {
-            id: 4,
-            eventName: "Lost Key",
-            description:
-              "You have lost your keys and now have to pay 100 coins to replace them",
-            event: () => {
-              subtractMoney(100);
-            },
-          },
-        ];
-        const userEvent = userEvents[getRandomArrayIndex(userEvents)];
-        setUserEvent(userEvent);
-        handleEnableIsEventPopUpActive();
-        userEvent.event();
+        console.log("user events", userEvents);
+        const localUserEvent = userEvents[getRandomArrayIndex(userEvents)];
+
+        setUserEvent(localUserEvent);
+        //pls help !!!
+        if (!userEvent) {
+          console.log("user event", userEvent);
+          handleEnableIsEventPopUpActive();
+          addMoney(userEvent.eventValues.money);
+        }
       }
     }
   }, [currentTime]);
@@ -283,9 +129,7 @@ export default function App({ Component, pageProps }) {
             setCurrentSeason((prevSeason) => (prevSeason + 1) % 4);
           }
         }
-      }, 60000);
-
-
+      }, 600);
       return () => clearInterval(interval);
     }
   }, [currentTime, router.pathname, setCurrentTime]);
