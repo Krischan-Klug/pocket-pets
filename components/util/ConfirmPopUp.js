@@ -1,30 +1,8 @@
 import styled from "styled-components";
 import StyledButton from "../StyledComponents/StyledButton";
 
-const ConfirmPopupOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  //the height of the Z index should ensure that this popup is always the top element.
-  //Since we work with the z-index in steps of 10, I have chosen 100 here.
-  z-index: 100;
-`;
-
-const ConfirmPopupContent = styled.div`
-  background-color: var(--background-color);
-  padding: 15px;
-  max-width: 90vw;
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: var(--text-color);
-  text-align: center;
-`;
+import StyledPopUpOverlay from "@/components/StyledComponents/StyledPopUpOverlay";
+import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent";
 
 const ConfirmPopUpButton = styled(StyledButton)`
   margin: 0 8px;
@@ -45,8 +23,8 @@ export default function ConfirmationPopup({
   cancelText,
 }) {
   return (
-    <ConfirmPopupOverlay>
-      <ConfirmPopupContent>
+    <StyledPopUpOverlay>
+      <StyledPopUpContent>
         <p>{message}</p>
         <ConfirmButtonWrapper>
           {onConfirm != null && (
@@ -60,7 +38,7 @@ export default function ConfirmationPopup({
             </ConfirmPopUpButton>
           )}
         </ConfirmButtonWrapper>
-      </ConfirmPopupContent>
-    </ConfirmPopupOverlay>
+      </StyledPopUpContent>
+    </StyledPopUpOverlay>
   );
 }
