@@ -6,12 +6,11 @@ import { foods } from "@/lib/shop.js";
 import MoneyCounter from "@/components/util/MoneyCounter";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import BuyPopUp from "@/components/util/BuyPopUp";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
 
-export default function FoodShop({
-  userStats,
-  onUpdateInventoryFood,
-  onSubtractMoney,
-}) {
+export default function FoodShop({ onUpdateInventoryFood }) {
+  const subtractMoney = useMoneyStore((state) => state.subtractMoney);
+  const money = useMoneyStore((state) => state.money);
   const [selectedFoodId, setSelectedFoodId] = useState(null);
   const [itemCost, setItemCost] = useState(0);
   const router = useRouter();
@@ -25,7 +24,7 @@ export default function FoodShop({
   function confirmBuy(value, id, cost) {
     onUpdateInventoryFood(value, id);
     setSelectedFoodId(null);
-    onSubtractMoney(cost * value);
+    subtractMoney(cost * value);
   }
 
   return (
@@ -35,7 +34,7 @@ export default function FoodShop({
           Back
         </StyledLeftButton>
         <h1>Food Shop</h1>
-        <MoneyCounter money={userStats.money} />
+        <MoneyCounter money={money} />
       </StyledDefaultHeader>
       <main>
         <ShopTable
@@ -54,7 +53,7 @@ export default function FoodShop({
           onCancel={() => setSelectedFoodId(null)}
           id={selectedFoodId}
           cost={itemCost}
-          money={userStats.money}
+          money={money}
         />
       )}
     </>

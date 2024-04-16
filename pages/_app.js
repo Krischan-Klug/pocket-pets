@@ -1,6 +1,4 @@
 import GlobalStyle from "../styles";
-import initialMyPets from "@/lib/initialPet";
-import defaultMyPet from "@/lib/myPetTemplate";
 import defaultUserStats from "@/lib/defaultUserStats";
 import { useEffect, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
@@ -8,13 +6,28 @@ import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";
 import SettingPopUp from "@/components/SettingPage/SettingPopUp";
 import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 import { useRouter } from "next/router";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { usePetStore } from "@/hooks/stores/petStore";
 
 export default function App({ Component, pageProps }) {
+  const money = useMoneyStore((state) => state.money);
+  const addMoney = useMoneyStore((state) => state.addMoney);
+  const subtractMoney = useMoneyStore((state) => state.subtractMoney);
+
+  const currentPet = usePetStore((state) => state.currentPet);
+  const updatePetsWithNewKeys = usePetStore(
+    (state) => state.updatePetsWithNewKeys
+  );
+  const setMyPets = usePetStore((state) => state.setMyPets);
+  const myPets = usePetStore((state) => state.myPets);
+  const onUpdatePetEnergy = usePetStore((state) => state.onUpdatePetEnergy);
+  const onUpdatePetHappiness = usePetStore(
+    (state) => state.onUpdatePetHappiness
+  );
+  const onUpdatePetHunger = usePetStore((state) => state.onUpdatePetHunger);
+
   const router = useRouter();
-  const [myPets, setMyPets] = useLocalStorageState("myPets", {
-    defaultValue: initialMyPets,
-  });
-  const [currentPet, setCurrentPet] = useState(null);
+
   const [userStats, setUserStats] = useLocalStorageState("userStats", {
     defaultValue: defaultUserStats,
   });
@@ -35,10 +48,6 @@ export default function App({ Component, pageProps }) {
       defaultValue: 0,
     }
   );
-
-  function handleSetCurrentPet(myPet) {
-    setCurrentPet(myPet);
-  }
 
   // daily event
   const [isPetActive, setIsPetActive] = useState(false);
@@ -75,132 +84,131 @@ export default function App({ Component, pageProps }) {
       function getRandomArrayIndex(array) {
         return Math.floor(Math.random() * array.length);
       }
-      //will be outsourced in future, problems with access on functions, i know zustand is the way to go
 
       if (isPetActive && !currentPet.isDead) {
         const petEvents = [
           {
             id: 1,
             eventName: "Your pet is sick",
-            description: `${currentPet.name} is sick. You need to pay 100 medical costs. and ${currentPet.name} lost 20 engergy.`,
+            description: `your pet is sick. You need to pay 100 medical costs. and your pet lost 20 engergy.`,
             event: () => {
-              handleUpdatePetEnergy(-20);
-              handleSubtractMoney(100);
+              onUpdatePetEnergy(-20);
+              subtractMoney(100);
             },
           },
 
           {
             id: 2,
             eventName: "Birthday Party",
-            description: `It's ${currentPet.name} birthday and you're throwing a big party with all of his pet friends. Pay 50 pet coins.`,
+            description: `It's your pet birthday and you're throwing a big party with all of his pet friends. Pay 50 pet coins.`,
             event: () => {
-              handleUpdatePetHappiness(100);
-              handleUpdatePetHunger(100);
-              handleUpdatePetEnergy(-30);
-              handleSubtractMoney(50);
+              onUpdatePetHappiness(100);
+              onUpdatePetHunger(100);
+              onUpdatePetEnergy(-30);
+              subtractMoney(50);
             },
           },
           {
             id: 3,
             eventName: "Big walk",
-            description: `After a long walk ${currentPet.name} is very happy. However, all the playing and exploring also made ${currentPet.name} tired and hungry. Your happiness increases by 80 but you lose 20 energy and 10 hunger.`,
+            description: `After a long walk your pet is very happy. However, all the playing and exploring also made your pet tired and hungry. Your happiness increases by 80 but you lose 20 energy and 10 hunger.`,
             event: () => {
-              handleUpdatePetHappiness(80);
-              handleUpdatePetHunger(-10);
-              handleUpdatePetEnergy(-20);
+              onUpdatePetHappiness(80);
+              onUpdatePetHunger(-10);
+              onUpdatePetEnergy(-20);
             },
           },
           {
             id: 4,
             eventName: "Sleepy pet",
-            description: `After a good sleep ${currentPet.name} is full of energy again but also really hungry. You win 60 energy and lose 20 hunger.`,
+            description: `After a good sleep your pet is full of energy again but also really hungry. You win 60 energy and lose 20 hunger.`,
             event: () => {
-              handleUpdatePetHappiness(80);
-              handleUpdatePetHunger(-10);
-              handleUpdatePetEnergy(-20);
+              onUpdatePetHappiness(80);
+              onUpdatePetHunger(-10);
+              onUpdatePetEnergy(-20);
             },
           },
           {
             id: 5,
             eventName: "Sad news",
-            description: `The doorbell rings and you find yourself face to face with a police officer. Unfortunately, she has to tell you that ${currentPet.name} was hit by a car. Your pet dies.`,
+            description: `The doorbell rings and you find yourself face to face with a police officer. Unfortunately, she has to tell you that your pet was hit by a car. Your pet dies.`,
             event: () => {
-              handleUpdatePetHappiness(-100);
-              handleUpdatePetHunger(-100);
-              handleUpdatePetEnergy(-100);
+              onUpdatePetHappiness(-100);
+              onUpdatePetHunger(-100);
+              onUpdatePetEnergy(-100);
             },
           },
           {
             id: 6,
             eventName: "Archaeological find",
-            description: `${currentPet.name} digs up an archaeological find. You sell it for 1200 pet coins.`,
+            description: `your pet digs up an archaeological find. You sell it for 1200 pet coins.`,
             event: () => {
-              handleAddMoney(1200);
+              addMoney(1200);
             },
           },
           {
             id: 7,
             eventName: "Mr/s barking",
-            description: `${currentPet.name} stays up all night barking at the neighbor's cat. Energy decreases by 30.`,
+            description: `your pet stays up all night barking at the neighbor's cat. Energy decreases by 30.`,
             event: () => {
-              handleUpdatePetEnergy(-30);
+              onUpdatePetEnergy(-30);
             },
           },
 
           {
             id: 8,
             eventName: "baking hour",
-            description: `${currentPet.name} smells freshly baked cookies and begs for a treat. Hunger increases by 15.`,
+            description: `your pet smells freshly baked cookies and begs for a treat. Hunger increases by 15.`,
             event: () => {
-              handleUpdatePetHunger(-15);
+              onUpdatePetHunger(-15);
             },
           },
           {
             id: 9,
             eventName: "Lost toy",
-            description: `${currentPet.name} favorite toy gets lost. Happiness decreases by 40.`,
+            description: `your pet favorite toy gets lost. Happiness decreases by 40.`,
             event: () => {
-              handleUpdatePetHappiness(-40);
+              onUpdatePetHappiness(-40);
             },
           },
           {
             id: 10,
             eventName: "a nice friend",
-            description: `${currentPet.name} receives cuddles and belly rubs from a loved one. Happiness increases by 60.`,
+            description: `your pet receives cuddles and belly rubs from a loved one. Happiness increases by 60.`,
             event: () => {
-              handleUpdatePetHappiness(60);
+              onUpdatePetHappiness(60);
             },
           },
           {
             id: 11,
             eventName: "piece of sh**",
-            description: `${currentPet.name} accidentally destroys your favorite piece of furniture. You lose 90 pet coins for repairs.`,
+            description: `your pet accidentally destroys your favorite piece of furniture. You lose 90 pet coins for repairs.`,
             event: () => {
-              handleSubtractMoney(90);
+              subtractMoney(90);
             },
           },
           {
             id: 12,
             eventName: "Bye bye my friend",
-            description: `${currentPet.name} best friend moves away. Happiness decreases by 50.`,
+            description: `your pet best friend moves away. Happiness decreases by 50.`,
             event: () => {
-              handleUpdatePetHappiness(-50);
+              onUpdatePetHappiness(-50);
             },
           },
           {
             id: 13,
             eventName: "Bad sleep",
-            description: `${currentPet.name} has a restless night due to thunderstorms. Energy decreases by 40.`,
+            description: `your pet has a restless night due to thunderstorms. Energy decreases by 40.`,
             event: () => {
-              handleUpdatePetEnergy(-40);
+              onUpdatePetEnergy(-40);
             },
           },
           {
             id: 14,
             eventName: "Coin hunter",
-            description: `${currentPet.name} finds a forgotten stash of coins hidden in the couch cushions. You gain 100 pet coins in a stroke of luck.`,
+            description: `your pet finds a forgotten stash of coins hidden in the couch cushions. You gain 100 pet coins in a stroke of luck.`,
             event: () => {
-              handleAddMoney(100);
+              addMoney(100);
             },
           },
         ];
@@ -218,7 +226,7 @@ export default function App({ Component, pageProps }) {
             description:
               "You bought the wrong cryptocurrency. You lose 20% of your money.",
             event: () => {
-              handleSubtractMoney(Math.floor((userStats.money * 20) / 100));
+              subtractMoney(Math.floor((money * 20) / 100));
             },
           },
           {
@@ -227,7 +235,7 @@ export default function App({ Component, pageProps }) {
             description:
               "Elon Musk tweets something about your pet coin. Your wealth grows by 20%.",
             event: () => {
-              handleAddMoney(Math.floor((userStats.money * 20) / 100));
+              addMoney(Math.floor((money * 20) / 100));
             },
           },
           {
@@ -236,7 +244,7 @@ export default function App({ Component, pageProps }) {
             description:
               "Your pet becomes second to last in the beauty contest. You  receive 100 pet coins consolation money.",
             event: () => {
-              handleAddMoney(100);
+              addMoney(100);
             },
           },
           {
@@ -245,7 +253,7 @@ export default function App({ Component, pageProps }) {
             description:
               "You have lost your keys and now have to pay 100 coins to replace them",
             event: () => {
-              handleSubtractMoney(100);
+              subtractMoney(100);
             },
           },
         ];
@@ -277,9 +285,10 @@ export default function App({ Component, pageProps }) {
         }
       }, 60000);
 
+
       return () => clearInterval(interval);
     }
-  }, [currentTime, router.pathname]);
+  }, [currentTime, router.pathname, setCurrentTime]);
 
   //Rain mechanic
   const [isRaining, setIsRaining] = useLocalStorageState("isRaining", {
@@ -309,83 +318,15 @@ export default function App({ Component, pageProps }) {
 
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
-    function updatePetsWithNewKeys() {
-      setMyPets((prevPets) => {
-        return prevPets.map((pet) => {
-          const updatedPet = { ...defaultMyPet, ...pet };
-          return updatedPet;
-        });
-      });
-    }
     //TODO: Object auf allen untergeordneten Ebenen überprüfen ob sich etwas geändert hat zum Save
     function updateUserStatsWithNewKeys() {
       setUserStats((prevUserStat) => {
         return { ...defaultUserStats, ...prevUserStat };
       });
     }
-
     updatePetsWithNewKeys();
     updateUserStatsWithNewKeys();
   }, []);
-
-  function handleAddPet(newPet) {
-    setMyPets([...myPets, newPet]);
-  }
-
-  function handleUpdatePet(updatedPet) {
-    setMyPets(
-      myPets.map((myPet) => (myPet.id === updatedPet.id ? updatedPet : myPet))
-    );
-  }
-
-  function handleUpdatePetEnergy(energyToUpdate) {
-    if (!currentPet.isDead) {
-      const updatedEnergy = currentPet.energy + energyToUpdate;
-
-      handleUpdatePet({
-        ...currentPet,
-        energy: Math.min(Math.max(updatedEnergy, 0), 100),
-      });
-    }
-  }
-
-  function handleUpdatePetHappiness(HappinessToUpdate) {
-    if (!currentPet.isDead) {
-      const updatedHappiness = currentPet.happiness + HappinessToUpdate;
-
-      handleUpdatePet({
-        ...currentPet,
-        happiness: Math.min(Math.max(updatedHappiness, 0), 100),
-      });
-    }
-  }
-
-  function handleUpdatePetHunger(HungerToUpdate) {
-    if (!currentPet.isDead) {
-      const updatedHunger = currentPet.hunger + HungerToUpdate;
-
-      handleUpdatePet({
-        ...currentPet,
-        hunger: Math.min(Math.max(updatedHunger, 0), 100),
-      });
-    }
-  }
-
-  function handleDeletePet(id) {
-    setMyPets(myPets.filter((myPet) => myPet.id !== id));
-  }
-
-  function handleAddMoney(value) {
-    setUserStats((prevUserStat) => {
-      return { ...prevUserStat, money: prevUserStat.money + value };
-    });
-  }
-
-  function handleSubtractMoney(value) {
-    setUserStats((prevUserStat) => {
-      return { ...prevUserStat, money: prevUserStat.money - value };
-    });
-  }
 
   function handleUpdateInventoryFood(value, newFoodId) {
     setUserStats((prevStats) => {
@@ -450,24 +391,16 @@ export default function App({ Component, pageProps }) {
       <GlobalStyle />
       <Component
         {...pageProps}
-        myPets={myPets}
         userStats={userStats}
-        onAddPet={handleAddPet}
-        onUpdatePet={handleUpdatePet}
-        onDeletePet={handleDeletePet}
         onGameUpdate={handleGameUpdate}
-        onSubtractMoney={handleSubtractMoney}
         onUpdateInventoryFood={handleUpdateInventoryFood}
         onUpdateInventoryToy={handleUpdateInventoryToy}
-        onAddMoney={handleAddMoney}
         currentTime={currentTime}
         currentDay={currentDay}
         currentSeason={currentSeason}
         isRaining={isRaining}
         onEnablePetIsActive={handleEnablePetIsActive}
         onDisablePetIsActive={handleDisablePetIsActive}
-        onSetCurrentPet={handleSetCurrentPet}
-        currentPet={currentPet}
         onDisableIsEventPopUpActive={handleDisableIsEventPopUpActive}
         isEventPopUpActive={isEventPopUpActive}
         userEvent={userEvent}

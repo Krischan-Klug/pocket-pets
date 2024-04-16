@@ -11,6 +11,7 @@ import {
   Label,
 } from "@/components/StyledComponents/StyledInputField";
 import StyledLink from "@/components/StyledComponents/StyledLink";
+import { usePetStore } from "@/hooks/stores/petStore";
 
 const StyledEditForm = styled.form`
   display: flex;
@@ -18,7 +19,10 @@ const StyledEditForm = styled.form`
   gap: 20px;
 `;
 
-export default function EditPet({ myPets, onUpdatePet }) {
+export default function EditPet({}) {
+  const myPets = usePetStore((state) => state.myPets);
+  const onUpdatePet = usePetStore((state) => state.onUpdatePet);
+
   const [savePopUp, setSavePopUp] = useState(false);
   const [newCurrentPetData, setNewCurrentPetData] = useState(null);
   const router = useRouter();

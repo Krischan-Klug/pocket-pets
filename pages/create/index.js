@@ -15,6 +15,7 @@ import defaultMyPet from "@/lib/myPetTemplate";
 import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
 import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
 import StyledLink from "@/components/StyledComponents/StyledLink";
+import { usePetStore } from "@/hooks/stores/petStore";
 
 const StyledForm = styled.form`
   display: flex;
@@ -39,7 +40,8 @@ const SytledTypeChangeButton = styled(Image)`
   }
 `;
 
-export default function Create({ onAddPet }) {
+export default function Create({}) {
+  const onAddPet = usePetStore((state) => state.onAddPet);
   const router = useRouter();
   const [petType, setPetType] = useState(0);
 

@@ -1,11 +1,15 @@
 import kaboom from "kaboom";
 import { useRef, useEffect } from "react";
 import { useRouter } from "next/router";
-
-export default function ObstacleJumper({ onAddMoney, myPets }) {
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { usePetStore } from "@/hooks/stores/petStore";
+export default function ObstacleJumper({}) {
   const router = useRouter();
   const id = router.query.id;
   const canvasRef = useRef(null);
+
+  const addMoney = useMoneyStore((state) => state.addMoney);
+  const myPets = usePetStore((state) => state.myPets);
 
   useEffect(() => {
     const k = kaboom({
@@ -165,7 +169,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       ]);
 
       function endGame() {
-        onAddMoney(moneyToAdd);
+        addMoney(moneyToAdd);
 
         //Router wont work here, reload is needed!
         window.location.href = `/pet-detail-page/${id}`;

@@ -4,13 +4,10 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import StyledButton from "@/components/StyledComponents/StyledButton";
-import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import MoneyCounter from "@/components/util/MoneyCounter";
-import MoneyImage from "@/components/util/MoneyImage";
-import {
-  StyledBackgroundImageWrapper,
-  StyledStaticBackground,
-} from "@/components/StyledComponents/StyledBackgroundImage";
+import { StyledStaticBackground } from "@/components/StyledComponents/StyledBackgroundImage";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { usePetStore } from "@/hooks/stores/petStore";
 
 const StyledPetCollectionHeader = styled.header`
   height: 120px;
@@ -44,17 +41,19 @@ const StyledPetCollection = styled.section`
 `;
 
 export default function HomePage({
-  myPets,
-  onDeletePet,
-  userStats,
   onDisablePetIsActive,
   onDisableIsEventPopUpActive,
   isEventPopUpActive,
   userEvent,
 }) {
+  const myPets = usePetStore((state) => state.myPets);
+  const onDeletePet = usePetStore((state) => state.onDeletePet);
+
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedPetId, setSelectedPetId] = useState(null);
   const router = useRouter();
+
+  const money = useMoneyStore((state) => state.money);
 
   useEffect(() => {
     onDisablePetIsActive();
@@ -100,7 +99,7 @@ export default function HomePage({
             Delete Pet
           </StyledButton>
         </StyledButtonWrapper>
-        <MoneyCounter money={userStats.money} />
+        <MoneyCounter money={money} />
       </StyledPetCollectionHeader>
       <main>
         <StyledPetCollection>

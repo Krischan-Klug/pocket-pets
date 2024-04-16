@@ -5,6 +5,7 @@ import Image from "next/image";
 import StyledButton from "@/components/StyledComponents/StyledButton";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import StyledLink from "@/components/StyledComponents/StyledLink";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
 
 const PlayGround = styled.div`
   display: grid;
@@ -79,7 +80,7 @@ const petImageMap = {
   2048: "/assets/images/pets/dragon.png",
 };
 
-export default function MergePets({ onAddMoney }) {
+export default function MergePets({}) {
   const [grid, setGrid] = useState([]);
   const [points, setPoints] = useState(0);
   const [animalImage, setAnimalImage] = useState(true);
@@ -96,6 +97,7 @@ export default function MergePets({ onAddMoney }) {
 
   const router = useRouter();
   const id = router.query.id;
+  const addMoney = useMoneyStore((state) => state.addMoney);
 
   //Create a new grid when the page is loaded
   useEffect(() => {
@@ -354,7 +356,7 @@ export default function MergePets({ onAddMoney }) {
         show: true,
         message: `Game over, your high score is: ${endPoints}. For this you get ${money} 🪙!`,
         onConfirm: () => {
-          onAddMoney(money);
+          addMoney(money);
           router.push(`/pet-detail-page/${id}`);
         },
       });

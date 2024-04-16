@@ -30,8 +30,11 @@ import {
   StyledWallBackground,
   StyledRainBackground,
 } from "@/components/StyledComponents/StyledBackgroundImage";
+import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { usePetStore } from "@/hooks/stores/petStore";
 import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
+
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -147,23 +150,24 @@ const StyledReviewButton = styled(StyledButton)`
 `;
 
 export default function PetDetailPage({
-  myPets,
   onGameUpdate,
-  onUpdatePet,
   userStats,
-  onSubtractMoney,
   onUpdateInventoryFood,
   currentTime,
   currentDay,
   currentSeason,
   isRaining,
   onEnablePetIsActive,
-  currentPet,
-  onSetCurrentPet,
   petEvent,
   isEventPopUpActive,
   onDisableIsEventPopUpActive,
 }) {
+  const myPets = usePetStore((state) => state.myPets);
+  const subtractMoney = useMoneyStore((state) => state.subtractMoney);
+  const onUpdatePet = usePetStore((state) => state.onUpdatePet);
+  const currentPet = usePetStore((state) => state.currentPet);
+  const onSetCurrentPet = usePetStore((state) => state.onSetCurrentPet);
+
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
     interaction: "",
@@ -299,7 +303,7 @@ export default function PetDetailPage({
   }
 
   function handleConfirm(value) {
-    onSubtractMoney(value);
+    subtractMoney(value);
     setConfirmationPopUpContent({ ...confirmationPopUpContent, show: false });
     onUpdatePet({
       ...currentPet,
