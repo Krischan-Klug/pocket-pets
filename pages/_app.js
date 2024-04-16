@@ -8,6 +8,7 @@ import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 import { useRouter } from "next/router";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { usePetStore } from "@/hooks/stores/petStore";
+import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
 export default function App({ Component, pageProps }) {
   const money = useMoneyStore((state) => state.money);
@@ -17,6 +18,9 @@ export default function App({ Component, pageProps }) {
   const currentPet = usePetStore((state) => state.currentPet);
   const updatePetsWithNewKeys = usePetStore(
     (state) => state.updatePetsWithNewKeys
+  );
+  const updateInventoryWithNewKeys = useInventoryStore(
+    (state) => state.updateInventoryWithNewKeys
   );
   const setMyPets = usePetStore((state) => state.setMyPets);
   const myPets = usePetStore((state) => state.myPets);
@@ -28,9 +32,6 @@ export default function App({ Component, pageProps }) {
 
   const router = useRouter();
 
-  const [userStats, setUserStats] = useLocalStorageState("userStats", {
-    defaultValue: defaultUserStats,
-  });
   const [settingPageShow, setSettingPage] = useState(false);
 
   //Hour
@@ -48,6 +49,12 @@ export default function App({ Component, pageProps }) {
       defaultValue: 0,
     }
   );
+
+  //fix: update pets with new keys when local storage is loaded
+  useEffect(() => {
+    updatePetsWithNewKeys();
+    updateInventoryWithNewKeys();
+  }, []);
 
   // daily event
   const [isPetActive, setIsPetActive] = useState(false);
@@ -315,45 +322,6 @@ export default function App({ Component, pageProps }) {
     }
   }, [isRaining]);
 
-  //fix: update pets with new keys when local storage is loaded
-  useEffect(() => {
-    //TODO: Object auf allen untergeordneten Ebenen überprüfen ob sich etwas geändert hat zum Save
-    function updateUserStatsWithNewKeys() {
-      setUserStats((prevUserStat) => {
-        return { ...defaultUserStats, ...prevUserStat };
-      });
-    }
-    updatePetsWithNewKeys();
-    updateUserStatsWithNewKeys();
-  }, []);
-
-  function handleUpdateInventoryFood(value, newFoodId) {
-    setUserStats((prevStats) => {
-      const updatedInventory = { ...prevStats.inventory };
-      const foodIndex = updatedInventory.food.findIndex(
-        (item) => item.id === newFoodId
-      );
-      if (foodIndex !== -1) {
-        updatedInventory.food[foodIndex].value =
-          updatedInventory.food[foodIndex].value + value;
-      }
-      return { ...prevStats, inventory: updatedInventory };
-    });
-  }
-
-  function handleUpdateInventoryToy(newToyId) {
-    setUserStats((prevStats) => {
-      const updatedInventory = { ...prevStats.inventory };
-      const toyIndex = updatedInventory.toy.findIndex(
-        (item) => item.id === newToyId
-      );
-      if (toyIndex !== -1) {
-        updatedInventory.toy[toyIndex].purchased = true;
-      }
-      return { ...prevStats, inventory: updatedInventory };
-    });
-  }
-
   function handleSettingPageClose() {
     setSettingPage(false);
   }
@@ -391,10 +359,7 @@ export default function App({ Component, pageProps }) {
       <GlobalStyle />
       <Component
         {...pageProps}
-        userStats={userStats}
         onGameUpdate={handleGameUpdate}
-        onUpdateInventoryFood={handleUpdateInventoryFood}
-        onUpdateInventoryToy={handleUpdateInventoryToy}
         currentTime={currentTime}
         currentDay={currentDay}
         currentSeason={currentSeason}

@@ -4,10 +4,10 @@ import { useState } from "react";
 import { foods } from "@/lib/shop";
 import InventoryContainer from "./InventoryContainer";
 import Link from "next/link";
-
 import StyledPopUpOverlay from "@/components/StyledComponents/StyledPopUpOverlay";
 import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent";
 import StyledInventoryContainer from "@/components/StyledComponents/StyledInventoryContainer";
+import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
 const ConfirmPopUpButton = styled(StyledButton)`
   margin: 0 8px;
@@ -33,8 +33,9 @@ export default function HungerInventoryPopUp({
 }) {
   const [selectedFoodItemId, setSelectedFoodItemId] = useState(0);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const foodInventory = useInventoryStore((state) => state.foodInventory);
 
-  const availableFood = userStats.inventory.food.filter((fooditems) => {
+  const availableFood = foodInventory.filter((fooditems) => {
     if (fooditems.value > 0) {
       return fooditems;
     }

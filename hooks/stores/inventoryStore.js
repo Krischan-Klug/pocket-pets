@@ -3,53 +3,36 @@ import { persist } from "zustand/middleware";
 
 import { initialFoods, initialToys } from "@/lib/defaultInventory";
 
-export const useMoneyStore = create((set) => ({
-  foods: initialFoods,
-  toys: initialToys,
-  onFood: (value, newFoodId) => {
-    set((state) => ({
-      foods: state.foods.map((food) =>
-        food.id === newFoodId ? food.quantity + value : food
-      ),
-    }));
-  },
-}));
-
-/*
-
-function handleUpdateInventoryFood(value, newFoodId) {
-    setUserStats((prevStats) => {
-      const updatedInventory = { ...prevStats.inventory };
-      const foodIndex = updatedInventory.food.findIndex(
-        (item) => item.id === newFoodId
-      );
-      if (foodIndex !== -1) {
-        updatedInventory.food[foodIndex].value =
-          updatedInventory.food[foodIndex].value + value;
-      }
-      return { ...prevStats, inventory: updatedInventory };
-    });
-  }
-
-  onUpdatePet: (updatedPet) => {
+export const useInventoryStore = create(
+  persist(
+    (set) => ({
+      foodInventory: initialFoods,
+      toyInventory: initialToys,
+      updateInventoryWithNewKeys: () => {
         set((state) => ({
-          myPets: state.myPets.map((myPet) =>
-            myPet.id === updatedPet.id ? updatedPet : myPet
+          foodInventory: { ...initialFoods, ...state.foodInventory },
+          toyInventory: { ...initialToys, ...state.toyInventory },
+        }));
+      },
+      onUpdateFood: (value, newFoodId) => {
+        set((state) => ({
+          foodInventory: state.foodInventory.map((food) =>
+            food.id === newFoodId
+              ? { ...food, value: food.value + value }
+              : food
           ),
         }));
       },
-
-
-
-export const useMoneyStore = create(      
-    persist(
-      (set) => ({
-        food: [],
-        toys: [],
-      }),
-      {
-        name: "inventory",
-      }
-    )
-  );
-  */
+      onUpdateToy: (newToyId) => {
+        set((state) => ({
+          toyInventory: state.toyInventory.map((toy) =>
+            toy.id === newToyId ? { ...toy, purchased: true } : toy
+          ),
+        }));
+      },
+    }),
+    {
+      name: "inventory",
+    }
+  )
+);

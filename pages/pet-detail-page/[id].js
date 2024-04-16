@@ -19,7 +19,6 @@ import {
   percentageLevelProgress,
 } from "@/components/DetailPage/calculateLevel";
 import StyledLink from "@/components/StyledComponents/StyledLink";
-
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
 import energyImage from "/public/assets/images/interaction/energy.png";
@@ -34,7 +33,7 @@ import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { usePetStore } from "@/hooks/stores/petStore";
 import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
-
+import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -151,8 +150,6 @@ const StyledReviewButton = styled(StyledButton)`
 
 export default function PetDetailPage({
   onGameUpdate,
-  userStats,
-  onUpdateInventoryFood,
   currentTime,
   currentDay,
   currentSeason,
@@ -167,6 +164,8 @@ export default function PetDetailPage({
   const onUpdatePet = usePetStore((state) => state.onUpdatePet);
   const currentPet = usePetStore((state) => state.currentPet);
   const onSetCurrentPet = usePetStore((state) => state.onSetCurrentPet);
+  const onUpdateFood = useInventoryStore((state) => state.onUpdateFood);
+  const money = useMoneyStore((state) => state.money);
 
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
@@ -241,23 +240,12 @@ export default function PetDetailPage({
     );
   }
 
-  const {
-    name,
-    type,
-    image,
-    health,
-    hunger,
-    happiness,
-    energy,
-    isDead,
-    level,
-    xp,
-  } = currentPet;
+  const { name, type, image, isDead, xp } = currentPet;
 
   function handleFeedButton(foodItemId) {
     if (!currentPet.isDead) {
       setFeedButtonPopUp(false);
-      onUpdateInventoryFood(-1, foodItemId);
+      onUpdateFood(-1, foodItemId);
       const foodToGive = foods.find((food) => food.id === foodItemId).value;
       const updatedHunger = currentPet.hunger + foodToGive;
       onUpdatePet({
@@ -402,7 +390,6 @@ export default function PetDetailPage({
                 <HungerInventoryPopUp
                   onFeedButton={handleFeedButton}
                   onCancel={() => setFeedButtonPopUp(false)}
-                  userStats={userStats}
                   petId={id}
                 />
               )}
@@ -421,7 +408,6 @@ export default function PetDetailPage({
                 <ToyInventoryPopUp
                   onPlayButton={handlePlayButton}
                   onCancel={() => setPlayButtonPopUp(false)}
-                  userStats={userStats}
                   petId={id}
                 />
               )}
@@ -458,8 +444,7 @@ export default function PetDetailPage({
                   }}
                 >
                   Revive {name} costs
-                  <MoneyColored cost={200} money={userStats.money} />{" "}
-                  <MoneyImage />
+                  <MoneyColored cost={200} money={money} /> <MoneyImage />
                 </StyledReviewButton>
               )}
               {isInteracting.duration > 0 && (

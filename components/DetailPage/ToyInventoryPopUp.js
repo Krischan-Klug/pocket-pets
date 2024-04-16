@@ -4,10 +4,10 @@ import { useState } from "react";
 import { toys } from "@/lib/shop";
 import InventoryContainer from "./InventoryContainer";
 import Link from "next/link";
-
 import StyledPopUpOverlay from "@/components/StyledComponents/StyledPopUpOverlay";
 import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent";
 import StyledInventoryContainer from "@/components/StyledComponents/StyledInventoryContainer";
+import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
 const ConfirmPopUpButton = styled(StyledButton)`
   margin: 0 8px;
@@ -25,16 +25,12 @@ const StyledErrorMessage = styled.p`
   color: red;
 `;
 
-export default function ToyInventoryPopUp({
-  userStats,
-  onPlayButton,
-  onCancel,
-  petId,
-}) {
+export default function ToyInventoryPopUp({ onPlayButton, onCancel, petId }) {
   const [selectedToyItemId, setSelectedToyItemId] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const toyInventory = useInventoryStore((state) => state.toyInventory);
 
-  const availableToy = userStats.inventory.toy.filter((toyItems) => {
+  const availableToy = toyInventory.filter((toyItems) => {
     if (toyItems.purchased === true) {
       return toyItems;
     }
