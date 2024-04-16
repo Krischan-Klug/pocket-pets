@@ -338,7 +338,7 @@ export default function PetDetailPage({
             <StyledButton
               onClick={() => router.push(`/${id}/minigames/sunday-walks/`)}
             >
-              Sunday Walks
+              Treasure Hunt
             </StyledButton>
           </StyledMoneyHandleSection>
         </header>

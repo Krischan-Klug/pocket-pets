@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
-// import Image from "next/image";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import styled from "styled-components";
 import MoneyImage from "@/components/util/MoneyImage";
@@ -14,19 +13,11 @@ const StyledGameScreen = styled.canvas`
   border: 4px solid rgb(194, 140, 90);
   width: ${gameScreenSize[0]}px;
   height: ${gameScreenSize[1]}px;
-
-  /* @media (min-width: 600px) {
-    grid-template-columns: ;
-    grid-template-columns: repeat(scale, 1fr);
-    grid-template-rows: repeat(scale, 1fr);
-  } */
 `;
 
-const StyledMain = styled.main`
-  overflow: hidden;
-`;
-
-const StyledEarnedCoins = styled.p`
+const StyledEarnedCoins = styled.div`
+  display: flex;
+  align-items: center;
   margin: 0;
 `;
 
@@ -74,9 +65,13 @@ const petImages = {
 };
 
 export default function SundayWalks({ onAddMoney, myPets }) {
-  const petStart = [[12, 16]];
+  const petStart = [
+    [12, 16],
+    [12, 17],
+    [12, 18],
+  ];
   const petFriendStart = [12, 7];
-  const defaultSpeed = 500;
+  const defaultSpeed = 300;
   const defaultDirections = {
     38: [0, -1], // up -> not moving on the x-axis but 1 up on the y-axis
     40: [0, 1], // down
@@ -90,10 +85,9 @@ export default function SundayWalks({ onAddMoney, myPets }) {
   const [speed, setSpeed] = useState(null); // pet does not move before the Start button is clicked
   const [coins, setCoins] = useState(0);
   const [gameOver, setGameOver] = useState(false);
-  const [showMobileControls, setShowMobileControls] = useState(false);
   const [startPopUpContent, setStartPopUpContent] = useState({
     message:
-      "The aim of the game is to meet as many of your pet friends and family members to enjoy a nice day in the park. But be careful that nobody harms himself/herself on the park fences or stumbles over a beloved one. To do this, either press the arrow keys or swipe across the display. Have a nice stroll!",
+      "The aim of the game is to collect as many pet coins as you can. But be careful not to stumble over yourself or harm yourself on the park fences. To change directions use the control buttons on the display. Good luck!",
     onConfirm: () => {
       setStartPopUpContent({ ...startPopUpContent, show: false });
       startGame();
@@ -102,30 +96,21 @@ export default function SundayWalks({ onAddMoney, myPets }) {
     show: true,
     confirmText: "Start Game",
   });
-  const [endPopUpContent, setEndPopUpContent] = useState({
-    message: `GAME OVER! Congrats, you won ${coins}!`,
-    onConfirm: () => {
-      onAddMoney(coins);
-      router.push(`/pet-detail-page/${id}`);
-    },
-    show: true,
-  });
 
   const canvasRef = useRef();
   const router = useRouter();
   const { id } = router.query;
 
-  useEffect(() => {
-    const handleResize = () => {
-      setShowMobileControls(window.innerWidth < 600);
-    };
-
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  //   useEffect(() => {
+  //     const handleResize = () => {
+  //       setShowMobileControls(window.innerWidth < 600);
+  //     };
+  //     handleResize(); // Initial check
+  //     window.addEventListener("resize", handleResize);
+  //     return () => {
+  //       window.removeEventListener("resize", handleResize);
+  //     };
+  //   }, []);
 
   // Invtervall function using custom hook by Dan Abramov
   function useInterval(callback, delay) {
@@ -221,98 +206,82 @@ export default function SundayWalks({ onAddMoney, myPets }) {
     setPet(petCopy);
   }
 
-  // everything that happens within gameScreen:
-  //   useEffect(() => {
-  //     const context = canvasRef.current.getContext("2d"); // 2d means drawing in 2D instead of e.g. in 3D
-  //     context.setTransform(scale, 0, 0, scale, 0, 0); // each render cycle the scale is set back to 0. this prevents the scale value from adding up
-  //     context.clearRect(0, 0, window.innerWidth, window.innerHeight); // clears the gameScreen befor it is rendered again
-  //     context.fillStyle = "pink"; // pet appearance on gameScreen
-  //     pet.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
-  //     context.fillStyle = "lightblue"; // friend appearance on gameScreen
-  //     context.fillRect(friend[0], friend[1], 1, 1);
-  //   }, [pet, friend, gameOver]);
-
   useEffect(() => {
     const context = canvasRef.current.getContext("2d"); // 2d means drawing in 2D instead of e.g. in 3D
     context.setTransform(scale, 0, 0, scale, 0, 0); // each render cycle the scale is set back to 0. this prevents the scale value from adding up
     context.clearRect(0, 0, window.innerWidth, window.innerHeight); // clears the gameScreen before it is rendered again
 
     // create pet image:
-    const currentPet = myPets.find((myPet) => myPet.id === id);
-    console.log("currentPet: ", currentPet);
+    // const currentPet = myPets.find((myPet) => myPet.id === id);
+    // console.log("currentPet: ", currentPet);
 
-    const petImage = new Image();
-    petImage.onload = () => {
-      context.drawImage(petImage, pet[0] * 1, pet[1] * 1, 1, 1);
-    };
+    // const petImage = new Image();
+    // petImage.onload = () => {
+    //   context.drawImage(petImage, pet[0] * 1, pet[1] * 1, 1, 1);
+    // };
     // petImage.src = currentPet.image;
-    context.fillStyle = "pink"; // pet appearance on gameScreen
+
+    context.fillStyle = "#f45d48"; // pet appearance on gameScreen
     pet.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
 
-    // create friend image:
+    // create coin image:
     const friendImage = new Image();
     friendImage.onload = () => {
       context.drawImage(friendImage, friend[0] * 1, friend[1] * 1, 1, 1);
     };
-    // const randomIndex =
-    //   Math.floor(Math.random() * Object.keys(petImages).length) + 1;
-    // friendImage.src = petImages[randomIndex];
     friendImage.src = petImages[100];
     context.fillStyle = "rgb(134, 189, 61)";
     context.fillRect(friend[0], friend[1], 1, 1);
-  }, [pet, friend, gameOver, id, myPets]);
+  }, [pet, friend, gameOver]);
 
   return (
-    <div role="button" tabIndex="0" onKeyDown={(e) => movePet(e)}>
+    <div>
       <header>
         <StyledLink href={`/pet-detail-page/${id}`}>Back</StyledLink>
         <h1>Treasure Hunt</h1>
         <StyledEarnedCoins>
-          Win: {coins} <MoneyImage />
+          <MoneyImage />
+          {coins}
         </StyledEarnedCoins>
       </header>
-      <StyledMain>
+      <main role="button" tabIndex="0" onKeyDown={(event) => movePet(event)}>
         <StyledGameScreen
           ref={canvasRef}
           width={gameScreenSize[0]}
           height={gameScreenSize[1]}
         />
-        {showMobileControls && (
-          <StyledMobileControlsContainer>
-            <ButtonContainer>
-              <ControlButton
-                type="button"
-                onClick={(event) => movePetMobile(event, 38)}
-              >
-                Up
-              </ControlButton>
-            </ButtonContainer>
-            <ButtonContainer>
-              <ControlButton
-                type="button"
-                onClick={(event) => movePetMobile(event, 37)}
-              >
-                Left
-              </ControlButton>
-              <ControlButton
-                type="button"
-                onClick={(event) => movePetMobile(event, 39)}
-              >
-                Right
-              </ControlButton>
-            </ButtonContainer>
-            <ButtonContainer>
-              <ControlButton
-                type="button"
-                onClick={(event) => movePetMobile(event, 40)}
-              >
-                Down
-              </ControlButton>
-            </ButtonContainer>
-          </StyledMobileControlsContainer>
-        )}
-        {/* { gameOver && <div>GAME OVER!</div>} */}
-        {/* <StyledButton onClick={startGame}>Start Game</StyledButton> */}
+        <StyledMobileControlsContainer>
+          <ButtonContainer>
+            <ControlButton
+              type="button"
+              onClick={(event) => movePetMobile(event, 38)}
+            >
+              Up
+            </ControlButton>
+          </ButtonContainer>
+          <ButtonContainer>
+            <ControlButton
+              type="button"
+              onClick={(event) => movePetMobile(event, 37)}
+            >
+              Left
+            </ControlButton>
+            <ControlButton
+              type="button"
+              onClick={(event) => movePetMobile(event, 39)}
+            >
+              Right
+            </ControlButton>
+          </ButtonContainer>
+          <ButtonContainer>
+            <ControlButton
+              type="button"
+              onClick={(event) => movePetMobile(event, 40)}
+            >
+              Down
+            </ControlButton>
+          </ButtonContainer>
+        </StyledMobileControlsContainer>
         {startPopUpContent.show && (
           <ConfirmationPopup
             message={startPopUpContent.message}
@@ -321,13 +290,16 @@ export default function SundayWalks({ onAddMoney, myPets }) {
             confirmText={startPopUpContent.confirmText}
           />
         )}
-        {gameOver && endPopUpContent.show && (
+        {gameOver && (
           <ConfirmationPopup
-            message={endPopUpContent.message}
-            onConfirm={endPopUpContent.onConfirm}
+            message={`Congrats, you found ${coins} pet coins!`}
+            onConfirm={() => {
+              onAddMoney(coins);
+              router.push(`/pet-detail-page/${id}`);
+            }}
           />
         )}
-      </StyledMain>
+      </main>
     </div>
   );
 }
