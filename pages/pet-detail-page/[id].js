@@ -336,9 +336,9 @@ export default function PetDetailPage({
               Merge Pets
             </StyledButton>
             <StyledButton
-              onClick={() => router.push(`/${id}/minigames/treasure-hunt/`)}
+              onClick={() => router.push(`/${id}/minigames/sunday-walks/`)}
             >
-              Treasure Hunt
+              Sunday Walks
             </StyledButton>
           </StyledMoneyHandleSection>
         </header>
