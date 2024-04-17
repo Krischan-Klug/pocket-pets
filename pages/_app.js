@@ -52,7 +52,7 @@ export default function App({ Component, pageProps }) {
   const [isPetActive, setIsPetActive] = useState(false);
   const [dailyEvent, setDailyEvent] = useState(false);
   const [isEventPopUpActive, setIsEventPopUpActive] = useState(false);
-  const [eventTime, setEventTime] = useState(20);
+  const [eventTime, setEventTime] = useState(getRandomDayTime());
   const [userEvent, setUserEvent] = useState(null);
   const [petEvent, setPetEvent] = useState(null);
 
