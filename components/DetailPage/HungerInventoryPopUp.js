@@ -26,7 +26,6 @@ const StyledErrorMessage = styled.p`
 `;
 
 export default function HungerInventoryPopUp({
-  userStats,
   onFeedButton,
   onCancel,
   petId,

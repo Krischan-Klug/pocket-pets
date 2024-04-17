@@ -10,8 +10,18 @@ export const useInventoryStore = create(
       toyInventory: initialToys,
       updateInventoryWithNewKeys: () => {
         set((state) => ({
-          foodInventory: { ...initialFoods, ...state.foodInventory },
-          toyInventory: { ...initialToys, ...state.toyInventory },
+          foodInventory: [
+            ...state.foodInventory,
+            ...initialFoods.filter(
+              (food) => !state.foodInventory.some((item) => item.id === food.id)
+            ),
+          ],
+          toyInventory: [
+            ...state.toyInventory,
+            ...initialToys.filter(
+              (toy) => !state.toyInventory.some((item) => item.id === toy.id)
+            ),
+          ],
         }));
       },
       onUpdateFood: (value, newFoodId) => {
