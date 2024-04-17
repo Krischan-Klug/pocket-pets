@@ -1,5 +1,4 @@
 import GlobalStyle from "../styles";
-import defaultUserStats from "@/lib/defaultUserStats";
 import { useEffect, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import AudioInterface from "@/components/AudioPlayer/AudioInterface.js";

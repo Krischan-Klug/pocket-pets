@@ -1,19 +1,7 @@
-import styled from "styled-components";
-import StyledButton from "../StyledComponents/StyledButton";
-
 import StyledPopUpOverlay from "@/components/StyledComponents/StyledPopUpOverlay";
 import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent";
-
-const ConfirmPopUpButton = styled(StyledButton)`
-  margin: 0 8px;
-  background-color: ${({ $red }) => $red && "red"};
-  cursor: pointer;
-`;
-
-const ConfirmButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+import StyledConfirmButtonWrapper from "@/components/StyledComponents/StyledConfirmButtonWrapper";
+import StyledConfirmPopUpButton from "@/components/StyledComponents/StyledConfirmPopUpButton";
 
 export default function ConfirmationPopup({
   message,
@@ -26,18 +14,18 @@ export default function ConfirmationPopup({
     <StyledPopUpOverlay>
       <StyledPopUpContent>
         <p>{message}</p>
-        <ConfirmButtonWrapper>
+        <StyledConfirmButtonWrapper>
           {onConfirm != null && (
-            <ConfirmPopUpButton onClick={onConfirm}>
+            <StyledConfirmPopUpButton onClick={onConfirm}>
               {confirmText ? confirmText : "Confirm"}
-            </ConfirmPopUpButton>
+            </StyledConfirmPopUpButton>
           )}
           {onCancel != null && (
-            <ConfirmPopUpButton $red onClick={onCancel}>
+            <StyledConfirmPopUpButton $red onClick={onCancel}>
               {cancelText ? cancelText : "Cancel"}
-            </ConfirmPopUpButton>
+            </StyledConfirmPopUpButton>
           )}
-        </ConfirmButtonWrapper>
+        </StyledConfirmButtonWrapper>
       </StyledPopUpContent>
     </StyledPopUpOverlay>
   );

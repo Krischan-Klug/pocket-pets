@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import StyledButton from "../StyledComponents/StyledButton";
 import { useState } from "react";
 import { foods } from "@/lib/shop";
 import InventoryContainer from "./InventoryContainer";
@@ -7,19 +6,9 @@ import Link from "next/link";
 import StyledPopUpOverlay from "@/components/StyledComponents/StyledPopUpOverlay";
 import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent";
 import StyledInventoryContainer from "@/components/StyledComponents/StyledInventoryContainer";
+import StyledConfirmButtonWrapper from "@/components/StyledComponents/StyledConfirmButtonWrapper";
+import StyledConfirmPopUpButton from "@/components/StyledComponents/StyledConfirmPopUpButton";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
-
-const ConfirmPopUpButton = styled(StyledButton)`
-  margin: 0 8px;
-  background-color: ${({ $red }) => $red && "red"};
-  cursor: pointer;
-`;
-
-const ConfirmButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  padding-top: 10px;
-`;
 
 const StyledErrorMessage = styled.p`
   color: red;
@@ -87,14 +76,14 @@ export default function HungerInventoryPopUp({
             </>
           )}
         </StyledInventoryContainer>
-        <ConfirmButtonWrapper>
-          <ConfirmPopUpButton onClick={handleConfirmButtonClick}>
+        <StyledConfirmButtonWrapper>
+          <StyledConfirmPopUpButton onClick={handleConfirmButtonClick}>
             Feed
-          </ConfirmPopUpButton>
-          <ConfirmPopUpButton $red onClick={onCancel}>
+          </StyledConfirmPopUpButton>
+          <StyledConfirmPopUpButton $red onClick={onCancel}>
             Cancel
-          </ConfirmPopUpButton>
-        </ConfirmButtonWrapper>
+          </StyledConfirmPopUpButton>
+        </StyledConfirmButtonWrapper>
         {showErrorMessage && (
           <StyledErrorMessage>
             You need to select a food item.

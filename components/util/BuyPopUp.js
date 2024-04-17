@@ -1,24 +1,12 @@
 import styled from "styled-components";
 import Image from "next/image";
-import StyledButton from "../StyledComponents/StyledButton";
 import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
 import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
 import { useState } from "react";
-
 import StyledPopUpOverlay from "@/components/StyledComponents/StyledPopUpOverlay";
 import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent";
-
-const BuyPopUpButton = styled(StyledButton)`
-  margin: 0 8px;
-  background-color: ${({ $red }) => $red && "red"};
-  cursor: pointer;
-`;
-
-const BuyButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  padding-top: 10px;
-`;
+import StyledConfirmButtonWrapper from "@/components/StyledComponents/StyledConfirmButtonWrapper";
+import StyledConfirmPopUpButton from "@/components/StyledComponents/StyledConfirmPopUpButton";
 
 const StyledValueButton = styled(Image)`
   transform: scale(1);
@@ -77,9 +65,9 @@ export default function BuyPopUp({
           width={20}
           height={20}
         />
-        <BuyButtonWrapper>
+        <StyledConfirmButtonWrapper>
           {onBuy != null && (
-            <BuyPopUpButton
+            <StyledConfirmPopUpButton
               onClick={() => {
                 if (cost * value <= money) {
                   onBuy(value, id, cost);
@@ -89,14 +77,14 @@ export default function BuyPopUp({
               }}
             >
               Buy
-            </BuyPopUpButton>
+            </StyledConfirmPopUpButton>
           )}
           {onCancel != null && (
-            <BuyPopUpButton $red onClick={onCancel}>
+            <StyledConfirmPopUpButton $red onClick={onCancel}>
               Cancel
-            </BuyPopUpButton>
+            </StyledConfirmPopUpButton>
           )}
-        </BuyButtonWrapper>
+        </StyledConfirmButtonWrapper>
         {budgetLimitReached !== false && (
           <StyledErrorMessage>
             You have not enough money to buy this many items.
