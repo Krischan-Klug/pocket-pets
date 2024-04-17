@@ -4,24 +4,26 @@ Remember Tamagotchis? 2024 it's called pocket pets. ;) In this app you can take 
 
 ## Project
 
-## Key features
+## Key Features
+📱 **Seamless Idea Collection:**  
 
 ## Technologies and Tools
-React | Next.js | Styled Components | zustand | Node.js | MongoDB | Mongoose | useSWR | Vercel 
+[React](https://react.dev/) | [Next.js](https://nextjs.org/) | [styled-components](https://styled-components.com/) | [zustand] (https://zustand-demo.pmnd.rs/) | [KaboomJS] (https://kaboomjs.com/) | [Node.js](https://nodejs.org/en) | [SWR](https://swr.vercel.app/) | [MongoDB](https://www.mongodb.com/) | [Mongoose](https://mongoosejs.com/) | [Vercel](https://vercel.com/) | 
 
 ## Team
-- Krischan Klug
-- Markus Sibbe
-- Nina Weber
+- [Krischan Klug] (https://github.com/Krischan-Klug)
+- [Markus Sibbe] (https://github.com/Miningmark)
+- [Nina Weber] (https://github.com/ninagw)
 
 ## Development
+
 ### Local Development
 
 To work locally, please install the dependencies using `npm i` first.
 
-Run `npm run dev` to start a development server and open the displayed URL in a browser.
+Add local environment variables for MongoDB connection string. To do so create .env.local file in the project's root. Check the env.example file, copy paste the variables into the .env.local and complete it with the corresponding values.
 
-Use `npm run test` to run the tests.
+Run `npm run dev` to start a development server and open the displayed URL in a browser.
 
 ### Scripts
 
