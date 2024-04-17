@@ -416,7 +416,7 @@ export default function PetDetailPage({
               {isDead && (
                 <StyledReviewButton
                   onClick={() => {
-                    if (userStats.money >= 200) {
+                    if (money >= 200) {
                       setConfirmationPopUpContent({
                         ...confirmationPopUpContent,
                         show: true,
