@@ -55,69 +55,68 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       //Globals
       const MOVE_SPEED = 200;
       let MOVE_DOWN = 72;
-      const TIME_LEFT = 30;
       const BULLET_SPEED = 400;
 
-      k.loadSprite("largealien", "/assets/images/pet-invaders/LargeAlien.png");
-      k.loadSprite("enemie1", "/assets/images/pets/bear.png");
-      k.loadSprite("wall", "/assets/images/pets/hen.png");
+      k.loadSprite("enemie1", "/assets/images/pet-invaders/space-invader.png");
+      k.loadSprite("wall", "/assets/images/pet-invaders/wall.png");
+      k.loadSprite("ufo-image", "/assets/images/pet-invaders/ufo.png");
+      k.loadSprite("player-image", actualPet.image);
 
       //Player
-      k.loadSprite("player", actualPet.image);
+      const pet = k.add([
+        k.sprite("player-image"),
+        k.pos(k.width() / 2 - 8, 485),
+        k.scale(0.045),
+        "pet",
+      ]);
       const player = k.add([
-        k.sprite("player"),
-        k.pos(k.width() / 2 - 51, 400),
+        k.sprite("ufo-image"),
+        k.pos(k.width() / 2 - 51, 450),
         k.area(),
         k.body(),
         k.scale(0.2),
         "player",
       ]);
 
-      k.onKeyDown("left", () => {
-        player.move(-MOVE_SPEED, 0);
-      });
-
-      k.onKeyDown("right", () => {
-        player.move(MOVE_SPEED, 0);
-      });
-
-      k.onClick(() => {
-        player.move(MOVE_SPEED, 0);
-      });
-
-      // UI
-      k.add([k.text("Pet Invaders"), k.pos(40, 20)]);
-
-      const level = [
-        "! &&&&&&&&?",
-        "! &&&&&&&&?",
-        "! &&&&&&&&?",
-        "! &&&&&&&&?",
-        "! &&&&&&&&?",
-        "!         ?",
-        "!         ?",
-        "!         ?",
-        "!         ?",
-        "!         ?",
-        "!         ?",
-        "!         ?",
-      ];
-
-      k.addLevel(level, {
-        tileWidth: 36,
-        tileHeight: 36,
-        tiles: {
-          "!": () => [k.sprite("wall"), k.scale(0.001), k.area(), "wall-left"],
-          "?": () => [k.sprite("wall"), k.scale(0.001), k.area(), "wall-right"],
-          "&": () => [
-            k.sprite("enemie1"),
-            k.scale(0.07),
-            k.area(),
-            patrol(),
-            "space-invader",
-          ],
-        },
-      });
+      k.addLevel(
+        [
+          "!         ?",
+          "! &&&&&&&&?",
+          "! &&&&&&&&?",
+          "! &&&&&&&&?",
+          "! &&&&&&&&?",
+          "! &&&&&&&&?",
+          "!         ?",
+          "!         ?",
+          "!         ?",
+          "!         ?",
+          "!         ?",
+          "!         ?",
+          "!         ?",
+          "!         ?",
+        ],
+        {
+          tileWidth: 36,
+          tileHeight: 36,
+          pos: k.vec2(k.width() / 2 - 180, 0),
+          tiles: {
+            "!": () => [
+              k.sprite("wall"),
+              k.scale(0.001),
+              k.area(),
+              "wall-left",
+            ],
+            "?": () => [k.sprite("wall"), k.area(), "wall-right"],
+            "&": () => [
+              k.sprite("enemie1"),
+              k.scale(0.14),
+              k.area(),
+              patrol(),
+              "space-invader",
+            ],
+          },
+        }
+      );
 
       function patrol(INVADER_SPEED = 120, dir = 1) {
         return {
@@ -138,6 +137,16 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
           },
         };
       }
+
+      k.onKeyDown("left", () => {
+        player.move(-MOVE_SPEED, 0);
+        pet.move(-MOVE_SPEED, 0);
+      });
+
+      k.onKeyDown("right", () => {
+        player.move(MOVE_SPEED, 0);
+        pet.move(MOVE_SPEED, 0);
+      });
 
       function spawnBullet(pos) {
         const bullet = k.add([
@@ -160,7 +169,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
         k.destroy(bullet);
         k.destroy(enemy);
         score++;
-        scoreText.text = score;
+        scoreText.text = `Score:${score}`;
       });
 
       k.onCollide("player", "space-invader", (bullet, enemy) => {
@@ -168,21 +177,14 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
         k.go("gameover");
       });
 
-      const scoreText = k.add([k.text("0"), k.pos(50, 50), k.scale(2)]);
+      const scoreText = k.add([k.text("Score:0"), k.pos(10, 10), k.scale(1)]);
 
-      const timer = k.add([
-        k.text("0"),
-        k.pos(50, 100),
-        k.scale(2),
-        {
-          time: TIME_LEFT,
-        },
-      ]);
+      const timer = k.add([k.text("Time:0"), k.pos(10, 50), k.scale(1)]);
 
       function customTime() {
         timeElapsed += k.dt();
-        timer.value = timeElapsed;
-        timer.text = timer.value;
+        //timer.value = timeElapsed;
+        timer.text = `Time:${timeElapsed.toFixed(2)}`;
       }
 
       k.onUpdate(() => {
@@ -218,6 +220,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       ]);
 
       k.add([
+        k.scale(0.7),
         k.text("Press SPACE to End"),
         k.pos(k.center().x, k.center().y + 200),
         k.anchor("center"),
@@ -264,6 +267,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       ]);
 
       k.add([
+        k.scale(0.7),
         k.text("Press SPACE to End"),
         k.pos(k.center().x, k.center().y + 200),
         k.anchor("center"),
