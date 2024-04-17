@@ -1,44 +1,25 @@
 import styled from "styled-components";
-import StyledButton from "../StyledComponents/StyledButton";
 import { useState } from "react";
 import { toys } from "@/lib/shop";
 import InventoryContainer from "./InventoryContainer";
 import Link from "next/link";
-
 import StyledPopUpOverlay from "@/components/StyledComponents/StyledPopUpOverlay";
 import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent";
 import StyledInventoryContainer from "@/components/StyledComponents/StyledInventoryContainer";
-
-const ConfirmPopUpButton = styled(StyledButton)`
-  margin: 0 8px;
-  background-color: ${({ $red }) => $red && "red"};
-  cursor: pointer;
-`;
-
-const ConfirmButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  padding-top: 10px;
-`;
+import StyledConfirmButtonWrapper from "@/components/StyledComponents/StyledConfirmButtonWrapper";
+import StyledConfirmPopUpButton from "@/components/StyledComponents/StyledConfirmPopUpButton";
+import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
 const StyledErrorMessage = styled.p`
   color: red;
 `;
 
-export default function ToyInventoryPopUp({
-  userStats,
-  onPlayButton,
-  onCancel,
-  petId,
-}) {
+export default function ToyInventoryPopUp({ onPlayButton, onCancel, petId }) {
   const [selectedToyItemId, setSelectedToyItemId] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const toyInventory = useInventoryStore((state) => state.toyInventory);
 
-  const availableToy = userStats.inventory.toy.filter((toyItems) => {
-    if (toyItems.purchased === true) {
-      return toyItems;
-    }
-  });
+  const availableToys = toyInventory.filter((toyItem) => toyItem.purchased);
 
   function handleConfirmButtonClick() {
     if (selectedToyItemId === null) {
@@ -64,7 +45,7 @@ export default function ToyInventoryPopUp({
       <StyledPopUpContent>
         <h3>Which toy would you like to use?</h3>
         <StyledInventoryContainer>
-          {availableToy.map((toyItem) => (
+          {availableToys.map((toyItem) => (
             <InventoryContainer
               key={toyItem.id}
               id={toyItem.id}
@@ -76,7 +57,7 @@ export default function ToyInventoryPopUp({
               type="Happiness"
             />
           ))}
-          {availableToy.length === 0 && (
+          {availableToys.length === 0 && (
             <>
               <p>
                 You need to purchase Toys from the shop first before you can
@@ -86,14 +67,14 @@ export default function ToyInventoryPopUp({
             </>
           )}
         </StyledInventoryContainer>
-        <ConfirmButtonWrapper>
-          <ConfirmPopUpButton onClick={handleConfirmButtonClick}>
+        <StyledConfirmButtonWrapper>
+          <StyledConfirmPopUpButton onClick={handleConfirmButtonClick}>
             Play
-          </ConfirmPopUpButton>
-          <ConfirmPopUpButton $red onClick={onCancel}>
+          </StyledConfirmPopUpButton>
+          <StyledConfirmPopUpButton $red onClick={onCancel}>
             Cancel
-          </ConfirmPopUpButton>
-        </ConfirmButtonWrapper>
+          </StyledConfirmPopUpButton>
+        </StyledConfirmButtonWrapper>
         {showErrorMessage && (
           <StyledErrorMessage>You need to select a toy.</StyledErrorMessage>
         )}
