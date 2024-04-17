@@ -35,7 +35,6 @@ import { usePetStore } from "@/hooks/stores/petStore";
 import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
 
-
 const StyledEditImage = styled(Image)`
   transform: scale(1);
   transition: 0.5s;
@@ -196,9 +195,7 @@ export default function PetDetailPage({
 
     const pet = myPets.find((myPet) => myPet.id == id);
     if (!pet) return;
-
     onSetCurrentPet(pet);
-
     if (pet.isDead) return;
 
     const interval = setInterval(() => {
@@ -241,18 +238,7 @@ export default function PetDetailPage({
     );
   }
 
-  const {
-    name,
-    type,
-    image,
-    health,
-    hunger,
-    happiness,
-    energy,
-    isDead,
-    level,
-    xp,
-  } = currentPet;
+  const { name, type, image, isDead, xp } = currentPet;
 
   function handleFeedButton(foodItemId) {
     if (!currentPet.isDead) {
@@ -501,10 +487,10 @@ export default function PetDetailPage({
           onCancel={confirmationPopUpContent.onCancel}
         />
       )}
-      {isEventPopUpActive && (
+      {isEventPopUpActive && petEvent && (
         <ConfirmationPopup
           onConfirm={onDisableIsEventPopUpActive}
-          message={`${petEvent.description}`}
+          message={petEvent.description}
         />
       )}
     </>

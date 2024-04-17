@@ -30,12 +30,12 @@ export const usePetStore = create(
               ...state.currentPet,
               energy: Math.min(Math.max(updatedEnergy, 0), 100),
             };
-            set({
-              currentPet: updatedPet,
-              myPets: state.myPets.map((myPet) =>
-                myPet.id === updatedPet.id ? updatedPet : myPet
+            return {
+              myPets: state.myPets.map((pet) =>
+                pet.id === state.currentPet.id ? updatedPet : pet
               ),
-            });
+              currentPet: updatedPet,
+            };
           }
         }),
 
@@ -48,12 +48,12 @@ export const usePetStore = create(
               ...state.currentPet,
               happiness: Math.min(Math.max(updatedHappiness, 0), 100),
             };
-            set({
-              currentPet: updatedPet,
-              myPets: state.myPets.map((myPet) =>
-                myPet.id === updatedPet.id ? updatedPet : myPet
+            return {
+              myPets: state.myPets.map((pet) =>
+                pet.id === state.currentPet.id ? updatedPet : pet
               ),
-            });
+              currentPet: updatedPet,
+            };
           }
         }),
       onUpdatePetHunger: (hungerToUpdate) =>
@@ -64,12 +64,12 @@ export const usePetStore = create(
               ...state.currentPet,
               hunger: Math.min(Math.max(updatedHunger, 0), 100),
             };
-            set({
-              currentPet: updatedPet,
-              myPets: state.myPets.map((myPet) =>
-                myPet.id === updatedPet.id ? updatedPet : myPet
+            return {
+              myPets: state.myPets.map((pet) =>
+                pet.id === state.currentPet.id ? updatedPet : pet
               ),
-            });
+              currentPet: updatedPet,
+            };
           }
         }),
       onDeletePet: (id) => {

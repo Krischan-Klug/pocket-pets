@@ -85,28 +85,20 @@ export default function App({ Component, pageProps }) {
       }
 
       if (isPetActive && !currentPet.isDead) {
-        console.log("pet event", petEvents);
         const localPetEvent = petEvents[getRandomArrayIndex(petEvents)];
         setPetEvent(localPetEvent);
-        console.log("pet event", petEvent);
         handleEnableIsEventPopUpActive();
-        onUpdatePetEnergy(petEvent.eventValues.energy);
-        onUpdatePetHappiness(petEvent.eventValues.happiness);
-        onUpdatePetHunger(petEvent.eventValues.hunger);
-        addMoney(petEvent.eventValues.money);
+        onUpdatePetEnergy(localPetEvent.eventValues.energy);
+        onUpdatePetHappiness(localPetEvent.eventValues.happiness);
+        onUpdatePetHunger(localPetEvent.eventValues.hunger);
+        addMoney(localPetEvent.eventValues.money);
       }
 
       if (!isPetActive) {
-        console.log("user events", userEvents);
         const localUserEvent = userEvents[getRandomArrayIndex(userEvents)];
-
         setUserEvent(localUserEvent);
-        //pls help !!!
-        if (!userEvent) {
-          console.log("user event", userEvent);
-          handleEnableIsEventPopUpActive();
-          addMoney(userEvent.eventValues.money);
-        }
+        handleEnableIsEventPopUpActive();
+        addMoney(localUserEvent.eventValues.money);
       }
     }
   }, [currentTime]);
@@ -129,7 +121,7 @@ export default function App({ Component, pageProps }) {
             setCurrentSeason((prevSeason) => (prevSeason + 1) % 4);
           }
         }
-      }, 600);
+      }, 60000);
       return () => clearInterval(interval);
     }
   }, [currentTime, router.pathname, setCurrentTime]);
