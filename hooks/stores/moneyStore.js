@@ -8,6 +8,7 @@ export const useMoneyStore = create(
       addMoney: (amount) => set((state) => ({ money: state.money + amount })),
       subtractMoney: (amount) =>
         set((state) => ({ money: state.money - amount })),
+      onResetMoney: () => set({ money: 1000 }),
     }),
     {
       name: "money",

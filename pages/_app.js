@@ -8,12 +8,13 @@ import { useRouter } from "next/router";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { usePetStore } from "@/hooks/stores/petStore";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
+import { useTimeStore } from "@/hooks/stores/timeStore";
 
 export default function App({ Component, pageProps }) {
   const money = useMoneyStore((state) => state.money);
   const addMoney = useMoneyStore((state) => state.addMoney);
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);
-
+  const onResetMoney = useMoneyStore((state) => state.onResetMoney);
   const currentPet = usePetStore((state) => state.currentPet);
   const updatePetsWithNewKeys = usePetStore(
     (state) => state.updatePetsWithNewKeys
@@ -28,6 +29,9 @@ export default function App({ Component, pageProps }) {
     (state) => state.onUpdatePetHappiness
   );
   const onUpdatePetHunger = usePetStore((state) => state.onUpdatePetHunger);
+  const onResetInventory = useInventoryStore((state) => state.onResetInventory);
+  const hour = useTimeStore((state) => state.hour);
+  const addHour = useTimeStore((state) => state.addHour);
 
   const router = useRouter();
 
@@ -329,9 +333,10 @@ export default function App({ Component, pageProps }) {
     setSettingPage(true);
   }
 
-  //TODO:
+  //TODO: inventory and time
   function handleGameReset() {
-    setUserStats(defaultUserStats);
+    onResetInventory();
+    onResetMoney();
     setMyPets([]);
     setSettingPage(false);
   }

@@ -40,6 +40,12 @@ export const useInventoryStore = create(
           ),
         }));
       },
+      onResetInventory: () => {
+        set((state) => ({
+          foodInventory: initialFoods,
+          toyInventory: initialToys,
+        }));
+      },
     }),
     {
       name: "inventory",
