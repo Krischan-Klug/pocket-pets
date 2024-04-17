@@ -73,7 +73,7 @@ export default function TreasureHunt({ onAddMoney }) {
   const [coin, setCoin] = useState(coinsStart);
   const [direction, setDirection] = useState([0, -1]); // first move of currentPet is UP
   const [speed, setSpeed] = useState(null); // pet does not move before the Start button is clicked
-  const [coins, setCoins] = useState(0);
+  const [coins, setCoins] = useState(0); // collected coins
   const [gameOver, setGameOver] = useState(false);
   const [startPopUpContent, setStartPopUpContent] = useState({
     message:
@@ -94,11 +94,11 @@ export default function TreasureHunt({ onAddMoney }) {
   // Invtervall function using custom hook by Dan Abramov
   function useInterval(callback, delay) {
     const savedCallback = useRef();
-    // Remember the latest callback.
+    // Remember the latest callback
     useEffect(() => {
       savedCallback.current = callback;
     }, [callback]);
-    // Set up the interval.
+    // Set up the interval
     useEffect(() => {
       function tick() {
         savedCallback.current();
@@ -137,7 +137,7 @@ export default function TreasureHunt({ onAddMoney }) {
   const createCoin = () =>
     coin.map((_, i) => Math.floor(Math.random() * (gameScreenSize[i] / scale)));
 
-  // ceck collision park fence or with pet crew
+  // ceck collision park fence or with pet
   const checkCollision = (head, newPet = pet) => {
     if (
       head[0] * scale >= gameScreenSize[0] ||
@@ -153,7 +153,7 @@ export default function TreasureHunt({ onAddMoney }) {
     return false;
   };
 
-  // meet and collect new coin
+  // collect new coin
   function checkCoinCollision(newPet) {
     if (newPet[0][0] === coin[0] && newPet[0][1] === coin[1]) {
       let newCoin = createCoin();
@@ -168,7 +168,7 @@ export default function TreasureHunt({ onAddMoney }) {
   }
 
   function gameLoop() {
-    const petCopy = JSON.parse(JSON.stringify(pet)); // the complete line of pets
+    const petCopy = JSON.parse(JSON.stringify(pet)); // the complete pet "line"
     const newPetHead = [
       petCopy[0][0] + direction[0],
       petCopy[0][1] + direction[1],
@@ -187,16 +187,6 @@ export default function TreasureHunt({ onAddMoney }) {
     const context = canvasRef.current.getContext("2d"); // 2d means drawing in 2D instead of e.g. in 3D
     context.setTransform(scale, 0, 0, scale, 0, 0); // each render cycle the scale is set back to 0. this prevents the scale value from adding up
     context.clearRect(0, 0, window.innerWidth, window.innerHeight); // clears the gameScreen before it is rendered again
-
-    // create pet image:
-    // const currentPet = myPets.find((myPet) => myPet.id === id);
-    // console.log("currentPet: ", currentPet);
-
-    // const petImage = new Image();
-    // petImage.onload = () => {
-    //   context.drawImage(petImage, pet[0] * 1, pet[1] * 1, 1, 1);
-    // };
-    // petImage.src = currentPet.image;
 
     context.fillStyle = "#f45d48"; // pet appearance on gameScreen
     pet.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
