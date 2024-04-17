@@ -6,7 +6,7 @@ import styled from "styled-components";
 import MoneyImage from "@/components/util/MoneyImage";
 
 const gameScreenSize = [360, 360];
-const scale = 18; // Pixel width & height of each pet/square
+const scale = 18; // Pixel width & height of each square
 
 const StyledGameScreen = styled.canvas`
   background-color: rgb(134, 189, 61);
@@ -49,29 +49,18 @@ const ButtonContainer = styled.div`
   gap: 20px;
 `;
 
-// object of pet images to use for random new petFriend
-const petImages = {
-  1: "/assets/images/pets/duck.png",
-  2: "/assets/images/pets/hen.png",
-  3: "/assets/images/pets/chameleon.png",
-  4: "/assets/images/pets/jellyfish.png",
-  5: "/assets/images/pets/cat.png",
-  6: "/assets/images/pets/beaver.png",
-  7: "/assets/images/pets/owl.png",
-  8: "/assets/images/pets/bear.png",
-  9: "/assets/images/pets/elephant.png",
-  10: "/assets/images/pets/whale.png",
-  11: "/assets/images/pets/dragon.png",
-  100: "/assets/images/dollar.png",
+// object of games images to use within the game
+const gameImages = {
+  1: "/assets/images/dollar.png",
 };
 
-export default function SundayWalks({ onAddMoney, myPets }) {
+export default function TreasureHunt({ onAddMoney }) {
   const petStart = [
     [12, 16],
     [12, 17],
     [12, 18],
   ];
-  const petFriendStart = [12, 7];
+  const coinsStart = [12, 7];
   const defaultSpeed = 300;
   const defaultDirections = {
     38: [0, -1], // up -> not moving on the x-axis but 1 up on the y-axis
@@ -81,14 +70,14 @@ export default function SundayWalks({ onAddMoney, myPets }) {
   };
 
   const [pet, setPet] = useState(petStart);
-  const [friend, setFriend] = useState(petFriendStart);
+  const [coin, setCoin] = useState(coinsStart);
   const [direction, setDirection] = useState([0, -1]); // first move of currentPet is UP
   const [speed, setSpeed] = useState(null); // pet does not move before the Start button is clicked
   const [coins, setCoins] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [startPopUpContent, setStartPopUpContent] = useState({
     message:
-      "The aim of the game is to collect as many coins as you can. But be careful not to stumble over yourself or harm yourself on the park fences. To change directions use the control buttons on the display. Good luck!",
+      "The aim of the game is to collect as many coins as you can. But be careful not to stumble over yourself or harm yourself on the park fences. To change directions use the control buttons on the display. Have a nice stroll!",
     onConfirm: () => {
       setStartPopUpContent({ ...startPopUpContent, show: false });
       startGame();
@@ -101,17 +90,6 @@ export default function SundayWalks({ onAddMoney, myPets }) {
   const canvasRef = useRef();
   const router = useRouter();
   const { id } = router.query;
-
-  //   useEffect(() => {
-  //     const handleResize = () => {
-  //       setShowMobileControls(window.innerWidth < 600);
-  //     };
-  //     handleResize(); // Initial check
-  //     window.addEventListener("resize", handleResize);
-  //     return () => {
-  //       window.removeEventListener("resize", handleResize);
-  //     };
-  //   }, []);
 
   // Invtervall function using custom hook by Dan Abramov
   function useInterval(callback, delay) {
@@ -136,7 +114,7 @@ export default function SundayWalks({ onAddMoney, myPets }) {
 
   function startGame() {
     setPet(petStart);
-    setFriend(petFriendStart);
+    setCoin(coinsStart);
     setDirection([0, -1]);
     setSpeed(defaultSpeed);
     setGameOver(false);
@@ -156,10 +134,8 @@ export default function SundayWalks({ onAddMoney, myPets }) {
     }
   }
 
-  const createFriend = () =>
-    friend.map((_, i) =>
-      Math.floor(Math.random() * (gameScreenSize[i] / scale))
-    );
+  const createCoin = () =>
+    coin.map((_, i) => Math.floor(Math.random() * (gameScreenSize[i] / scale)));
 
   // ceck collision park fence or with pet crew
   const checkCollision = (head, newPet = pet) => {
@@ -177,14 +153,14 @@ export default function SundayWalks({ onAddMoney, myPets }) {
     return false;
   };
 
-  // meet and collect new friend
-  function checkFriendCollision(newPet) {
-    if (newPet[0][0] === friend[0] && newPet[0][1] === friend[1]) {
-      let newFriend = createFriend();
-      while (checkCollision(newFriend, newPet)) {
-        newFriend = createFriend();
+  // meet and collect new coin
+  function checkCoinCollision(newPet) {
+    if (newPet[0][0] === coin[0] && newPet[0][1] === coin[1]) {
+      let newCoin = createCoin();
+      while (checkCollision(newCoin, newPet)) {
+        newCoin = createCoin();
       }
-      setFriend(newFriend);
+      setCoin(newCoin);
       setCoins(coins + 5); // Add coins
       return true;
     }
@@ -201,7 +177,7 @@ export default function SundayWalks({ onAddMoney, myPets }) {
     if (checkCollision(newPetHead)) {
       endGame();
     }
-    if (!checkFriendCollision(petCopy)) {
+    if (!checkCoinCollision(petCopy)) {
       petCopy.pop();
     } // delete first element of array
     setPet(petCopy);
@@ -226,14 +202,14 @@ export default function SundayWalks({ onAddMoney, myPets }) {
     pet.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
 
     // create coin image:
-    const friendImage = new Image();
-    friendImage.onload = () => {
-      context.drawImage(friendImage, friend[0] * 1, friend[1] * 1, 1, 1);
+    const coinImage = new Image();
+    coinImage.onload = () => {
+      context.drawImage(coinImage, coin[0] * 1, coin[1] * 1, 1, 1);
     };
-    friendImage.src = petImages[100];
+    coinImage.src = gameImages[1];
     context.fillStyle = "rgb(134, 189, 61)";
-    context.fillRect(friend[0], friend[1], 1, 1);
-  }, [pet, friend, gameOver]);
+    context.fillRect(coin[0], coin[1], 1, 1);
+  }, [pet, coin, gameOver]);
 
   return (
     <div>
