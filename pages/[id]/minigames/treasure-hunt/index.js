@@ -34,7 +34,6 @@ const ControlButton = styled.button`
   padding: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
   height: 35px;
