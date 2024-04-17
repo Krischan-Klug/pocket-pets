@@ -6,7 +6,7 @@ import styled from "styled-components";
 import MoneyImage from "@/components/util/MoneyImage";
 
 const gameScreenSize = [360, 360];
-const scale = 18; // Pixel width & height of each pet
+const scale = 18; // Pixel width & height of each pet/square
 
 const StyledGameScreen = styled.canvas`
   background-color: rgb(134, 189, 61);
@@ -19,6 +19,7 @@ const StyledEarnedCoins = styled.div`
   display: flex;
   align-items: center;
   margin: 0;
+  gap: 5px;
 `;
 
 const StyledMobileControlsContainer = styled.section`
@@ -87,7 +88,7 @@ export default function SundayWalks({ onAddMoney, myPets }) {
   const [gameOver, setGameOver] = useState(false);
   const [startPopUpContent, setStartPopUpContent] = useState({
     message:
-      "The aim of the game is to collect as many pet coins as you can. But be careful not to stumble over yourself or harm yourself on the park fences. To change directions use the control buttons on the display. Good luck!",
+      "The aim of the game is to collect as many coins as you can. But be careful not to stumble over yourself or harm yourself on the park fences. To change directions use the control buttons on the display. Good luck!",
     onConfirm: () => {
       setStartPopUpContent({ ...startPopUpContent, show: false });
       startGame();
