@@ -23,11 +23,7 @@ export default function HungerInventoryPopUp({
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const foodInventory = useInventoryStore((state) => state.foodInventory);
 
-  const availableFood = foodInventory.filter((fooditems) => {
-    if (fooditems.value > 0) {
-      return fooditems;
-    }
-  });
+  const availableFoods = foodInventory.filter((fooditem) => fooditem.value > 0);
 
   function handleConfirmButtonClick() {
     if (selectedFoodItemId === 0) {
@@ -53,7 +49,7 @@ export default function HungerInventoryPopUp({
       <StyledPopUpContent>
         <h3>What food item would you like to feed?</h3>
         <StyledInventoryContainer>
-          {availableFood.map((fooditem) => (
+          {availableFoods.map((fooditem) => (
             <InventoryContainer
               key={fooditem.id}
               id={fooditem.id}
@@ -66,7 +62,7 @@ export default function HungerInventoryPopUp({
               type="Hunger"
             />
           ))}
-          {availableFood.length === 0 && (
+          {availableFoods.length === 0 && (
             <>
               <p>
                 You need to purchase food items from the shop first before you

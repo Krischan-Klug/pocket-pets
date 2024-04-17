@@ -19,11 +19,7 @@ export default function ToyInventoryPopUp({ onPlayButton, onCancel, petId }) {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const toyInventory = useInventoryStore((state) => state.toyInventory);
 
-  const availableToy = toyInventory.filter((toyItems) => {
-    if (toyItems.purchased === true) {
-      return toyItems;
-    }
-  });
+  const availableToys = toyInventory.filter((toyItem) => toyItem.purchased);
 
   function handleConfirmButtonClick() {
     if (selectedToyItemId === null) {
@@ -49,7 +45,7 @@ export default function ToyInventoryPopUp({ onPlayButton, onCancel, petId }) {
       <StyledPopUpContent>
         <h3>Which toy would you like to use?</h3>
         <StyledInventoryContainer>
-          {availableToy.map((toyItem) => (
+          {availableToys.map((toyItem) => (
             <InventoryContainer
               key={toyItem.id}
               id={toyItem.id}
@@ -61,7 +57,7 @@ export default function ToyInventoryPopUp({ onPlayButton, onCancel, petId }) {
               type="Happiness"
             />
           ))}
-          {availableToy.length === 0 && (
+          {availableToys.length === 0 && (
             <>
               <p>
                 You need to purchase Toys from the shop first before you can

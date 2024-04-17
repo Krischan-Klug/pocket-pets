@@ -41,7 +41,7 @@ export const useInventoryStore = create(
         }));
       },
       onResetInventory: () => {
-        set((state) => ({
+        set(() => ({
           foodInventory: initialFoods,
           toyInventory: initialToys,
         }));

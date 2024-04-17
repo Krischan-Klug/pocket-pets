@@ -66,7 +66,7 @@ export default function BuyPopUp({
           height={20}
         />
         <StyledConfirmButtonWrapper>
-          {onBuy != null && (
+          {onBuy && (
             <StyledConfirmPopUpButton
               onClick={() => {
                 if (cost * value <= money) {
@@ -79,7 +79,7 @@ export default function BuyPopUp({
               Buy
             </StyledConfirmPopUpButton>
           )}
-          {onCancel != null && (
+          {onCancel && (
             <StyledConfirmPopUpButton $red onClick={onCancel}>
               Cancel
             </StyledConfirmPopUpButton>

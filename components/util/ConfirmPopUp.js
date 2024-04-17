@@ -15,12 +15,12 @@ export default function ConfirmationPopup({
       <StyledPopUpContent>
         <p>{message}</p>
         <StyledConfirmButtonWrapper>
-          {onConfirm != null && (
+          {onConfirm && (
             <StyledConfirmPopUpButton onClick={onConfirm}>
               {confirmText ? confirmText : "Confirm"}
             </StyledConfirmPopUpButton>
           )}
-          {onCancel != null && (
+          {onCancel && (
             <StyledConfirmPopUpButton $red onClick={onCancel}>
               {cancelText ? cancelText : "Cancel"}
             </StyledConfirmPopUpButton>
