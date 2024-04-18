@@ -8,6 +8,7 @@ import MoneyCounter from "@/components/util/MoneyCounter";
 import { StyledStaticBackground } from "@/components/StyledComponents/StyledBackgroundImage";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { usePetStore } from "@/hooks/stores/petStore";
+import { useAchievementStore } from "@/hooks/stores/achievementStore";
 
 const StyledPetCollectionHeader = styled.header`
   height: 120px;
@@ -54,6 +55,9 @@ export default function HomePage({
   const router = useRouter();
 
   const money = useMoneyStore((state) => state.money);
+  const updateAchievementCurrentAmount = useAchievementStore(
+    (state) => state.updateAchievementCurrentAmount
+  );
 
   useEffect(() => {
     onDisablePetIsActive();
@@ -73,6 +77,7 @@ export default function HomePage({
 
   function handleConfirmDelete() {
     onDeletePet(selectedPetId);
+    updateAchievementCurrentAmount(2, 1);
     handleToggleDelete();
     setSelectedPetId(null);
   }
