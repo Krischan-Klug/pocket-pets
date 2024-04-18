@@ -66,17 +66,12 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       const player = k.add([
         k.sprite("player-image"),
         k.pos(k.width() / 2 - 20, 470),
-        k.area(100, 100),
+        k.area({ scale: 3, offset: k.vec2(-130, 0) }),
         k.body(),
         k.scale(0.07),
-        "pet",
-      ]);
-      player.add([
-        k.sprite("ufo-image"),
-        k.pos(-550, -600),
-        k.scale(3.5),
         "player",
       ]);
+      player.add([k.sprite("ufo-image"), k.pos(-550, -600), k.scale(3.5)]);
 
       //playerborder
       const leftBorder = k.add([
@@ -114,7 +109,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       k.addLevel(level, {
         tileWidth: 36,
         tileHeight: 36,
-        pos: k.vec2(k.width() / 2 - 180, 0),
+        pos: k.vec2(k.width() / 2 - 216, 0),
         tiles: {
           "!": () => [k.sprite("wall"), k.area(), "wall-left"],
           "?": () => [k.sprite("wall"), k.area(), "wall-right"],
@@ -169,7 +164,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       }
 
       k.onKeyPress("space", () => {
-        spawnBullet(player.pos.add(51, -25));
+        spawnBullet(player.pos.add(20, -25));
       });
 
       k.onCollide("bullet", "space-invader", (bullet, enemy) => {
