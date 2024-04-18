@@ -6,6 +6,19 @@ export const useAchievementStore = create(
   persist(
     (set) => ({
       allAchievements: achievements,
+      updatedAchievementsWithNewKeys: () => {
+        set((state) => ({
+          allAchievements: [
+            ...state.allAchievements,
+            ...achievements.filter(
+              (achievement) =>
+                !state.allAchievements.some(
+                  (item) => item.id === achievement.id
+                )
+            ),
+          ],
+        }));
+      },
       updateAchievementCurrentAmount: (id, amount) => {
         set((state) => {
           const updatedAchievements = state.allAchievements.map((achievement) =>
