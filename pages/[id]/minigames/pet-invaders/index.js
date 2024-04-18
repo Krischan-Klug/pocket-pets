@@ -62,58 +62,69 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       //Player
       const pet = k.add([
         k.sprite("player-image"),
-        k.pos(k.width() / 2 - 8, 485),
-        k.scale(0.045),
+        k.pos(k.width() / 2 - 20, 470),
+        k.area(100, 100),
+        k.body(),
+        k.scale(0.07),
         "pet",
       ]);
-      const player = k.add([
+      player.add([
         k.sprite("ufo-image"),
-        k.pos(k.width() / 2 - 51, 450),
-        k.area(),
-        k.body(),
-        k.scale(0.2),
+        k.pos(-550, -600),
+        k.scale(3.5),
         "player",
       ]);
+      player.add([k.sprite("ufo-image"), k.pos(-550, -600), k.scale(3.5)]);
 
-      k.addLevel(
-        [
-          "!         ?",
-          "! &&&&&&&&?",
-          "! &&&&&&&&?",
-          "! &&&&&&&&?",
-          "! &&&&&&&&?",
-          "! &&&&&&&&?",
-          "!         ?",
-          "!         ?",
-          "!         ?",
-          "!         ?",
-          "!         ?",
-          "!         ?",
-          "!         ?",
-          "!         ?",
-        ],
-        {
-          tileWidth: 36,
-          tileHeight: 36,
-          pos: k.vec2(k.width() / 2 - 180, 0),
-          tiles: {
-            "!": () => [
-              k.sprite("wall"),
-              k.scale(0.001),
-              k.area(),
-              "wall-left",
-            ],
-            "?": () => [k.sprite("wall"), k.area(), "wall-right"],
-            "&": () => [
-              k.sprite("enemie1"),
-              k.scale(0.14),
-              k.area(),
-              patrol(),
-              "space-invader",
-            ],
-          },
-        }
-      );
+      //playerborder
+      const leftBorder = k.add([
+        k.sprite("wall"),
+        k.pos(k.width() / 2 - 215, 485),
+        k.area(),
+        k.body({ isStatic: true }),
+        "leftBorder",
+      ]);
+      const rightBorder = k.add([
+        k.sprite("wall"),
+        k.pos(k.width() / 2 + 180, 485),
+        k.area(),
+        k.body({ isStatic: true }),
+        "rightBorder",
+      ]);
+
+      const level = [
+        "!          ?",
+        "!  &&&&&&&&?",
+        "!  &&&&&&&&?",
+        "!  &&&&&&&&?",
+        "!  &&&&&&&&?",
+        "!  &&&&&&&&?",
+        "!  &&&&&&&&?",
+        "!          ?",
+        "!          ?",
+        "!          ?",
+        "!          ?",
+        "!          ?",
+        "!          ?",
+        "!          ?",
+      ];
+
+      k.addLevel(level, {
+        tileWidth: 36,
+        tileHeight: 36,
+        pos: k.vec2(k.width() / 2 - 180, 0),
+        tiles: {
+          "!": () => [k.sprite("wall"), k.area(), "wall-left"],
+          "?": () => [k.sprite("wall"), k.area(), "wall-right"],
+          "&": () => [
+            k.sprite("enemie1"),
+            k.scale(0.13),
+            k.area(),
+            patrol(),
+            "space-invader",
+          ],
+        },
+      });
 
       function patrol(INVADER_SPEED = 120, dir = 1) {
         return {
