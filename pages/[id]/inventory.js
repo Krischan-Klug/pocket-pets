@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { foods, toys } from "@/lib/shop";
 import Link from "next/link";
+import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
 import ItemCard from "@/components/Inventory/ItemCard";
 
@@ -58,18 +59,21 @@ export default function Inventory({ userStats }) {
   const headerRef = useRef(null);
   const tabContainerRef = useRef(null);
 
+  const foodInventory = useInventoryStore((state) => state.foodInventory);
+  const toyInventory = useInventoryStore((state) => state.toyInventory);
+
   useEffect(() => {
     setHeaderHeight(headerRef.current.offsetHeight);
     setTabContainerHeight(tabContainerRef.current.offsetHeight);
   }, []);
 
-  const availableFood = userStats.inventory.food.filter((fooditem) => {
+  const availableFood = foodInventory.filter((fooditem) => {
     if (fooditem.value > 0) {
       return fooditem;
     }
   });
 
-  const availableToys = userStats.inventory.toy.filter((toyitem) => {
+  const availableToys = toyInventory.filter((toyitem) => {
     if (toyitem.purchased === true) {
       return toyitem;
     }

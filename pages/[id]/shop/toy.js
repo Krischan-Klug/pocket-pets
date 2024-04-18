@@ -7,24 +7,27 @@ import MoneyCounter from "@/components/util/MoneyCounter";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
-export default function ToyShop({ userStats, onUpdateInventoryToy }) {
+export default function ToyShop() {
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);
+  const money = useMoneyStore((state) => state.money);
   const [selectedToyId, setSelectedToyId] = useState(null);
   const [itemCost, setItemCost] = useState(0);
   const router = useRouter();
   const { id } = router.query;
 
+  const onUpdateToy = useInventoryStore((state) => state.onUpdateToy);
+  const toyInventory = useInventoryStore((state) => state.toyInventory);
+
   function isToyPurchased(id) {
-    return userStats.inventory.toy.some(
-      (toy) => toy.id === id && toy.purchased
-    );
+    return toyInventory.some((toy) => toy.id === id && toy.purchased);
   }
 
   function selectToyItemToBuy(toyId, cost) {
     if (isToyPurchased(toyId)) {
       setSelectedToyId(-2);
-    } else if (userStats.money >= cost) {
+    } else if (money >= cost) {
       setSelectedToyId(toyId);
     } else {
       setSelectedToyId(-1);
@@ -33,7 +36,7 @@ export default function ToyShop({ userStats, onUpdateInventoryToy }) {
   }
 
   function confirmBuy() {
-    onUpdateInventoryToy(selectedToyId);
+    onUpdateToy(selectedToyId);
     setSelectedToyId(null);
     subtractMoney(itemCost);
   }
@@ -45,7 +48,7 @@ export default function ToyShop({ userStats, onUpdateInventoryToy }) {
           Back
         </StyledLeftButton>
         <h1>Toy Shop</h1>
-        <MoneyCounter money={userStats.money} />
+        <MoneyCounter money={money} />
       </StyledDefaultHeader>
       <main>
         <ShopTable

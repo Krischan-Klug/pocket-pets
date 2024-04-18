@@ -7,10 +7,12 @@ import MoneyCounter from "@/components/util/MoneyCounter";
 import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import BuyPopUp from "@/components/util/BuyPopUp";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
-export default function FoodShop({ onUpdateInventoryFood }) {
+export default function FoodShop() {
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);
   const money = useMoneyStore((state) => state.money);
+  const onUpdateFood = useInventoryStore((state) => state.onUpdateFood);
   const [selectedFoodId, setSelectedFoodId] = useState(null);
   const [itemCost, setItemCost] = useState(0);
   const router = useRouter();
@@ -22,7 +24,7 @@ export default function FoodShop({ onUpdateInventoryFood }) {
   }
 
   function confirmBuy(value, id, cost) {
-    onUpdateInventoryFood(value, id);
+    onUpdateFood(value, id);
     setSelectedFoodId(null);
     subtractMoney(cost * value);
   }
