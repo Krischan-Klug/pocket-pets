@@ -7,12 +7,9 @@ import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 import { useRouter } from "next/router";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { usePetStore } from "@/hooks/stores/petStore";
-
 import { petEvents, userEvents } from "@/lib/events";
-
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
-
 
 export default function App({ Component, pageProps }) {
   const addMoney = useMoneyStore((state) => state.addMoney);
@@ -39,22 +36,6 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   const [settingPageShow, setSettingPage] = useState(false);
-
-  //Hour
-  const [currentTime, setCurrentTime] = useLocalStorageState("currentTime", {
-    defaultValue: 0,
-  });
-  //Day
-  const [currentDay, setCurrentDay] = useLocalStorageState("currentDay", {
-    defaultValue: 1,
-  });
-  //Season
-  const [currentSeason, setCurrentSeason] = useLocalStorageState(
-    "currentSeason",
-    {
-      defaultValue: 0,
-    }
-  );
 
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
@@ -90,7 +71,10 @@ export default function App({ Component, pageProps }) {
   }
 
   useEffect(() => {
-    if (!dailyEvent && eventTime === currentTime) {
+    if (hour === 0) {
+      setDailyEvent(false);
+    }
+    if (!dailyEvent && eventTime === hour) {
       setEventTime(getRandomDayTime());
       setDailyEvent(true);
 
@@ -115,7 +99,7 @@ export default function App({ Component, pageProps }) {
         addMoney(localUserEvent.eventValues.money);
       }
     }
-  }, [currentTime]);
+  }, [hour]);
 
   //Clock
 
@@ -125,20 +109,11 @@ export default function App({ Component, pageProps }) {
       router.pathname === "/pet-detail-page/[id]"
     ) {
       const interval = setInterval(() => {
-        if (currentTime < 23) {
-          setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
-        } else {
-          setCurrentTime(0);
-          setDailyEvent(false);
-          setCurrentDay((prevCurrentDay) => prevCurrentDay + 1);
-          if ((currentDay + 1) % 8 === 0) {
-            setCurrentSeason((prevSeason) => (prevSeason + 1) % 4);
-          }
-        }
+        addHour();
       }, 60000);
       return () => clearInterval(interval);
     }
-  }, [currentTime, router.pathname, setCurrentTime]);
+  }, [router.pathname, hour]);
 
   //Rain mechanic
   const [isRaining, setIsRaining] = useLocalStorageState("isRaining", {
@@ -205,9 +180,9 @@ export default function App({ Component, pageProps }) {
       <Component
         {...pageProps}
         onGameUpdate={handleGameUpdate}
-        currentTime={currentTime}
-        currentDay={currentDay}
-        currentSeason={currentSeason}
+        currentTime={hour}
+        currentDay={2}
+        currentSeason={1}
         isRaining={isRaining}
         onEnablePetIsActive={handleEnablePetIsActive}
         onDisablePetIsActive={handleDisablePetIsActive}

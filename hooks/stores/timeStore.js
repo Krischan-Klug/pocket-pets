@@ -11,7 +11,7 @@ export const useTimeStore = create(
         set((state) => {
           const { hour, day, season } = state;
           if (hour < 23) {
-            return { hour: hour + 1, day, season };
+            return { hour: hour + 1 };
           } else {
             let newDay = day + 1;
             let newSeason = season;
