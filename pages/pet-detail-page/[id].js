@@ -35,6 +35,7 @@ import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
+
 const StyledEditImage = styled(Image)`
   transform: scale(1);
   transition: 0.5s;
@@ -195,9 +196,7 @@ export default function PetDetailPage({
 
     const pet = myPets.find((myPet) => myPet.id == id);
     if (!pet) return;
-
     onSetCurrentPet(pet);
-
     if (pet.isDead) return;
 
     const interval = setInterval(() => {
@@ -491,10 +490,10 @@ export default function PetDetailPage({
           onCancel={confirmationPopUpContent.onCancel}
         />
       )}
-      {isEventPopUpActive && (
+      {isEventPopUpActive && petEvent && (
         <ConfirmationPopup
           onConfirm={onDisableIsEventPopUpActive}
-          message={`${petEvent.description}`}
+          message={petEvent.description}
         />
       )}
     </>

@@ -26,42 +26,50 @@ export const usePetStore = create(
         set((state) => {
           if (!state.currentPet.isDead) {
             const updatedEnergy = state.currentPet.energy + energyToUpdate;
-
-            const updatedPet = set((state) => ({
-              currentPet: {
-                ...state.currentPet,
-                energy: Math.min(Math.max(updatedEnergy, 0), 100),
-              },
-            }));
-            onUpdatePet(updatedPet);
+            const updatedPet = {
+              ...state.currentPet,
+              energy: Math.min(Math.max(updatedEnergy, 0), 100),
+            };
+            return {
+              myPets: state.myPets.map((pet) =>
+                pet.id === state.currentPet.id ? updatedPet : pet
+              ),
+              currentPet: updatedPet,
+            };
           }
         }),
 
-      onUpdatePetHappiness: (HappinessToUpdate) =>
+      onUpdatePetHappiness: (happinessToUpdate) =>
         set((state) => {
           if (!state.currentPet.isDead) {
             const updatedHappiness =
-              state.currentPet.happiness + HappinessToUpdate;
-            const updatedPet = set((state) => ({
-              currentPet: {
-                ...state.currentPet,
-                happiness: Math.min(Math.max(updatedHappiness, 0), 100),
-              },
-            }));
-            onUpdatePet(updatedPet);
+              state.currentPet.happiness + happinessToUpdate;
+            const updatedPet = {
+              ...state.currentPet,
+              happiness: Math.min(Math.max(updatedHappiness, 0), 100),
+            };
+            return {
+              myPets: state.myPets.map((pet) =>
+                pet.id === state.currentPet.id ? updatedPet : pet
+              ),
+              currentPet: updatedPet,
+            };
           }
         }),
-      onUpdatePetHunger: (HungerToUpdate) =>
+      onUpdatePetHunger: (hungerToUpdate) =>
         set((state) => {
           if (!state.currentPet.isDead) {
-            const updatedHunger = state.currentPet.hunger + HungerToUpdate;
-            const updatedPet = set((state) => ({
-              currentPet: {
-                ...state.currentPet,
-                hunger: Math.min(Math.max(updatedHunger, 0), 100),
-              },
-            }));
-            onUpdatePet(updatedPet);
+            const updatedHunger = state.currentPet.hunger + hungerToUpdate;
+            const updatedPet = {
+              ...state.currentPet,
+              hunger: Math.min(Math.max(updatedHunger, 0), 100),
+            };
+            return {
+              myPets: state.myPets.map((pet) =>
+                pet.id === state.currentPet.id ? updatedPet : pet
+              ),
+              currentPet: updatedPet,
+            };
           }
         }),
       onDeletePet: (id) => {
