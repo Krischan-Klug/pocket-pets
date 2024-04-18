@@ -454,14 +454,18 @@ export default function App({ Component, pageProps }) {
         userEvent={userEvent}
         petEvent={petEvent}
       />
-      <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
+      {
+        //<SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
+      }
       {settingPageShow && (
         <SettingPopUp
           onSettingPageClose={handleSettingPageClose}
           handleGameReset={handleGameReset}
         />
       )}
-      <AudioInterface />
+      {
+        //<AudioInterface />
+      }
     </>
   );
 }
