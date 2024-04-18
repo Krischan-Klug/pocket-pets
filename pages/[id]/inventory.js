@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { foods, toys } from "@/lib/shop";
+import { foods, toys, clothes } from "@/lib/shop";
 import Link from "next/link";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
@@ -61,6 +61,7 @@ export default function Inventory({ userStats }) {
 
   const foodInventory = useInventoryStore((state) => state.foodInventory);
   const toyInventory = useInventoryStore((state) => state.toyInventory);
+  const clothesInventory = useInventoryStore((state) => state.clothesInventory);
 
   useEffect(() => {
     setHeaderHeight(headerRef.current.offsetHeight);
@@ -76,6 +77,12 @@ export default function Inventory({ userStats }) {
   const availableToys = toyInventory.filter((toyitem) => {
     if (toyitem.purchased === true) {
       return toyitem;
+    }
+  });
+
+  const availableClothes = clothesInventory.filter((clothesitem) => {
+    if (clothesitem.purchased === true) {
+      return clothesitem;
     }
   });
 
