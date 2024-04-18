@@ -7,16 +7,12 @@ import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 import { useRouter } from "next/router";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { usePetStore } from "@/hooks/stores/petStore";
-
 import { petEvents, userEvents } from "@/lib/events";
-
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
 
-
 export default function App({ Component, pageProps }) {
   const addMoney = useMoneyStore((state) => state.addMoney);
-  const subtractMoney = useMoneyStore((state) => state.subtractMoney);
   const onResetMoney = useMoneyStore((state) => state.onResetMoney);
   const currentPet = usePetStore((state) => state.currentPet);
   const updatePetsWithNewKeys = usePetStore(
@@ -27,34 +23,17 @@ export default function App({ Component, pageProps }) {
   );
   const setMyPets = usePetStore((state) => state.setMyPets);
   const myPets = usePetStore((state) => state.myPets);
-  const onUpdatePetEnergy = usePetStore((state) => state.onUpdatePetEnergy);
-  const onUpdatePetHappiness = usePetStore(
-    (state) => state.onUpdatePetHappiness
+  const onUpdateActivePetValues = usePetStore(
+    (state) => state.onUpdateActivePetValues
   );
-  const onUpdatePetHunger = usePetStore((state) => state.onUpdatePetHunger);
   const onResetInventory = useInventoryStore((state) => state.onResetInventory);
   const hour = useTimeStore((state) => state.hour);
   const addHour = useTimeStore((state) => state.addHour);
+  const onResetTime = useTimeStore((state) => state.onResetTime);
 
   const router = useRouter();
 
   const [settingPageShow, setSettingPage] = useState(false);
-
-  //Hour
-  const [currentTime, setCurrentTime] = useLocalStorageState("currentTime", {
-    defaultValue: 0,
-  });
-  //Day
-  const [currentDay, setCurrentDay] = useLocalStorageState("currentDay", {
-    defaultValue: 1,
-  });
-  //Season
-  const [currentSeason, setCurrentSeason] = useLocalStorageState(
-    "currentSeason",
-    {
-      defaultValue: 0,
-    }
-  );
 
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
@@ -89,8 +68,12 @@ export default function App({ Component, pageProps }) {
     return Math.floor(Math.random() * 24);
   }
 
+  //Event System
   useEffect(() => {
-    if (!dailyEvent && eventTime === currentTime) {
+    if (hour === 0) {
+      setDailyEvent(false);
+    }
+    if (!dailyEvent && eventTime === hour) {
       setEventTime(getRandomDayTime());
       setDailyEvent(true);
 
@@ -102,9 +85,11 @@ export default function App({ Component, pageProps }) {
         const localPetEvent = petEvents[getRandomArrayIndex(petEvents)];
         setPetEvent(localPetEvent);
         handleEnableIsEventPopUpActive();
-        onUpdatePetEnergy(localPetEvent.eventValues.energy);
-        onUpdatePetHappiness(localPetEvent.eventValues.happiness);
-        onUpdatePetHunger(localPetEvent.eventValues.hunger);
+        onUpdateActivePetValues({
+          hunger: localPetEvent.eventValues.hunger,
+          energy: localPetEvent.eventValues.energy,
+          happiness: localPetEvent.eventValues.happiness,
+        });
         addMoney(localPetEvent.eventValues.money);
       }
 
@@ -115,30 +100,20 @@ export default function App({ Component, pageProps }) {
         addMoney(localUserEvent.eventValues.money);
       }
     }
-  }, [currentTime]);
+  }, [hour]);
 
-  //Clock
-
+  //Main Clock
   useEffect(() => {
     if (
       router.pathname === "/" ||
       router.pathname === "/pet-detail-page/[id]"
     ) {
       const interval = setInterval(() => {
-        if (currentTime < 23) {
-          setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
-        } else {
-          setCurrentTime(0);
-          setDailyEvent(false);
-          setCurrentDay((prevCurrentDay) => prevCurrentDay + 1);
-          if ((currentDay + 1) % 8 === 0) {
-            setCurrentSeason((prevSeason) => (prevSeason + 1) % 4);
-          }
-        }
+        addHour();
       }, 60000);
       return () => clearInterval(interval);
     }
-  }, [currentTime, router.pathname, setCurrentTime]);
+  }, [router.pathname, hour]);
 
   //Rain mechanic
   const [isRaining, setIsRaining] = useLocalStorageState("isRaining", {
@@ -179,24 +154,8 @@ export default function App({ Component, pageProps }) {
     onResetInventory();
     onResetMoney();
     setMyPets([]);
+    onResetTime();
     setSettingPage(false);
-  }
-
-  function handleGameUpdate(updateId, isSleep) {
-    setMyPets(
-      myPets.map((pet) =>
-        pet.id === updateId
-          ? {
-              ...pet,
-              health: (pet.hunger + pet.happiness + pet.energy) / 3,
-              hunger: Math.max(pet.hunger - 1, 0),
-              happiness: Math.max(pet.happiness - 0.75, 0),
-              energy: isSleep ? 100 : Math.max(pet.energy - 0.5, 0),
-              isDead: pet.health > 10 ? false : true,
-            }
-          : pet
-      )
-    );
   }
 
   return (
@@ -204,10 +163,6 @@ export default function App({ Component, pageProps }) {
       <GlobalStyle />
       <Component
         {...pageProps}
-        onGameUpdate={handleGameUpdate}
-        currentTime={currentTime}
-        currentDay={currentDay}
-        currentSeason={currentSeason}
         isRaining={isRaining}
         onEnablePetIsActive={handleEnablePetIsActive}
         onDisablePetIsActive={handleDisablePetIsActive}
