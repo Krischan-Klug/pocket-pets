@@ -34,7 +34,7 @@ import { usePetStore } from "@/hooks/stores/petStore";
 import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
-
+import { useTimeStore } from "@/hooks/stores/timeStore";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -151,9 +151,6 @@ const StyledReviewButton = styled(StyledButton)`
 
 export default function PetDetailPage({
   onGameUpdate,
-  currentTime,
-  currentDay,
-  currentSeason,
   isRaining,
   onEnablePetIsActive,
   petEvent,
@@ -167,6 +164,9 @@ export default function PetDetailPage({
   const onSetCurrentPet = usePetStore((state) => state.onSetCurrentPet);
   const onUpdateFood = useInventoryStore((state) => state.onUpdateFood);
   const money = useMoneyStore((state) => state.money);
+  const hour = useTimeStore((state) => state.hour);
+  const day = useTimeStore((state) => state.day);
+  const season = useTimeStore((state) => state.season);
 
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
@@ -305,14 +305,11 @@ export default function PetDetailPage({
   return (
     <>
       <StyledBackgroundImageWrapper>
-        <StyledTimeBackground
-          currenttime={currentTime}
-          currentseason={currentSeason}
-        />
+        <StyledTimeBackground currenttime={hour} currentseason={season} />
         {isRaining && (
           <StyledRainBackground
-            iswinter={currentSeason === 3 ? "true" : "false"}
-            currentseason={currentSeason}
+            iswinter={season === 3 ? "true" : "false"}
+            currentseason={season}
           />
         )}
 
@@ -336,8 +333,8 @@ export default function PetDetailPage({
               Level: <span>{calculateLevel(xp)}</span>
             </StyledXPBar>
           </StyledNameSection>
-          <Calendar day={currentDay} season={currentSeason} />
-          <Clock hour={currentTime} />
+          <Calendar day={day} season={season} />
+          <Clock hour={hour} />
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
             <StatusBar text={"Hunger"} value={currentPet.hunger} />

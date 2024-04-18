@@ -180,9 +180,6 @@ export default function App({ Component, pageProps }) {
       <Component
         {...pageProps}
         onGameUpdate={handleGameUpdate}
-        currentTime={hour}
-        currentDay={2}
-        currentSeason={1}
         isRaining={isRaining}
         onEnablePetIsActive={handleEnablePetIsActive}
         onDisablePetIsActive={handleDisablePetIsActive}
