@@ -101,8 +101,8 @@ export default function Inventory({ userStats }) {
   }
 
   function findClothesValuesById(id) {
-    const clothes = clothes.find((item) => item.id === id);
-    return clothes;
+    const clothesItem = clothes.find((item) => item.id === id);
+    return clothesItem;
   }
 
   return (

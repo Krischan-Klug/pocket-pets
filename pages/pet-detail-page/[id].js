@@ -359,20 +359,30 @@ export default function PetDetailPage({
               Inventory
             </StyledButton>
             <StyledButton
-              onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
+              onClick={() => {
+                router.push(`/edit/${id}/`);
+              }}
             >
-              Obstacle Jumper
+              Dressing Room
             </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/merge-pets/`)}
-            >
-              Merge Pets
-            </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/treasure-hunt/`)}
-            >
-              Treasure Hunt
-            </StyledButton>
+            {/* the following div is just a quick fix. all minigames will be combined in a drop down */}
+            <div>
+              <StyledButton
+                onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
+              >
+                Obstacle Jumper
+              </StyledButton>
+              <StyledButton
+                onClick={() => router.push(`/${id}/minigames/merge-pets/`)}
+              >
+                Merge Pets
+              </StyledButton>
+              <StyledButton
+                onClick={() => router.push(`/${id}/minigames/treasure-hunt/`)}
+              >
+                Treasure Hunt
+              </StyledButton>
+            </div>
           </StyledMoneyHandleSection>
         </header>
         <StyledPetDetailPageMain>
