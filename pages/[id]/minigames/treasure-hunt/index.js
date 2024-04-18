@@ -4,6 +4,7 @@ import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import styled from "styled-components";
 import MoneyImage from "@/components/util/MoneyImage";
+import { useAchievementStore } from "@/hooks/stores/achievementStore";
 
 const gameScreenSize = [360, 360];
 const scale = 18; // Pixel width & height of each square
@@ -54,6 +55,9 @@ const gameImages = {
 };
 
 export default function TreasureHunt({ onAddMoney }) {
+  const updateAchievementCurrentAmount = useAchievementStore(
+    (state) => state.updateAchievementCurrentAmount
+  );
   const petStart = [
     [12, 16],
     [12, 17],
@@ -261,6 +265,7 @@ export default function TreasureHunt({ onAddMoney }) {
             message={`Congrats, you found ${coins} pet coins!`}
             onConfirm={() => {
               onAddMoney(coins);
+              updateAchievementCurrentAmount(3, coins);
               router.push(`/pet-detail-page/${id}`);
             }}
           />

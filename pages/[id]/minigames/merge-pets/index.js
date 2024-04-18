@@ -6,6 +6,7 @@ import StyledButton from "@/components/StyledComponents/StyledButton";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
+import { useAchievementStore } from "@/hooks/stores/achievementStore";
 
 const PlayGround = styled.div`
   display: grid;
@@ -98,7 +99,9 @@ export default function MergePets({}) {
   const router = useRouter();
   const id = router.query.id;
   const addMoney = useMoneyStore((state) => state.addMoney);
-
+  const updateAchievementCurrentAmount = useAchievementStore(
+    (state) => state.updateAchievementCurrentAmount
+  );
   //Create a new grid when the page is loaded
   useEffect(() => {
     const grid = [];
@@ -357,6 +360,7 @@ export default function MergePets({}) {
         message: `Game over, your high score is: ${endPoints}. For this you get ${money} 🪙!`,
         onConfirm: () => {
           addMoney(money);
+          updateAchievementCurrentAmount(3, money);
           router.push(`/pet-detail-page/${id}`);
         },
       });
