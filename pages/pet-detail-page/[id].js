@@ -17,7 +17,7 @@ import StyledXPBar from "@/components/DetailPage/StyledXPBar";
 import {
   calculateLevel,
   percentageLevelProgress,
-} from "@/components/DetailPage/calculateLevel";
+} from "@/components/util/calculateLevel";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
@@ -150,7 +150,6 @@ const StyledReviewButton = styled(StyledButton)`
 `;
 
 export default function PetDetailPage({
-  onGameUpdate,
   isRaining,
   onEnablePetIsActive,
   petEvent,
@@ -160,6 +159,9 @@ export default function PetDetailPage({
   const myPets = usePetStore((state) => state.myPets);
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);
   const onUpdatePet = usePetStore((state) => state.onUpdatePet);
+  const onUpdateActivePetValues = usePetStore(
+    (state) => state.onUpdateActivePetValues
+  );
   const currentPet = usePetStore((state) => state.currentPet);
   const onSetCurrentPet = usePetStore((state) => state.onSetCurrentPet);
   const onUpdateFood = useInventoryStore((state) => state.onUpdateFood);
@@ -204,9 +206,17 @@ export default function PetDetailPage({
         isInteracting.interaction === "sleeping" &&
         isInteracting.duration > 0
       ) {
-        onGameUpdate(id, true);
+        onUpdateActivePetValues({
+          hunger: -0.7,
+          energy: 100,
+          happiness: -0.45,
+        });
       } else {
-        onGameUpdate(id, false);
+        onUpdateActivePetValues({
+          hunger: -0.7,
+          energy: -0.3,
+          happiness: -0.45,
+        });
       }
       setIsInteracting((prevIsInteracting) => ({
         ...prevIsInteracting,
@@ -246,12 +256,9 @@ export default function PetDetailPage({
       setFeedButtonPopUp(false);
       onUpdateFood(-1, foodItemId);
       const foodToGive = foods.find((food) => food.id === foodItemId).value;
-      const updatedHunger = currentPet.hunger + foodToGive;
-      onUpdatePet({
-        ...currentPet,
-        hunger: updatedHunger > 100 ? 100 : updatedHunger,
-        xp: currentPet.xp + foodToGive,
-        level: calculateLevel(currentPet.xp),
+      onUpdateActivePetValues({
+        hunger: foodToGive,
+        xp: foodToGive,
       });
       const foodImage = foods.find((food) => food.id === foodItemId).image;
       setIsInteracting({ interaction: "food", duration: 5, image: foodImage });
@@ -260,14 +267,11 @@ export default function PetDetailPage({
 
   function handlePlayButton(toyItemId) {
     if (!currentPet.isDead) {
-      const toyToGive = toys.find((toy) => toy.id === toyItemId).value;
       setPlayButtonPopUp(false);
-      const updatedHappiness = currentPet.happiness + toyToGive;
-      onUpdatePet({
-        ...currentPet,
-        happiness: updatedHappiness > 100 ? 100 : updatedHappiness,
-        xp: currentPet.xp + toyToGive,
-        level: calculateLevel(currentPet.xp),
+      const toyToGive = toys.find((toy) => toy.id === toyItemId).value;
+      onUpdateActivePetValues({
+        happiness: toyToGive,
+        xp: toyToGive,
       });
       const toyImage = toys.find((toy) => toy.id === toyItemId).image;
       setIsInteracting({ interaction: "toy", duration: 5, image: toyImage });
@@ -276,10 +280,8 @@ export default function PetDetailPage({
 
   function handleSleep() {
     if (!currentPet.isDead) {
-      onUpdatePet({
-        ...currentPet,
-        xp: currentPet.xp + 15,
-        level: calculateLevel(currentPet.xp),
+      onUpdateActivePetValues({
+        xp: 15,
       });
       setIsInteracting({
         interaction: "sleeping",

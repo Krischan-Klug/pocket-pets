@@ -2,6 +2,10 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import initialMyPets from "@/lib/initialPet.js";
 import defaultMyPet from "@/lib/myPetTemplate.js";
+import {
+  calculateLevel,
+  percentageLevelProgress,
+} from "@/components/util/calculateLevel";
 
 export const usePetStore = create(
   persist(
@@ -87,6 +91,59 @@ export const usePetStore = create(
       },
       setMyPets: (myPets) => {
         set({ myPets });
+      },
+
+      onUpdateActivePetValues: ({
+        energy = 0,
+        hunger = 0,
+        happiness = 0,
+        xp = 0,
+      }) => {
+        set((state) => {
+          if (!state.currentPet.isDead) {
+            const updatedHunger = Math.min(
+              Math.max(state.currentPet.hunger + hunger, 0),
+              100
+            );
+            const updatedEnergy = Math.min(
+              Math.max(state.currentPet.energy + energy, 0),
+              100
+            );
+            const updatedHappiness = Math.min(
+              Math.max(state.currentPet.happiness + happiness, 0),
+              100
+            );
+            const updatedXP = state.currentPet.xp + xp;
+
+            const newHealth =
+              (updatedHunger + updatedEnergy + updatedHappiness) / 3;
+
+            const updatedPet = {
+              ...state.currentPet,
+              hunger: updatedHunger,
+              energy: updatedEnergy,
+              happiness: updatedHappiness,
+              health: newHealth,
+              xp: updatedXP,
+              level: calculateLevel(updatedXP),
+              isDead: newHealth > 10 ? false : true,
+            };
+
+            return {
+              myPets: state.myPets.map((pet) =>
+                pet.id === state.currentPet.id ? updatedPet : pet
+              ),
+              currentPet: updatedPet,
+            };
+          } else {
+            return {
+              myPets: state.myPets.map((pet) =>
+                pet.id === state.currentPet.id ? state.currentPet : pet
+              ),
+              currentPet: state.currentPet,
+            };
+          }
+        });
       },
     }),
     {

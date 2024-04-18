@@ -13,7 +13,6 @@ import { useTimeStore } from "@/hooks/stores/timeStore";
 
 export default function App({ Component, pageProps }) {
   const addMoney = useMoneyStore((state) => state.addMoney);
-  const subtractMoney = useMoneyStore((state) => state.subtractMoney);
   const onResetMoney = useMoneyStore((state) => state.onResetMoney);
   const currentPet = usePetStore((state) => state.currentPet);
   const updatePetsWithNewKeys = usePetStore(
@@ -24,11 +23,9 @@ export default function App({ Component, pageProps }) {
   );
   const setMyPets = usePetStore((state) => state.setMyPets);
   const myPets = usePetStore((state) => state.myPets);
-  const onUpdatePetEnergy = usePetStore((state) => state.onUpdatePetEnergy);
-  const onUpdatePetHappiness = usePetStore(
-    (state) => state.onUpdatePetHappiness
+  const onUpdateActivePetValues = usePetStore(
+    (state) => state.onUpdateActivePetValues
   );
-  const onUpdatePetHunger = usePetStore((state) => state.onUpdatePetHunger);
   const onResetInventory = useInventoryStore((state) => state.onResetInventory);
   const hour = useTimeStore((state) => state.hour);
   const addHour = useTimeStore((state) => state.addHour);
@@ -70,6 +67,7 @@ export default function App({ Component, pageProps }) {
     return Math.floor(Math.random() * 24);
   }
 
+  //Event System
   useEffect(() => {
     if (hour === 0) {
       setDailyEvent(false);
@@ -86,9 +84,11 @@ export default function App({ Component, pageProps }) {
         const localPetEvent = petEvents[getRandomArrayIndex(petEvents)];
         setPetEvent(localPetEvent);
         handleEnableIsEventPopUpActive();
-        onUpdatePetEnergy(localPetEvent.eventValues.energy);
-        onUpdatePetHappiness(localPetEvent.eventValues.happiness);
-        onUpdatePetHunger(localPetEvent.eventValues.hunger);
+        onUpdateActivePetValues({
+          hunger: localPetEvent.eventValues.hunger,
+          energy: localPetEvent.eventValues.energy,
+          happiness: localPetEvent.eventValues.happiness,
+        });
         addMoney(localPetEvent.eventValues.money);
       }
 
@@ -101,8 +101,7 @@ export default function App({ Component, pageProps }) {
     }
   }, [hour]);
 
-  //Clock
-
+  //Main Clock
   useEffect(() => {
     if (
       router.pathname === "/" ||
@@ -157,29 +156,11 @@ export default function App({ Component, pageProps }) {
     setSettingPage(false);
   }
 
-  function handleGameUpdate(updateId, isSleep) {
-    setMyPets(
-      myPets.map((pet) =>
-        pet.id === updateId
-          ? {
-              ...pet,
-              health: (pet.hunger + pet.happiness + pet.energy) / 3,
-              hunger: Math.max(pet.hunger - 1, 0),
-              happiness: Math.max(pet.happiness - 0.75, 0),
-              energy: isSleep ? 100 : Math.max(pet.energy - 0.5, 0),
-              isDead: pet.health > 10 ? false : true,
-            }
-          : pet
-      )
-    );
-  }
-
   return (
     <>
       <GlobalStyle />
       <Component
         {...pageProps}
-        onGameUpdate={handleGameUpdate}
         isRaining={isRaining}
         onEnablePetIsActive={handleEnablePetIsActive}
         onDisablePetIsActive={handleDisablePetIsActive}
