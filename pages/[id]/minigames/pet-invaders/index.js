@@ -24,6 +24,7 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
 
     let score = 0;
     let timeElapsed = 0;
+    let playermovement = 0;
 
     //Scene Management
 
@@ -180,6 +181,59 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
         k.go("gameover");
       });
 
+      const btnleft = k.add([
+        k.rect(70, 70, { radius: 8 }),
+        k.pos(20, 580),
+        k.opacity(0.5),
+        k.area(),
+      ]);
+      const btnright = k.add([
+        k.rect(70, 70, { radius: 8 }),
+        k.pos(120, 580),
+        k.opacity(0.5),
+        k.area(),
+      ]);
+      const btnshoot = k.add([
+        k.rect(70, 70, { radius: 8 }),
+        k.pos(270, 580),
+        k.opacity(0.5),
+        k.area(),
+      ]);
+
+      k.onTouchStart((id, pos) => {
+        if (
+          pos.clientX > 20 &&
+          pos.clientX < 90 &&
+          pos.clientY > 580 &&
+          pos.clientY < 650
+        ) {
+          playermovement = -1;
+        } else if (
+          pos.clientX > 120 &&
+          pos.clientX < 190 &&
+          pos.clientY > 580 &&
+          pos.clientY < 650
+        ) {
+          playermovement = 1;
+        } else {
+          spawnBullet(player.pos.add(20, -25));
+        }
+      });
+      k.onTouchEnd((id, pos) => {
+        if (
+          (pos.clientX > 20 &&
+            pos.clientX < 120 &&
+            pos.clientY > 600 &&
+            pos.clientY < 670) ||
+          (pos.clientX > 150 &&
+            pos.clientX < 250 &&
+            pos.clientY > 600 &&
+            pos.clientY < 670)
+        ) {
+          playermovement = 0;
+        }
+      });
+
       const scoreText = k.add([k.text("Score:0"), k.pos(10, 10), k.scale(1)]);
 
       const timer = k.add([k.text("Time:0"), k.pos(10, 50), k.scale(1)]);
@@ -191,6 +245,9 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
 
       k.onUpdate(() => {
         customTime();
+        if (playermovement != 0) {
+          player.move(playermovement * MOVE_SPEED, 0);
+        }
         if (score == 48) {
           k.go("win");
         }
