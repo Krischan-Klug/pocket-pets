@@ -22,6 +22,9 @@ export const useTimeStore = create(
           }
         });
       },
+      onResetTime: () => {
+        set({ hour: 0, day: 1, season: 0 });
+      },
     }),
     {
       name: "time",

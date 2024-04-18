@@ -29,6 +29,7 @@ export default function App({ Component, pageProps }) {
   const onResetInventory = useInventoryStore((state) => state.onResetInventory);
   const hour = useTimeStore((state) => state.hour);
   const addHour = useTimeStore((state) => state.addHour);
+  const onResetTime = useTimeStore((state) => state.onResetTime);
 
   const router = useRouter();
 
@@ -153,6 +154,7 @@ export default function App({ Component, pageProps }) {
     onResetInventory();
     onResetMoney();
     setMyPets([]);
+    onResetTime();
     setSettingPage(false);
   }
 

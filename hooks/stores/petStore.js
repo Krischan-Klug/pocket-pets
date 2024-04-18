@@ -25,57 +25,6 @@ export const usePetStore = create(
           ),
         }));
       },
-
-      onUpdatePetEnergy: (energyToUpdate) =>
-        set((state) => {
-          if (!state.currentPet.isDead) {
-            const updatedEnergy = state.currentPet.energy + energyToUpdate;
-            const updatedPet = {
-              ...state.currentPet,
-              energy: Math.min(Math.max(updatedEnergy, 0), 100),
-            };
-            return {
-              myPets: state.myPets.map((pet) =>
-                pet.id === state.currentPet.id ? updatedPet : pet
-              ),
-              currentPet: updatedPet,
-            };
-          }
-        }),
-
-      onUpdatePetHappiness: (happinessToUpdate) =>
-        set((state) => {
-          if (!state.currentPet.isDead) {
-            const updatedHappiness =
-              state.currentPet.happiness + happinessToUpdate;
-            const updatedPet = {
-              ...state.currentPet,
-              happiness: Math.min(Math.max(updatedHappiness, 0), 100),
-            };
-            return {
-              myPets: state.myPets.map((pet) =>
-                pet.id === state.currentPet.id ? updatedPet : pet
-              ),
-              currentPet: updatedPet,
-            };
-          }
-        }),
-      onUpdatePetHunger: (hungerToUpdate) =>
-        set((state) => {
-          if (!state.currentPet.isDead) {
-            const updatedHunger = state.currentPet.hunger + hungerToUpdate;
-            const updatedPet = {
-              ...state.currentPet,
-              hunger: Math.min(Math.max(updatedHunger, 0), 100),
-            };
-            return {
-              myPets: state.myPets.map((pet) =>
-                pet.id === state.currentPet.id ? updatedPet : pet
-              ),
-              currentPet: updatedPet,
-            };
-          }
-        }),
       onDeletePet: (id) => {
         set((state) => ({
           myPets: state.myPets.filter((myPet) => myPet.id !== id),
