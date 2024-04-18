@@ -16,6 +16,7 @@ import arrowLeft from "/public/assets/icons/round_arrow_back_ios_black.png";
 import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import { usePetStore } from "@/hooks/stores/petStore";
+import { useAchievementStore } from "@/hooks/stores/achievementStore";
 
 const StyledForm = styled.form`
   display: flex;
@@ -44,6 +45,10 @@ export default function Create({}) {
   const onAddPet = usePetStore((state) => state.onAddPet);
   const router = useRouter();
   const [petType, setPetType] = useState(0);
+  const updateAchievementCurrentAmount = useAchievementStore(
+    (state) => state.updateAchievementCurrentAmount
+  );
+  const allAchievements = useAchievementStore((state) => state.allAchievements);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -55,6 +60,7 @@ export default function Create({}) {
       image: `/assets/images/pets/${pets[petType].type}.png`,
       type: pets[petType].type,
     });
+    updateAchievementCurrentAmount(1, 1);
     router.push("/");
   };
 
