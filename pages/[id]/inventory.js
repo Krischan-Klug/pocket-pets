@@ -99,6 +99,12 @@ export default function Inventory({ userStats }) {
     const toy = toys.find((toy) => toy.id === id);
     return toy;
   }
+
+  function findClothesValuesById(id) {
+    const clothes = clothes.find((item) => item.id === id);
+    return clothes;
+  }
+
   return (
     <>
       <header ref={headerRef}>
@@ -119,6 +125,12 @@ export default function Inventory({ userStats }) {
           >
             Toys
           </Tab>
+          <Tab
+            active={activeTab === 2 ? "true" : "false"}
+            onClick={() => handleTabClick(2)}
+          >
+            Beds
+          </Tab>
         </TabContainer>
         <ContentContainer>
           <Content
@@ -138,8 +150,8 @@ export default function Inventory({ userStats }) {
             {availableFood.length === 0 && (
               <>
                 <p>
-                  You need to purchase food items from the shop first before you
-                  can feed them to your pet.
+                  You need to purchase food in the shop first before you can
+                  feed it to your pet.
                 </p>
                 <Link href={`/${id}/shop/`}>To Shop</Link>
               </>
@@ -161,8 +173,31 @@ export default function Inventory({ userStats }) {
             {availableToys.length === 0 && (
               <>
                 <p>
-                  You need to purchase toy items from the shop first before you
-                  can play with your pet.
+                  You need to purchase toys in the shop first before you can
+                  play with your pet.
+                </p>
+                <Link href={`/${id}/shop/`}>To Shop</Link>
+              </>
+            )}
+          </Content>
+          <Content
+            active={activeTab === 2 ? "true" : ""}
+            $headerheight={headerHeight}
+            $tabcontainerheight={tabContainerHeight}
+          >
+            {availableClothes.map((clothesitem) => (
+              <ItemCard
+                key={clothesitem.id}
+                name={findClothesValuesById(clothesitem.id).name}
+                image={findClothesValuesById(clothesitem.id).image}
+                description={findClothesValuesById(clothesitem.id).description}
+              />
+            ))}
+            {availableClothes.length === 0 && (
+              <>
+                <p>
+                  You need to purchase a bed in the shop first before you can
+                  gift it to your pet.
                 </p>
                 <Link href={`/${id}/shop/`}>To Shop</Link>
               </>

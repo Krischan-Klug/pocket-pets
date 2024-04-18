@@ -35,7 +35,6 @@ import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 
-
 const StyledEditImage = styled(Image)`
   transform: scale(1);
   transition: 0.5s;
@@ -357,7 +356,7 @@ export default function PetDetailPage({
                 router.push(`/${id}/inventory`);
               }}
             >
-              inventory
+              Inventory
             </StyledButton>
             <StyledButton
               onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
