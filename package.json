@@ -15,6 +15,7 @@
     "file-loader": "^6.2.0",
     "kaboom": "^3000.1.17",
     "next": "13.4.8",
+    "next-auth": "^4.24.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "^6.0.2",
