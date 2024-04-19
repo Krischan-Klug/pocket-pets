@@ -361,7 +361,7 @@ export default function ObstacleJumper() {
     });
     // Init game
     k.go("start");
-  }, []);
+  }, [addMoney, id, myPets]);
 
   if (!canvasRef.current) {
     return null;
