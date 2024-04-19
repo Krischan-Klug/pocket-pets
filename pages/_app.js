@@ -37,6 +37,9 @@ export default function App({ Component, pageProps }) {
   const updatedAchievementsWithNewKeys = useAchievementStore(
     (state) => state.updatedAchievementsWithNewKeys
   );
+  const updateAchievementCurrentAmount = useAchievementStore(
+    (state) => state.updateAchievementCurrentAmount
+  );
 
   const router = useRouter();
 
@@ -109,6 +112,9 @@ export default function App({ Component, pageProps }) {
         onUpdatePetHappiness(localPetEvent.eventValues.happiness);
         onUpdatePetHunger(localPetEvent.eventValues.hunger);
         addMoney(localPetEvent.eventValues.money);
+        if (localPetEvent.id == 5) {
+          updateAchievementCurrentAmount(11, 1);
+        }
       }
 
       if (!isPetActive) {

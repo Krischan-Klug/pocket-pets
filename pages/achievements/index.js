@@ -1,9 +1,13 @@
 import { useAchievementStore } from "@/hooks/stores/achievementStore";
-import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import { StyledStaticBackground } from "@/components/StyledComponents/StyledBackgroundImage";
 import AchievementArticle from "@/components/Achievements/AchievementArticle";
-import { useRouter } from "next/router";
 import StyledLink from "@/components/StyledComponents/StyledLink";
+import styled from "styled-components";
+
+const StyledSection = styled.section`
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+`;
 
 export default function Achievements({}) {
   const { allAchievements } = useAchievementStore();
@@ -15,16 +19,18 @@ export default function Achievements({}) {
         <h1>Achievements</h1>
       </header>
       <main>
-        {allAchievements.map((achievement) => (
-          <AchievementArticle
-            key={achievement.id}
-            name={achievement.name}
-            icon={achievement.icon}
-            description={achievement.description}
-            id={achievement.id}
-            unlocked={achievement.unlocked}
-          />
-        ))}
+        <StyledSection>
+          {allAchievements.map((achievement) => (
+            <AchievementArticle
+              key={achievement.id}
+              name={achievement.name}
+              icon={achievement.icon}
+              description={achievement.description}
+              id={achievement.id}
+              unlocked={achievement.unlocked}
+            />
+          ))}
+        </StyledSection>
       </main>
     </>
   );

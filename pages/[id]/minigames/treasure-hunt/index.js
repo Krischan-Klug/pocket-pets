@@ -165,6 +165,7 @@ export default function TreasureHunt({ onAddMoney }) {
       }
       setCoin(newCoin);
       setCoins(coins + 5); // Add coins
+      updateAchievementCurrentAmount(9, 5);
       return true;
     }
     return false;
@@ -266,6 +267,7 @@ export default function TreasureHunt({ onAddMoney }) {
             onConfirm={() => {
               onAddMoney(coins);
               updateAchievementCurrentAmount(3, coins);
+              updateAchievementCurrentAmount(9, -coins);
               router.push(`/pet-detail-page/${id}`);
             }}
           />

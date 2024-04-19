@@ -121,6 +121,7 @@ export default function MergePets({}) {
   //Recalculate points when grid changes
   useEffect(() => {
     setPoints(() => getPoints());
+    updateAchievementCurrentAmount(8, getPoints());
   }, [grid]);
 
   //Keyboard Input Detection
@@ -361,6 +362,7 @@ export default function MergePets({}) {
         onConfirm: () => {
           addMoney(money);
           updateAchievementCurrentAmount(3, money);
+          updateAchievementCurrentAmount(8, -endPoints);
           router.push(`/pet-detail-page/${id}`);
         },
       });

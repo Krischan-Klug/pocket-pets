@@ -8,7 +8,8 @@ const StyledAchievementArticle = styled.article`
   gap: 10px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   width: 80vw;
-  height: 15vh;
+  margin: 10px;
+
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(5px);
 `;
@@ -21,6 +22,10 @@ const StyledAchievementText = styled.p`
 
 const StyledImageWrapper = styled.div`
   padding-left: 10px;
+`;
+const StyledTextWrapper = styled.div`
+  align-content: center;
+  height: 120px;
 `;
 
 const StyledName = styled.h2`
@@ -49,10 +54,10 @@ export default function AchievementArticle({
           height={50}
         />
       </StyledImageWrapper>
-      <div>
+      <StyledTextWrapper>
         <StyledName>{name}</StyledName>
         <StyledAchievementText>{description}</StyledAchievementText>
-      </div>
+      </StyledTextWrapper>
     </StyledAchievementArticle>
   );
 }

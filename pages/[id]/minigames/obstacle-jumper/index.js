@@ -71,6 +71,7 @@ export default function ObstacleJumper({}) {
           score++;
           scoreText.text = score;
           timeElapsed -= 1;
+          updateAchievementCurrentAmount(7, 1);
         }
       }
 
@@ -175,6 +176,7 @@ export default function ObstacleJumper({}) {
       function endGame() {
         addMoney(moneyToAdd);
         updateAchievementCurrentAmount(3, moneyToAdd);
+        updateAchievementCurrentAmount(7, -score);
 
         //Router wont work here, reload is needed!
         window.location.href = `/pet-detail-page/${id}`;

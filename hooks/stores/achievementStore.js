@@ -44,7 +44,6 @@ export const useAchievementStore = create(
               return achievement;
             }
           );
-          console.log(updatedAndUnlockedAchievements);
           return { allAchievements: updatedAndUnlockedAchievements };
         });
       },
