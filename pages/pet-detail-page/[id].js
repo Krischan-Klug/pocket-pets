@@ -35,6 +35,7 @@ import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
