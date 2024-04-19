@@ -3,6 +3,7 @@ import { useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { usePetStore } from "@/hooks/stores/petStore";
+import { useAchievementStore } from "@/hooks/stores/achievementStore";
 export default function ObstacleJumper({}) {
   const router = useRouter();
   const id = router.query.id;
@@ -10,6 +11,9 @@ export default function ObstacleJumper({}) {
 
   const addMoney = useMoneyStore((state) => state.addMoney);
   const myPets = usePetStore((state) => state.myPets);
+  const updateAchievementCurrentAmount = useAchievementStore(
+    (state) => state.updateAchievementCurrentAmount
+  );
 
   useEffect(() => {
     const k = kaboom({
@@ -67,6 +71,7 @@ export default function ObstacleJumper({}) {
           score++;
           scoreText.text = score;
           timeElapsed -= 1;
+          updateAchievementCurrentAmount(7, 1);
         }
       }
 
@@ -170,6 +175,8 @@ export default function ObstacleJumper({}) {
 
       function endGame() {
         addMoney(moneyToAdd);
+        updateAchievementCurrentAmount(3, moneyToAdd);
+        updateAchievementCurrentAmount(7, -score);
 
         //Router wont work here, reload is needed!
         window.location.href = `/pet-detail-page/${id}`;

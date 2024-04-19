@@ -10,6 +10,7 @@ import { usePetStore } from "@/hooks/stores/petStore";
 import { petEvents, userEvents } from "@/lib/events";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
+import { useAchievementStore } from "@/hooks/stores/achievementStore";
 
 export default function App({ Component, pageProps }) {
   const addMoney = useMoneyStore((state) => state.addMoney);
@@ -31,6 +32,13 @@ export default function App({ Component, pageProps }) {
   const addHour = useTimeStore((state) => state.addHour);
   const onResetTime = useTimeStore((state) => state.onResetTime);
 
+  const updatedAchievementsWithNewKeys = useAchievementStore(
+    (state) => state.updatedAchievementsWithNewKeys
+  );
+  const updateAchievementCurrentAmount = useAchievementStore(
+    (state) => state.updateAchievementCurrentAmount
+  );
+
   const router = useRouter();
 
   const [settingPageShow, setSettingPage] = useState(false);
@@ -39,6 +47,7 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     updatePetsWithNewKeys();
     updateInventoryWithNewKeys();
+    updatedAchievementsWithNewKeys();
   }, []);
 
   // daily event
@@ -91,6 +100,9 @@ export default function App({ Component, pageProps }) {
           happiness: localPetEvent.eventValues.happiness,
         });
         addMoney(localPetEvent.eventValues.money);
+        if (localPetEvent.id == 5) {
+          updateAchievementCurrentAmount(11, 1);
+        }
       }
 
       if (!isPetActive) {
