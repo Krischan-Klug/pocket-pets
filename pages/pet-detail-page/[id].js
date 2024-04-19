@@ -17,7 +17,7 @@ import StyledXPBar from "@/components/DetailPage/StyledXPBar";
 import {
   calculateLevel,
   percentageLevelProgress,
-} from "@/components/DetailPage/calculateLevel";
+} from "@/components/util/calculateLevel";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import hungerImage from "/public/assets/images/interaction/hunger.png";
 import happinessImage from "/public/assets/images/interaction/happiness.png";
@@ -35,6 +35,9 @@ import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useAchievementStore } from "@/hooks/stores/achievementStore";
+import { useTimeStore } from "@/hooks/stores/timeStore";
+import MinigamesPopUp from "@/components/DetailPage/MinigamesPopUp";
+
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -150,10 +153,6 @@ const StyledReviewButton = styled(StyledButton)`
 `;
 
 export default function PetDetailPage({
-  onGameUpdate,
-  currentTime,
-  currentDay,
-  currentSeason,
   isRaining,
   onEnablePetIsActive,
   petEvent,
@@ -163,6 +162,9 @@ export default function PetDetailPage({
   const myPets = usePetStore((state) => state.myPets);
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);
   const onUpdatePet = usePetStore((state) => state.onUpdatePet);
+  const onUpdateActivePetValues = usePetStore(
+    (state) => state.onUpdateActivePetValues
+  );
   const currentPet = usePetStore((state) => state.currentPet);
   const onSetCurrentPet = usePetStore((state) => state.onSetCurrentPet);
   const onUpdateFood = useInventoryStore((state) => state.onUpdateFood);
@@ -170,6 +172,9 @@ export default function PetDetailPage({
   const updateAchievementCurrentAmount = useAchievementStore(
     (state) => state.updateAchievementCurrentAmount
   );
+  const hour = useTimeStore((state) => state.hour);
+  const day = useTimeStore((state) => state.day);
+  const season = useTimeStore((state) => state.season);
 
   const [isInteracting, setIsInteracting] = useState({
     duration: 0,
@@ -184,6 +189,7 @@ export default function PetDetailPage({
   });
   const [feedButtonPopUp, setFeedButtonPopUp] = useState(false);
   const [playButtonPopUp, setPlayButtonPopUp] = useState(false);
+  const [minigamesPopUp, setMinigamesPopUp] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -207,9 +213,17 @@ export default function PetDetailPage({
         isInteracting.interaction === "sleeping" &&
         isInteracting.duration > 0
       ) {
-        onGameUpdate(id, true);
+        onUpdateActivePetValues({
+          hunger: -0.7,
+          energy: 100,
+          happiness: -0.45,
+        });
       } else {
-        onGameUpdate(id, false);
+        onUpdateActivePetValues({
+          hunger: -0.7,
+          energy: -0.3,
+          happiness: -0.45,
+        });
       }
       setIsInteracting((prevIsInteracting) => ({
         ...prevIsInteracting,
@@ -249,12 +263,9 @@ export default function PetDetailPage({
       setFeedButtonPopUp(false);
       onUpdateFood(-1, foodItemId);
       const foodToGive = foods.find((food) => food.id === foodItemId).value;
-      const updatedHunger = currentPet.hunger + foodToGive;
-      onUpdatePet({
-        ...currentPet,
-        hunger: updatedHunger > 100 ? 100 : updatedHunger,
-        xp: currentPet.xp + foodToGive,
-        level: calculateLevel(currentPet.xp),
+      onUpdateActivePetValues({
+        hunger: foodToGive,
+        xp: foodToGive,
       });
       const foodImage = foods.find((food) => food.id === foodItemId).image;
       setIsInteracting({ interaction: "food", duration: 5, image: foodImage });
@@ -267,14 +278,11 @@ export default function PetDetailPage({
 
   function handlePlayButton(toyItemId) {
     if (!currentPet.isDead) {
-      const toyToGive = toys.find((toy) => toy.id === toyItemId).value;
       setPlayButtonPopUp(false);
-      const updatedHappiness = currentPet.happiness + toyToGive;
-      onUpdatePet({
-        ...currentPet,
-        happiness: updatedHappiness > 100 ? 100 : updatedHappiness,
-        xp: currentPet.xp + toyToGive,
-        level: calculateLevel(currentPet.xp),
+      const toyToGive = toys.find((toy) => toy.id === toyItemId).value;
+      onUpdateActivePetValues({
+        happiness: toyToGive,
+        xp: toyToGive,
       });
       const toyImage = toys.find((toy) => toy.id === toyItemId).image;
       setIsInteracting({ interaction: "toy", duration: 5, image: toyImage });
@@ -284,10 +292,8 @@ export default function PetDetailPage({
 
   function handleSleep() {
     if (!currentPet.isDead) {
-      onUpdatePet({
-        ...currentPet,
-        xp: currentPet.xp + 15,
-        level: calculateLevel(currentPet.xp),
+      onUpdateActivePetValues({
+        xp: 15,
       });
       setIsInteracting({
         interaction: "sleeping",
@@ -310,18 +316,18 @@ export default function PetDetailPage({
       health: 42,
     });
   }
+  function toggleMinigamesPopUp() {
+    setMinigamesPopUp(!minigamesPopUp);
+  }
 
   return (
     <>
       <StyledBackgroundImageWrapper>
-        <StyledTimeBackground
-          currenttime={currentTime}
-          currentseason={currentSeason}
-        />
+        <StyledTimeBackground currenttime={hour} currentseason={season} />
         {isRaining && (
           <StyledRainBackground
-            iswinter={currentSeason === 3 ? "true" : "false"}
-            currentseason={currentSeason}
+            iswinter={season === 3 ? "true" : "false"}
+            currentseason={season}
           />
         )}
 
@@ -345,8 +351,8 @@ export default function PetDetailPage({
               Level: <span>{calculateLevel(xp)}</span>
             </StyledXPBar>
           </StyledNameSection>
-          <Calendar day={currentDay} season={currentSeason} />
-          <Clock hour={currentTime} />
+          <Calendar day={day} season={season} />
+          <Clock hour={hour} />
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
             <StatusBar text={"Hunger"} value={currentPet.hunger} />
@@ -368,20 +374,8 @@ export default function PetDetailPage({
             >
               inventory
             </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
-            >
-              Obstacle Jumper
-            </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/merge-pets/`)}
-            >
-              Merge Pets
-            </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/treasure-hunt/`)}
-            >
-              Treasure Hunt
+            <StyledButton onClick={toggleMinigamesPopUp}>
+              Minigames
             </StyledButton>
           </StyledMoneyHandleSection>
         </header>
@@ -504,6 +498,9 @@ export default function PetDetailPage({
           onConfirm={onDisableIsEventPopUpActive}
           message={petEvent.description}
         />
+      )}
+      {minigamesPopUp && (
+        <MinigamesPopUp id={id} closePopUp={toggleMinigamesPopUp} />
       )}
     </>
   );
