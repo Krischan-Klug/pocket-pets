@@ -35,7 +35,7 @@ import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
-import MinigamesDropdown from "@/components/DetailPage/MinigamesDropdown";
+import MinigamesPopUp from "@/components/DetailPage/MinigamesPopUp";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -489,7 +489,7 @@ export default function PetDetailPage({
         />
       )}
       {minigamesPopUp && (
-        <MinigamesDropdown id={id} closePopUp={toggleMinigamesPopUp} />
+        <MinigamesPopUp id={id} closePopUp={toggleMinigamesPopUp} />
       )}
     </>
   );

@@ -16,7 +16,7 @@ const StyledMinigameContent = styled(StyledPopUpContent)`
   gap: 10px;
 `;
 
-export default function MinigamesDropdown({ id, closePopUp }) {
+export default function MinigamesPopUp({ id, closePopUp }) {
   function handleOverlayClick(event) {
     if (!event.target.closest("a")) {
       closePopUp();
