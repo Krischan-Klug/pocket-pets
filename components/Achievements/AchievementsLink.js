@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import AchievementsImage from "./AchievementsImage";
 import Link from "next/link";
+import { useAchievementStore } from "@/hooks/stores/achievementStore";
 
 const StyledAchievementsLink = styled(Link)`
   position: absolute;
-  bottom: 50px;
+  bottom: 45px;
   left: 20px;
   display: flex;
   align-items: center;
@@ -15,10 +16,15 @@ const StyledAchievementsLink = styled(Link)`
 `;
 
 export default function AchievemetsLink({}) {
+  const allAchievements = useAchievementStore((state) => state.allAchievements);
+  const solvedAchievements = allAchievements.filter(
+    (achievement) => achievement.unlocked
+  );
+
   return (
     <StyledAchievementsLink href="/achievements">
       <AchievementsImage />
-      Trophys
+      {solvedAchievements.length} / {allAchievements.length}
     </StyledAchievementsLink>
   );
 }

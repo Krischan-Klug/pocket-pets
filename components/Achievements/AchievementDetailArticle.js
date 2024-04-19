@@ -33,12 +33,6 @@ const StyledName = styled.h2`
   margin-bottom: 0;
 `;
 
-const StyledDescription = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
 export default function AchievementDetailArticle({
   name,
   icon,

@@ -22,6 +22,7 @@ export default function Achievements({}) {
             icon={achievement.icon}
             description={achievement.description}
             id={achievement.id}
+            unlocked={achievement.unlocked}
           />
         ))}
       </main>

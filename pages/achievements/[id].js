@@ -1,6 +1,5 @@
 import AchievementDetailArticle from "@/components/Achievements/AchievementDetailArticle";
 import { useAchievementStore } from "@/hooks/stores/achievementStore";
-import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import { StyledStaticBackground } from "@/components/StyledComponents/StyledBackgroundImage";
 import { useRouter } from "next/router";
 import StyledLink from "@/components/StyledComponents/StyledLink";
@@ -32,6 +31,7 @@ export default function AchievementDetailPage({}) {
           description={currentAchievement.description}
           achievementGoal={currentAchievement.achievementGoal}
           currentAmount={currentAchievement.currentAmount}
+          unlocked={currentAchievement.unlocked}
         />
       </main>
     </>
