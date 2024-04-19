@@ -17,13 +17,10 @@ import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import StyledInventoryContainer from "@/components/StyledComponents/StyledInventoryContainer";
 import InventoryContainer from "@/components/DetailPage/InventoryContainer";
 import {
-  StyledBackgroundImageWrapper,
   StyledTimeBackground,
-  StyledWallBackground,
   StyledRainBackground,
   StyledDressingRoomBackground,
 } from "@/components/StyledComponents/StyledBackgroundImage";
-import ItemCard from "@/components/Inventory/ItemCard";
 
 const StyledEditForm = styled.form`
   display: flex;
@@ -61,7 +58,7 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
   const [clothesImage, setClothesImage] = useState({
     src: "",
     alt: "",
-    $yoffset: "",
+    yoffset: 0,
   });
 
   const router = useRouter();
@@ -82,7 +79,13 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
   function handleClickOnClothesItem(id) {
     setSelectedClothesItemId(id);
     const clothesitem = clothes.find((item) => item.id === id);
-    // daraus alt & src ziehen // setUSESTATE für IMAGE
+    console.log("CLOTHESITEM: ", clothesitem);
+
+    setClothesImage({
+      alt: clothesitem.name,
+      src: clothesitem.image,
+      $yoffset: clothesitem.yOffset,
+    });
   }
 
   if (!id) {
@@ -162,12 +165,12 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
 
           <StyledInventoryContainer>
             {availableClothes.map((clothesitem) => (
-              <ItemCard
+              <InventoryContainer
                 key={clothesitem.id}
                 id={clothesitem.id}
                 name={findClothesValuesById(clothesitem.id).name}
                 image={findClothesValuesById(clothesitem.id).image}
-                // isActive={clothesitem.id === selectedClothesItemId}
+                isActive={clothesitem.id === selectedClothesItemId}
                 onClickOnItem={handleClickOnClothesItem}
               />
             ))}
@@ -184,17 +187,16 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
           <StyledButton type="submit">Save</StyledButton>
         </StyledEditForm>
         <StyledImageContainer>
-          {/* {selectedClothesItemId !== null && ( */}
-          {/* {availableClothes.map((clothesitem) => ( */}
-          <StyledClothesImage
-            $yoffset={findClothesValuesById(clothesitem.id).yOffset}
-            alt={findClothesValuesById(clothesitem.id).name}
-            src={findClothesValuesById(clothesitem.id).image}
-            width={250}
-            height={250}
-          />
-          {/* ))}
-          ;)} */}
+          {selectedClothesItemId !== null && (
+            <div $yoffset={clothesImage.yoffset}>
+              <StyledClothesImage
+                alt={clothesImage.alt}
+                src={clothesImage.src}
+                width={250}
+                height={250}
+              />
+            </div>
+          )}
           <StyledPetImage alt={type} src={image} width={150} height={150} />
         </StyledImageContainer>
       </main>

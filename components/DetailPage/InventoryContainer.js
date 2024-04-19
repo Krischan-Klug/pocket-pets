@@ -4,9 +4,9 @@ import styled from "styled-components";
 const StyledInventoryContainer = styled.button`
   border: solid 2px ${({ $bordercolor }) => $bordercolor};
   border-radius: 10px;
-  height: 87px;
-  width: 87px;
-  padding: 2px 0px;
+  height: 100px;
+  width: 100px;
+  padding: 1px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,8 +21,9 @@ const StyledStats = styled.p`
   width: 80px;
 `;
 
-const StyledStatsQuantity = styled(StyledStats)`
+const StyledName = styled.span`
   font-weight: bold;
+  padding-top: 5px;
 `;
 
 export default function InventoryContainer({
@@ -41,15 +42,21 @@ export default function InventoryContainer({
       onClick={() => {
         onClickOnItem(id);
       }}
+      type="button"
     >
       <Image src={image} alt={name} width={45} height={45} />
+
+      {name !== undefined && <StyledName>{name}</StyledName>}
+
       {quantity !== undefined && (
-        <StyledStatsQuantity>quantity: {quantity}</StyledStatsQuantity>
+        <StyledStats>quantity: {quantity}</StyledStats>
       )}
 
-      <StyledStats>
-        {type}: {value}
-      </StyledStats>
+      {value !== undefined && (
+        <StyledStats>
+          {type}: {value}
+        </StyledStats>
+      )}
     </StyledInventoryContainer>
   );
 }
