@@ -24,12 +24,13 @@ const StyledStats = styled.p`
 
 const StyledName = styled.span`
   font-weight: bold;
+  padding-top: 5px;
 `;
 
 export default function ItemCard({ name, image, quantity, description }) {
   return (
     <>
-      <StyledItemCard title={`${name}\n${description}`}>
+      <StyledItemCard type="button" title={`${name}\n${description}`}>
         <Image src={image} alt={name} width={40} height={40} />
         <StyledName>{name}</StyledName>
         {quantity !== undefined && (
