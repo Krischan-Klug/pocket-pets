@@ -306,7 +306,7 @@ export default function PetDetailPage({
     });
   }
   function toggleMinigamesPopUp() {
-    setMinigamesPopUp(!isOpen);
+    setMinigamesPopUp(!minigamesPopUp);
   }
 
   return (
@@ -488,7 +488,9 @@ export default function PetDetailPage({
           message={petEvent.description}
         />
       )}
-      {minigamesPopUp && <MinigamesDropdown />}
+      {minigamesPopUp && (
+        <MinigamesDropdown id={id} closePopUp={toggleMinigamesPopUp} />
+      )}
     </>
   );
 }
