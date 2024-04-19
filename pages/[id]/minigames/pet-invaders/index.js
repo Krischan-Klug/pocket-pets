@@ -28,6 +28,10 @@ export default function ObstacleJumper() {
 
     let score = 0;
     let timeElapsed = 0;
+<<<<<<< HEAD
+=======
+    let playermovement = 0;
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
 
     //Scene Management
     k.scene("start", () => {
@@ -64,6 +68,7 @@ export default function ObstacleJumper() {
       k.loadSprite("wall", "/assets/images/pet-invaders/wall.png");
       k.loadSprite("ufo-image", "/assets/images/pet-invaders/ufo.png");
       k.loadSprite("player-image", actualPet.image);
+<<<<<<< HEAD
 
       //Player
       const pet = k.add([
@@ -78,6 +83,22 @@ export default function ObstacleJumper() {
         k.sprite("ufo-image"),
         k.pos(-550, -600),
         k.scale(3.5),
+=======
+      k.loadSprite("Arrow-Left", "/assets/icons/round_arrow_back_white.png");
+      k.loadSprite(
+        "Arrow-Right",
+        "/assets/icons/round_arrow_forward_white.png"
+      );
+      k.loadSprite("shoot", "/assets/icons/round_shoot.png");
+
+      //Player
+      const player = k.add([
+        k.sprite("player-image"),
+        k.pos(k.width() / 2 - 20, 470),
+        k.area({ scale: 3, offset: k.vec2(-130, 0) }),
+        k.body(),
+        k.scale(0.07),
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
         "player",
       ]);
       player.add([k.sprite("ufo-image"), k.pos(-550, -600), k.scale(3.5)]);
@@ -118,7 +139,11 @@ export default function ObstacleJumper() {
       k.addLevel(level, {
         tileWidth: 36,
         tileHeight: 36,
+<<<<<<< HEAD
         pos: k.vec2(k.width() / 2 - 180, 0),
+=======
+        pos: k.vec2(k.width() / 2 - 216, 0),
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
         tiles: {
           "!": () => [k.sprite("wall"), k.area(), "wall-left"],
           "?": () => [k.sprite("wall"), k.area(), "wall-right"],
@@ -154,12 +179,18 @@ export default function ObstacleJumper() {
 
       k.onKeyDown("left", () => {
         player.move(-MOVE_SPEED, 0);
+<<<<<<< HEAD
         pet.move(-MOVE_SPEED, 0);
+=======
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
       });
 
       k.onKeyDown("right", () => {
         player.move(MOVE_SPEED, 0);
+<<<<<<< HEAD
         pet.move(MOVE_SPEED, 0);
+=======
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
       });
 
       function spawnBullet(pos) {
@@ -183,7 +214,11 @@ export default function ObstacleJumper() {
         k.destroy(bullet);
         k.destroy(enemy);
         score++;
+<<<<<<< HEAD
         scoreText.text = score;
+=======
+        scoreText.text = `Score:${score}`;
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
       });
 
       k.onCollide("player", "space-invader", (bullet, enemy) => {
@@ -247,6 +282,7 @@ export default function ObstacleJumper() {
         }
       });
 
+<<<<<<< HEAD
       const scoreText = k.add([k.text("0"), k.pos(50, 50), k.scale(2)]);
 
       const timer = k.add([
@@ -261,6 +297,14 @@ export default function ObstacleJumper() {
       function customTime() {
         timeElapsed += k.dt();
         //timer.value = timeElapsed;
+=======
+      const scoreText = k.add([k.text("Score:0"), k.pos(10, 10), k.scale(1)]);
+
+      const timer = k.add([k.text("Time:0"), k.pos(10, 50), k.scale(1)]);
+
+      function customTime() {
+        timeElapsed += k.dt();
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
         timer.text = `Time:${timeElapsed.toFixed(2)}`;
       }
 
@@ -300,6 +344,10 @@ export default function ObstacleJumper() {
       ]);
 
       k.add([
+<<<<<<< HEAD
+=======
+        k.scale(0.7),
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
         k.text("Press SPACE to End"),
         k.pos(k.center().x, k.center().y + 200),
         k.anchor("center"),
@@ -312,6 +360,7 @@ export default function ObstacleJumper() {
         window.location.href = `/pet-detail-page/${id}`;
       }
 
+<<<<<<< HEAD
       player.overlaps("space-invader", () => {
         go("lose", { score: score.value });
       });
@@ -321,6 +370,14 @@ export default function ObstacleJumper() {
           // if (s.pos.y >= height() /2) {
           go("lose", { score: score.value });
         }
+=======
+      k.onKeyPress("space", () => {
+        endGame();
+      });
+
+      k.onTouchStart(() => {
+        endGame();
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
       });
     });
 
@@ -349,6 +406,10 @@ export default function ObstacleJumper() {
       ]);
 
       k.add([
+<<<<<<< HEAD
+=======
+        k.scale(0.7),
+>>>>>>> 979ad9cf827aefe67a760dd9fef0fc37327b129b
         k.text("Press SPACE to End"),
         k.pos(k.center().x, k.center().y + 200),
         k.anchor("center"),
