@@ -10,6 +10,8 @@ import { usePetStore } from "@/hooks/stores/petStore";
 import { petEvents, userEvents } from "@/lib/events";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
+import { SessionProvider } from "next-auth/react";
+import LoginComponent from "@/components/util/LoginComponent";
 
 export default function App({ Component, pageProps }) {
   const addMoney = useMoneyStore((state) => state.addMoney);
@@ -160,25 +162,29 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
-      <GlobalStyle />
-      <Component
-        {...pageProps}
-        isRaining={isRaining}
-        onEnablePetIsActive={handleEnablePetIsActive}
-        onDisablePetIsActive={handleDisablePetIsActive}
-        onDisableIsEventPopUpActive={handleDisableIsEventPopUpActive}
-        isEventPopUpActive={isEventPopUpActive}
-        userEvent={userEvent}
-        petEvent={petEvent}
-      />
-      <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
-      {settingPageShow && (
-        <SettingPopUp
-          onSettingPageClose={handleSettingPageClose}
-          handleGameReset={handleGameReset}
+      <SessionProvider session={pageProps.session}>
+        <GlobalStyle />
+        <LoginComponent></LoginComponent>
+        <Component
+          {...pageProps}
+          isRaining={isRaining}
+          onEnablePetIsActive={handleEnablePetIsActive}
+          onDisablePetIsActive={handleDisablePetIsActive}
+          onDisableIsEventPopUpActive={handleDisableIsEventPopUpActive}
+          isEventPopUpActive={isEventPopUpActive}
+          userEvent={userEvent}
+          petEvent={petEvent}
         />
-      )}
-      <AudioInterface />
+        <SettingPageButton onSettingPageOpen={handleSettingPageOpen} />
+        {settingPageShow && (
+          <SettingPopUp
+            onSettingPageClose={handleSettingPageClose}
+            handleGameReset={handleGameReset}
+          />
+        )}
+
+        <AudioInterface />
+      </SessionProvider>
     </>
   );
 }

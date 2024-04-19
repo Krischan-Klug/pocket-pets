@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import { useRouter } from "next/router";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const StyledSettingPopUp = styled.div`
   position: fixed;
@@ -35,6 +36,7 @@ export default function SettingPopUp({ onSettingPageClose, handleGameReset }) {
     show: false,
   });
   const router = useRouter();
+  const { data: session } = useSession();
 
   function handleReset() {
     setConfirmationPopUpContent({
@@ -64,6 +66,9 @@ export default function SettingPopUp({ onSettingPageClose, handleGameReset }) {
       <h1>Settings</h1>
       <StyledCloseButton onClick={onSettingPageClose}>Close</StyledCloseButton>
       <StyledButton onClick={handleReset}>Reset Game</StyledButton>
+      <br />
+      Signed in as {session.user.email} <br />
+      <StyledButton onClick={() => signOut()}>Sign out</StyledButton>
       <div>
         <p>Impressum</p>
         <p>This Project is from: Krischan, Markus, Nina</p>
