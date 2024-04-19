@@ -56,9 +56,10 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       let MOVE_DOWN = 72;
       const BULLET_SPEED = 400;
 
-      k.loadSprite("largealien", "/assets/images/pet-invaders/LargeAlien.png");
-      k.loadSprite("enemie1", "/assets/images/pets/bear.png");
-      k.loadSprite("wall", "/assets/images/pets/hen.png");
+      k.loadSprite("enemie1", "/assets/images/pet-invaders/space-invader.png");
+      k.loadSprite("wall", "/assets/images/pet-invaders/wall.png");
+      k.loadSprite("ufo-image", "/assets/images/pet-invaders/ufo.png");
+      k.loadSprite("player-image", actualPet.image);
 
       //Player
       const pet = k.add([
@@ -187,22 +188,25 @@ export default function ObstacleJumper({ onAddMoney, myPets }) {
       });
 
       const btnleft = k.add([
-        k.rect(70, 70, { radius: 8 }),
         k.pos(20, 580),
         k.opacity(0.5),
         k.area(),
+        k.scale(0.8),
+        k.sprite("Arrow-Left"),
       ]);
       const btnright = k.add([
-        k.rect(70, 70, { radius: 8 }),
         k.pos(120, 580),
         k.opacity(0.5),
         k.area(),
+        k.scale(0.8),
+        k.sprite("Arrow-Right"),
       ]);
       const btnshoot = k.add([
-        k.rect(70, 70, { radius: 8 }),
         k.pos(270, 580),
         k.opacity(0.5),
         k.area(),
+        k.scale(0.8),
+        k.sprite("shoot"),
       ]);
 
       k.onTouchStart((id, pos) => {
