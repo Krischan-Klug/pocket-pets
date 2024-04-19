@@ -35,6 +35,7 @@ import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
+import MinigamesDropdown from "@/components/DetailPage/MinigamesDropdown";
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -183,6 +184,7 @@ export default function PetDetailPage({
   });
   const [feedButtonPopUp, setFeedButtonPopUp] = useState(false);
   const [playButtonPopUp, setPlayButtonPopUp] = useState(false);
+  const [minigamesPopUp, setMinigamesPopUp] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -303,6 +305,9 @@ export default function PetDetailPage({
       health: 42,
     });
   }
+  function toggleMinigamesPopUp() {
+    setMinigamesPopUp(!isOpen);
+  }
 
   return (
     <>
@@ -358,25 +363,8 @@ export default function PetDetailPage({
             >
               inventory
             </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
-            >
-              Obstacle Jumper
-            </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/merge-pets/`)}
-            >
-              Merge Pets
-            </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/treasure-hunt/`)}
-            >
-              Treasure Hunt
-            </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/pet-invaders/`)}
-            >
-              Pet Invaders
+            <StyledButton onClick={toggleMinigamesPopUp}>
+              Minigames
             </StyledButton>
           </StyledMoneyHandleSection>
         </header>
@@ -500,6 +488,7 @@ export default function PetDetailPage({
           message={petEvent.description}
         />
       )}
+      {minigamesPopUp && <MinigamesDropdown />}
     </>
   );
 }
