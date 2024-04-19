@@ -1,0 +1,24 @@
+import styled from "styled-components";
+import AchievementsImage from "./AchievementsImage";
+import Link from "next/link";
+
+const StyledAchievementsLink = styled(Link)`
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: black;
+  text-decoration: none;
+`;
+
+export default function AchievemetsLink({}) {
+  return (
+    <StyledAchievementsLink href="/achievements">
+      <AchievementsImage />
+      Trophys
+    </StyledAchievementsLink>
+  );
+}

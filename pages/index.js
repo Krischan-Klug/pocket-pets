@@ -9,6 +9,9 @@ import { StyledStaticBackground } from "@/components/StyledComponents/StyledBack
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { usePetStore } from "@/hooks/stores/petStore";
 import { useAchievementStore } from "@/hooks/stores/achievementStore";
+import AchievemetsLink from "@/components/Achievements/AchievementsLink";
+import StyledLink from "@/components/StyledComponents/StyledLink";
+import AchievementsImage from "@/components/Achievements/AchievementsImage";
 
 const StyledPetCollectionHeader = styled.header`
   height: 120px;
@@ -105,6 +108,7 @@ export default function HomePage({
           </StyledButton>
         </StyledButtonWrapper>
         <MoneyCounter money={money} />
+        <AchievemetsLink />
       </StyledPetCollectionHeader>
       <main>
         <StyledPetCollection>
