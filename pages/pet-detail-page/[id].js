@@ -34,7 +34,10 @@ import { usePetStore } from "@/hooks/stores/petStore";
 import Calendar from "@/components/util/Calendar";
 import Clock from "@/components/util/Clock";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
+import { useAchievementStore } from "@/hooks/stores/achievementStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
+import MinigamesPopUp from "@/components/DetailPage/MinigamesPopUp";
+
 
 const StyledEditImage = styled(Image)`
   transform: scale(1);
@@ -166,6 +169,9 @@ export default function PetDetailPage({
   const onSetCurrentPet = usePetStore((state) => state.onSetCurrentPet);
   const onUpdateFood = useInventoryStore((state) => state.onUpdateFood);
   const money = useMoneyStore((state) => state.money);
+  const updateAchievementCurrentAmount = useAchievementStore(
+    (state) => state.updateAchievementCurrentAmount
+  );
   const hour = useTimeStore((state) => state.hour);
   const day = useTimeStore((state) => state.day);
   const season = useTimeStore((state) => state.season);
@@ -183,6 +189,7 @@ export default function PetDetailPage({
   });
   const [feedButtonPopUp, setFeedButtonPopUp] = useState(false);
   const [playButtonPopUp, setPlayButtonPopUp] = useState(false);
+  const [minigamesPopUp, setMinigamesPopUp] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -262,6 +269,10 @@ export default function PetDetailPage({
       });
       const foodImage = foods.find((food) => food.id === foodItemId).image;
       setIsInteracting({ interaction: "food", duration: 5, image: foodImage });
+      updateAchievementCurrentAmount(4, 1);
+      if (foodItemId == 1) {
+        updateAchievementCurrentAmount(10, 1);
+      }
     }
   }
 
@@ -275,6 +286,7 @@ export default function PetDetailPage({
       });
       const toyImage = toys.find((toy) => toy.id === toyItemId).image;
       setIsInteracting({ interaction: "toy", duration: 5, image: toyImage });
+      updateAchievementCurrentAmount(5, 1);
     }
   }
 
@@ -288,6 +300,7 @@ export default function PetDetailPage({
         duration: 10,
         image: `/assets/images/interaction/sleeping.png`,
       });
+      updateAchievementCurrentAmount(6, 1);
     }
   }
 
@@ -302,6 +315,9 @@ export default function PetDetailPage({
       energy: 50,
       health: 42,
     });
+  }
+  function toggleMinigamesPopUp() {
+    setMinigamesPopUp(!minigamesPopUp);
   }
 
   return (
@@ -358,20 +374,8 @@ export default function PetDetailPage({
             >
               inventory
             </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/obstacle-jumper`)}
-            >
-              Obstacle Jumper
-            </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/merge-pets/`)}
-            >
-              Merge Pets
-            </StyledButton>
-            <StyledButton
-              onClick={() => router.push(`/${id}/minigames/treasure-hunt/`)}
-            >
-              Treasure Hunt
+            <StyledButton onClick={toggleMinigamesPopUp}>
+              Minigames
             </StyledButton>
           </StyledMoneyHandleSection>
         </header>
@@ -494,6 +498,9 @@ export default function PetDetailPage({
           onConfirm={onDisableIsEventPopUpActive}
           message={petEvent.description}
         />
+      )}
+      {minigamesPopUp && (
+        <MinigamesPopUp id={id} closePopUp={toggleMinigamesPopUp} />
       )}
     </>
   );

@@ -27,6 +27,10 @@ const StyledCloseButton = styled(StyledButton)`
   top: 20px;
   right: 20px;
 `;
+const StyledImpressum = styled.div`
+  position: absolute;
+  bottom: 20px;
+`;
 
 export default function SettingPopUp({ onSettingPageClose, handleGameReset }) {
   const [confirmationPopUpContent, setConfirmationPopUpContent] = useState({
@@ -66,12 +70,29 @@ export default function SettingPopUp({ onSettingPageClose, handleGameReset }) {
       <h1>Settings</h1>
       <StyledCloseButton onClick={onSettingPageClose}>Close</StyledCloseButton>
       <StyledButton onClick={handleReset}>Reset Game</StyledButton>
+
       <br />
       Signed in as {session.user.email} <br />
       <StyledButton onClick={() => signOut()}>Sign out</StyledButton>
-      <div>
-        <p>Impressum</p>
-        <p>This Project is from: Krischan, Markus, Nina</p>
+      
+
+      <StyledImpressum>
+        <u>Impressum</u>
+        <p>
+          This Project is from:{" "}
+          <Link href={"https://github.com/Krischan-Klug"} target="_blank">
+            Krischan
+          </Link>
+          ,{" "}
+          <Link href={"https://github.com/Miningmark"} target="_blank">
+            Markus
+          </Link>
+          ,{" "}
+          <Link href={"https://github.com/ninagw"} target="_blank">
+            Nina
+          </Link>
+        </p>
+
         <p>
           Images from:{" "}
           <Link href={"https://www.flaticon.com/"} target="_blank">
@@ -89,7 +110,7 @@ export default function SettingPopUp({ onSettingPageClose, handleGameReset }) {
             Musicfox
           </Link>
         </p>
-      </div>
+      </StyledImpressum>
       {confirmationPopUpContent.show && (
         <ConfirmationPopup
           message={confirmationPopUpContent.message}
