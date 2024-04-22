@@ -3,6 +3,7 @@ import HungerImage from "../util/HungerImage";
 import ToyImage from "../util/ToyImage";
 import Image from "next/image";
 import styled from "styled-components";
+import ClothesImage from "../util/ClothesImage";
 
 const StyledTd = styled.td`
   width: ${(props) => props.width}px;
@@ -52,6 +53,9 @@ export default function ShopTable({ data, onItemClick, category }) {
     case "toy":
       typeIcon = <ToyImage />;
       break;
+    case "clothes":
+      typeIcon = <ClothesImage />;
+      break;
     default:
       typeIcon = null;
       break;
@@ -75,11 +79,13 @@ export default function ShopTable({ data, onItemClick, category }) {
                 />
               </StyledTd>
               <StyledTd width={120}>{item.name}</StyledTd>
-              <StyledTd width={60}>
-                <StyledImageContainer>
-                  {item.value} {typeIcon}
-                </StyledImageContainer>
-              </StyledTd>
+              {item.value && (
+                <StyledTd width={60}>
+                  <StyledImageContainer>
+                    {item.value} {typeIcon}
+                  </StyledImageContainer>
+                </StyledTd>
+              )}
               <StyledTd width={60}>
                 <StyledImageContainer>
                   {item.cost} <MoneyImage />

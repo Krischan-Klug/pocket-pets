@@ -25,13 +25,19 @@ import {
 const StyledEditForm = styled.form`
   display: flex;
   flex-direction: column;
+  width: 300px;
   gap: 20px;
+`;
+
+const StyledEditButton = styled(StyledButton)`
+  margin-bottom: 20px;
+  justify-content: center;
 `;
 
 const StyledImageContainer = styled.div`
   position: relative;
-  width: 100%;
-  height: 45vh;
+  width: 300px;
+  height: 300px;
 `;
 
 const StyledPetImage = styled(Image)`
@@ -41,10 +47,12 @@ const StyledPetImage = styled(Image)`
   transform: translateX(-50%);
 `;
 
-const StyledClothesImage = styled(Image)`
+const StyledDiv = styled.div`
+  height: 250px;
+  width: 250px;
   position: absolute;
   bottom: ${({ $yoffset }) => $yoffset}px;
-  left: 20%; /* Adjust the horizontal position */
+  left: 25px; /* Adjust the horizontal position */
 `;
 
 export default function EditPet({ currentTime, currentSeason, isRaining }) {
@@ -84,7 +92,7 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
     setClothesImage({
       alt: clothesitem.name,
       src: clothesitem.image,
-      $yoffset: clothesitem.yOffset,
+      yoffset: clothesitem.yOffset,
     });
   }
 
@@ -184,18 +192,18 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
               </>
             )}
           </StyledInventoryContainer>
-          <StyledButton type="submit">Save</StyledButton>
+          <StyledEditButton type="submit">Save</StyledEditButton>
         </StyledEditForm>
         <StyledImageContainer>
           {selectedClothesItemId !== null && (
-            <div $yoffset={clothesImage.yoffset}>
-              <StyledClothesImage
+            <StyledDiv $yoffset={clothesImage.yoffset}>
+              <Image
                 alt={clothesImage.alt}
                 src={clothesImage.src}
                 width={250}
                 height={250}
               />
-            </div>
+            </StyledDiv>
           )}
           <StyledPetImage alt={type} src={image} width={150} height={150} />
         </StyledImageContainer>

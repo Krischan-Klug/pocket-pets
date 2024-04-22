@@ -44,13 +44,11 @@ export default function ClothesShop() {
 
   return (
     <>
-      <StyledDefaultHeader>
-        <StyledLeftButton onClick={() => router.push(`/${id}/shop`)}>
-          Back
-        </StyledLeftButton>
+      <header>
+        <StyledLink href={`/${id}/shop`}>Back</StyledLink>
         <h1>Bed Shop</h1>
         <MoneyCounter money={money} />
-      </StyledDefaultHeader>
+      </header>
       <main>
         <ShopTable
           data={clothes}
