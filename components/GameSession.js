@@ -11,6 +11,8 @@ import { useTimeStore } from "@/hooks/stores/timeStore";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useAchievementStore } from "@/hooks/stores/achievementStore";
 import useSWR from "swr";
+import { get } from "mongoose";
+import { achievements } from "@/lib/achievements";
 
 export default function GameSession({ Component, pageProps }) {
   const addMoney = useMoneyStore((state) => state.addMoney);
@@ -46,23 +48,39 @@ export default function GameSession({ Component, pageProps }) {
 
   const { data, error, isLoading } = useSWR("api/user/");
 
+  const saveData = {
+    email: "asdasd@asdasd.de",
+    achievements: allAchievements,
+    foodInventory: foodInventory,
+    toyInventory: toyInventory,
+    money: money,
+    myPets: myPets,
+    hour: hour,
+    day: day,
+    season: season,
+  };
+
+  async function saveUserData() {
+    const response = await fetch("/api/user/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(saveData),
+    });
+
+    if (!response.ok) {
+      console.log(response.status);
+    }
+  }
+  //saveUserData(saveData);
+  //console.log(saveData);
+
   useEffect(() => {
     const interval = setInterval(() => {
       saveUserData();
+      console.log("saving data", saveData);
     }, 30000);
-    async function saveUserData() {
-      const response = await fetch("/api/user/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(combineUserStats()),
-      });
-
-      if (!response.ok) {
-        console.log(response.status);
-      }
-    }
 
     return () => clearInterval(interval);
   }, []);
@@ -191,24 +209,6 @@ export default function GameSession({ Component, pageProps }) {
     setMyPets([]);
     onResetTime();
     setSettingPage(false);
-  }
-
-  function combineUserStats() {
-    let saveData = {};
-
-    saveData.email = "test.123@sdfsdf.de";
-    saveData.achievements = allAchievements;
-    saveData.foodInventory = foodInventory;
-    saveData.toyInventory = toyInventory;
-    saveData.money = money;
-    saveData.myPets = myPets;
-    saveData.hour = hour;
-    saveData.day = day;
-    saveData.season = season;
-
-    console.log(saveData);
-
-    return saveData;
   }
 
   return (
