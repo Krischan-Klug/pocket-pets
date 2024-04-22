@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import SettingPopUp from "@/components/SettingPage/SettingPopUp";
 import SettingPageButton from "@/components/SettingPage/SettingPageButton";
@@ -9,6 +9,8 @@ import { petEvents, userEvents } from "@/lib/events";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useAchievementStore } from "@/hooks/stores/achievementStore";
+import useSWR from "swr";
 
 export default function GameSession({ Component, pageProps }) {
   const addMoney = useMoneyStore((state) => state.addMoney);
@@ -34,6 +36,17 @@ export default function GameSession({ Component, pageProps }) {
 
   const [settingPageShow, setSettingPage] = useState(false);
   const { data: session } = useSession();
+
+  const allAchievements = useAchievementStore((state) => state.allAchievements);
+  const foodInventory = useInventoryStore((state) => state.foodInventory);
+  const toyInventory = useInventoryStore((state) => state.toyInventory);
+  const money = useMoneyStore((state) => state.money);
+  const day = useTimeStore((state) => state.day);
+  const season = useTimeStore((state) => state.season);
+
+  const { data, error, isLoading } = useSWR("api/user/");
+
+  console.log(data);
 
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
@@ -160,6 +173,28 @@ export default function GameSession({ Component, pageProps }) {
     onResetTime();
     setSettingPage(false);
   }
+
+  function CombineUserStats() {
+    let saveData = {};
+
+    saveData.email = session.user.email;
+    saveData.achievements = allAchievements;
+    saveData.foodInventory = foodInventory;
+    saveData.toyInventory = toyInventory;
+    saveData.money = money;
+    saveData.myPets = myPets;
+    saveData.hour = hour;
+    saveData.day = day;
+    saveData.season = season;
+
+    console.log(saveData);
+
+    return saveData;
+  }
+  useEffect(() => {
+    if (!session) return;
+    CombineUserStats();
+  }, [session]);
   return (
     <>
       {session && (
