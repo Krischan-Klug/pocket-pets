@@ -46,7 +46,26 @@ export default function GameSession({ Component, pageProps }) {
 
   const { data, error, isLoading } = useSWR("api/user/");
 
-  console.log(data);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      saveUserData();
+    }, 30000);
+    async function saveUserData() {
+      const response = await fetch("/api/user/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(combineUserStats()),
+      });
+
+      if (!response.ok) {
+        console.log(response.status);
+      }
+    }
+
+    return () => clearInterval(interval);
+  }, []);
 
   //fix: update pets with new keys when local storage is loaded
   useEffect(() => {
@@ -174,10 +193,10 @@ export default function GameSession({ Component, pageProps }) {
     setSettingPage(false);
   }
 
-  function CombineUserStats() {
+  function combineUserStats() {
     let saveData = {};
 
-    saveData.email = session.user.email;
+    saveData.email = "test.123@sdfsdf.de";
     saveData.achievements = allAchievements;
     saveData.foodInventory = foodInventory;
     saveData.toyInventory = toyInventory;
@@ -191,10 +210,7 @@ export default function GameSession({ Component, pageProps }) {
 
     return saveData;
   }
-  useEffect(() => {
-    if (!session) return;
-    CombineUserStats();
-  }, [session]);
+
   return (
     <>
       {session && (

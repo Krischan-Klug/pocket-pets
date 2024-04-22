@@ -18,6 +18,7 @@ export default async function handler(request, response) {
     if (request.method === "POST") {
       try {
         const userData = request.body;
+        console.log(userData);
         const user = new User(userData);
         await user.save();
         return response.status(201).json({ status: "User created!" });
