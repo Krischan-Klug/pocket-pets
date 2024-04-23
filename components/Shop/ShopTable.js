@@ -65,34 +65,37 @@ export default function ShopTable({ data, onItemClick, category }) {
     <StyledShopTableWrapper>
       <table>
         <tbody>
-          {data.map((item) => (
-            <StyledTableRow
-              key={item.id}
-              onClick={() => onItemClick(item.id, item.cost)}
-            >
-              <StyledTd width={60}>
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  width={50}
-                  height={50}
-                />
-              </StyledTd>
-              <StyledTd width={120}>{item.name}</StyledTd>
-              {item.value && (
-                <StyledTd width={60}>
-                  <StyledImageContainer>
-                    {item.value} {typeIcon}
-                  </StyledImageContainer>
-                </StyledTd>
-              )}
-              <StyledTd width={60}>
-                <StyledImageContainer>
-                  {item.cost} <MoneyImage />
-                </StyledImageContainer>
-              </StyledTd>
-            </StyledTableRow>
-          ))}
+          {data.map(
+            (item) =>
+              item.id > 0 && (
+                <StyledTableRow
+                  key={item.id}
+                  onClick={() => onItemClick(item.id, item.cost)}
+                >
+                  <StyledTd width={60}>
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={50}
+                      height={50}
+                    />
+                  </StyledTd>
+                  <StyledTd width={120}>{item.name}</StyledTd>
+                  {item.value && (
+                    <StyledTd width={60}>
+                      <StyledImageContainer>
+                        {item.value} {typeIcon}
+                      </StyledImageContainer>
+                    </StyledTd>
+                  )}
+                  <StyledTd width={60}>
+                    <StyledImageContainer>
+                      {item.cost} <MoneyImage />
+                    </StyledImageContainer>
+                  </StyledTd>
+                </StyledTableRow>
+              )
+          )}
         </tbody>
       </table>
     </StyledShopTableWrapper>

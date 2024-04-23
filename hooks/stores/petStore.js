@@ -56,6 +56,7 @@ export const usePetStore = create(
             };
           }
         }),
+
       onUpdatePetHunger: (hungerToUpdate) =>
         set((state) => {
           if (!state.currentPet.isDead) {
@@ -72,11 +73,13 @@ export const usePetStore = create(
             };
           }
         }),
+
       onDeletePet: (id) => {
         set((state) => ({
           myPets: state.myPets.filter((myPet) => myPet.id !== id),
         }));
       },
+
       updatePetsWithNewKeys: () => {
         set((state) => ({
           myPets: state.myPets.map((myPet) => {
@@ -85,6 +88,7 @@ export const usePetStore = create(
           }),
         }));
       },
+
       setMyPets: (myPets) => {
         set({ myPets });
       },

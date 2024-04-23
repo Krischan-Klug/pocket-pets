@@ -39,8 +39,16 @@ const StyledScrollInventoryContainer = styled(StyledInventoryContainer)`
   overflow-x: auto;
   flex-wrap: nowrap;
   button:first-child {
-    margin-left: 250px;
+    margin-left: calc((100vw - 300px) / 2);
   }
+`;
+
+const StyledInventoryWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  min-width: 500px;
 `;
 
 const StyledImageContainer = styled.div`
@@ -135,6 +143,7 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
       ...currentPet,
 
       name: newPetName,
+      clothes: clothes.find((item) => item.id === selectedClothesItemId),
     });
 
     setSavePopUp(true);
@@ -181,16 +190,19 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
           </Label>
 
           <StyledScrollInventoryContainer>
-            {availableClothes.map((clothesitem) => (
-              <InventoryContainer
-                key={clothesitem.id}
-                id={clothesitem.id}
-                name={findClothesValuesById(clothesitem.id).name}
-                image={findClothesValuesById(clothesitem.id).image}
-                isActive={clothesitem.id === selectedClothesItemId}
-                onClickOnItem={handleClickOnClothesItem}
-              />
-            ))}
+            <StyledInventoryWrapper>
+              {availableClothes.map((clothesitem) => (
+                <InventoryContainer
+                  key={clothesitem.id}
+                  id={clothesitem.id}
+                  name={findClothesValuesById(clothesitem.id).name}
+                  image={findClothesValuesById(clothesitem.id).image}
+                  isActive={clothesitem.id === selectedClothesItemId}
+                  onClickOnItem={handleClickOnClothesItem}
+                />
+              ))}
+            </StyledInventoryWrapper>
+
             {availableClothes.length === 0 && (
               <>
                 <p>
@@ -204,7 +216,7 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
           <StyledEditButton type="submit">Save</StyledEditButton>
         </StyledEditForm>
         <StyledImageContainer>
-          {selectedClothesItemId !== null && (
+          {selectedClothesItemId !== null && selectedClothesItemId !== 0 && (
             <StyledDiv $yoffset={clothesImage.yoffset}>
               <Image
                 alt={clothesImage.alt}

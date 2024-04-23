@@ -59,8 +59,29 @@ const StyledPetContainer = styled.section`
   bottom: 0;
 `;
 
+// const StyledPetImage = styled(Image)`
+//   margin: 40px 0;
+// `;
+
 const StyledPetImage = styled(Image)`
-  margin: 40px 0;
+  position: absolute;
+  bottom: 50px;
+  left: 50%; /* Position at the center of the screen */
+  transform: translateX(-50%);
+`;
+
+const StyledImageContainer = styled.div`
+  position: relative;
+  width: 300px;
+  height: 300px;
+`;
+
+const StyledDiv = styled.div`
+  height: 250px;
+  width: 250px;
+  position: absolute;
+  bottom: ${({ $yoffset }) => $yoffset}px;
+  left: 25px; /* Adjust the horizontal position */
 `;
 
 const sleepingAnimation = keyframes`
@@ -96,12 +117,28 @@ const StyledInteractionImage = styled(Image)`
     1s ease-in-out infinite;
 `;
 
-const SyledInteractionButtonWrapper = styled.div`
+const StyledInteractionButtonWrapperLeft = styled.div`
+  position: absolute;
+  bottom: 30px;
+  left: 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
+  z-index: 5;
+`;
+
+const StyledInteractionButtonWrapperRight = styled.div`
+  position: absolute;
+  bottom: 100px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  z-index: 5;
 `;
 
 const StyledGameArea = styled.section`
@@ -143,9 +180,12 @@ const StyledNameWrapper = styled.div`
   border-radius: var(--border-radius);
 `;
 
-const StyledReviewButton = styled(StyledButton)`
+const StyledReviveButton = styled(StyledButton)`
   position: absolute;
   top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
 `;
 
 export default function PetDetailPage({
@@ -387,7 +427,7 @@ export default function PetDetailPage({
         </header>
         <StyledPetDetailPageMain>
           <StyledGameArea>
-            <SyledInteractionButtonWrapper>
+            <StyledInteractionButtonWrapperLeft>
               <button
                 disabled={isInteracting.duration > 0 || currentPet.isDead}
                 onClick={() => setFeedButtonPopUp(true)}
@@ -424,16 +464,16 @@ export default function PetDetailPage({
                   petId={id}
                 />
               )}
-            </SyledInteractionButtonWrapper>
+            </StyledInteractionButtonWrapperLeft>
             <StyledPetContainer>
               {isDead && (
-                <StyledReviewButton
+                <StyledReviveButton
                   onClick={() => {
                     if (money >= 200) {
                       setConfirmationPopUpContent({
                         ...confirmationPopUpContent,
                         show: true,
-                        message: `Are you sure you want to revive ${name}? `,
+                        message: `Are you sure you want to revive ${name}?`,
                         onConfirm: () => handleConfirm(200),
                         onCancel: () =>
                           setConfirmationPopUpContent({
@@ -445,7 +485,7 @@ export default function PetDetailPage({
                       setConfirmationPopUpContent({
                         ...confirmationPopUpContent,
                         show: true,
-                        message: `You don't have enough money for this. `,
+                        message: `You don't have enough money for this.`,
                         onConfirm: () =>
                           setConfirmationPopUpContent({
                             ...confirmationPopUpContent,
@@ -458,7 +498,7 @@ export default function PetDetailPage({
                 >
                   Revive {name} costs
                   <MoneyColored cost={200} money={money} /> <MoneyImage />
-                </StyledReviewButton>
+                </StyledReviveButton>
               )}
               {isInteracting.duration > 0 && (
                 <StyledInteractionImage
@@ -469,14 +509,33 @@ export default function PetDetailPage({
                   $animationstyle={isInteracting.interaction}
                 />
               )}
-              <StyledPetImage
+              <StyledImageContainer>
+                {currentPet.clothes.id !== null &&
+                  currentPet.clothes.id !== 0 && (
+                    <StyledDiv $yoffset={currentPet.clothes.yOffset}>
+                      <Image
+                        alt={currentPet.clothes.name}
+                        src={currentPet.clothes.image}
+                        width={250}
+                        height={250}
+                      />
+                    </StyledDiv>
+                  )}
+                <StyledPetImage
+                  src={isDead ? graveImage : image}
+                  alt={type}
+                  height={150}
+                  width={150}
+                />
+              </StyledImageContainer>
+              {/* <StyledPetImage
                 src={isDead ? graveImage : image}
                 alt={type}
                 height={150}
                 width={150}
-              />
+              /> */}
             </StyledPetContainer>
-            <SyledInteractionButtonWrapper>
+            <StyledInteractionButtonWrapperRight>
               <button
                 onClick={() => handleSleep(100)}
                 disabled={isInteracting.duration > 0 || currentPet.isDead}
@@ -488,7 +547,7 @@ export default function PetDetailPage({
                   height={50}
                 ></Image>
               </button>
-            </SyledInteractionButtonWrapper>
+            </StyledInteractionButtonWrapperRight>
           </StyledGameArea>
         </StyledPetDetailPageMain>
       </StyledBackgroundImageWrapper>
