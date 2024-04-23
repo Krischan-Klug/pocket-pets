@@ -48,11 +48,9 @@ export default function Create({}) {
   const updateAchievementCurrentAmount = useAchievementStore(
     (state) => state.updateAchievementCurrentAmount
   );
-  const allAchievements = useAchievementStore((state) => state.allAchievements);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     onAddPet({
       ...defaultMyPet,
       id: uuidv4(),

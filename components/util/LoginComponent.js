@@ -2,7 +2,6 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import styled from "styled-components";
 import StyledButton from "../StyledComponents/StyledButton";
 import Image from "next/image";
-
 import pocketpetsLogo from "/public/assets/images/pocket-pet-logo.png";
 
 const StyledLoginPage = styled.div`
