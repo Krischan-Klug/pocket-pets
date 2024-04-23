@@ -32,7 +32,11 @@ const StyledImpressum = styled.div`
   bottom: 20px;
 `;
 
-export default function SettingPopUp({ onSettingPageClose, handleGameReset }) {
+export default function SettingPopUp({
+  onSettingPageClose,
+  handleGameReset,
+  handleManualSave,
+}) {
   const [confirmationPopUpContent, setConfirmationPopUpContent] = useState({
     message: "",
     onConfirm: null,
@@ -70,12 +74,10 @@ export default function SettingPopUp({ onSettingPageClose, handleGameReset }) {
       <h1>Settings</h1>
       <StyledCloseButton onClick={onSettingPageClose}>Close</StyledCloseButton>
       <StyledButton onClick={handleReset}>Reset Game</StyledButton>
-
       <br />
       Signed in as {session.user.email} <br />
       <StyledButton onClick={() => signOut()}>Sign out</StyledButton>
-      
-
+      <StyledButton onClick={handleManualSave}>Save Game</StyledButton>
       <StyledImpressum>
         <u>Impressum</u>
         <p>

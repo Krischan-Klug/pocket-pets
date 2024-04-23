@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import useLocalStorageState from "use-local-storage-state";
 import SettingPopUp from "@/components/SettingPage/SettingPopUp";
 import SettingPageButton from "@/components/SettingPage/SettingPageButton";
 import { useRouter } from "next/router";
@@ -8,9 +7,11 @@ import { usePetStore } from "@/hooks/stores/petStore";
 import { petEvents, userEvents } from "@/lib/events";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useAchievementStore } from "@/hooks/stores/achievementStore";
 import useSWR from "swr";
+import initialSaveData from "@/lib/initialSaveState";
+import SaveToast from "@/components/util/SaveToast";
 
 export default function GameSession({ Component, pageProps }) {
   const addMoney = useMoneyStore((state) => state.addMoney);
@@ -57,26 +58,36 @@ export default function GameSession({ Component, pageProps }) {
   const season = useTimeStore((state) => state.season);
   const setSeason = useTimeStore((state) => state.setSeason);
 
-  const { data: userData, error, isLoading } = useSWR("api/user/");
-  const [userExist, setUserExist] = useState(false);
+  const { data: userData } = useSWR("/api/user/");
 
   const [saveData, setSaveData] = useState({});
   const dataRef = useRef(saveData);
-  console.log(userData);
+
+  const [saveToastVisible, setSaveToastVisible] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSaveToastVisible(false);
+    }, 5500);
+  }, [saveToastVisible]);
 
   //fix: update pets with new keys when local storage is loaded and init game
   useEffect(() => {
     if (userData) {
-      setUserExist(true);
-      setAllAchievements(userData.achievements);
-      setAllfoodInvetory(userData.foodInventory);
-      setAllToyInventory(userData.toyInventory);
-      setAllMoney(userData.money);
-      setMyPets(userData.myPets);
-      setHour(userData.hour);
-      setDay(userData.day);
-      setSeason(userData.season);
+      if (userData.status === "no user found") {
+        saveInitialUserData();
+      } else if (userData) {
+        setAllAchievements(userData.achievements);
+        setAllfoodInvetory(userData.foodInventory);
+        setAllToyInventory(userData.toyInventory);
+        setAllMoney(userData.money);
+        setMyPets(userData.myPets);
+        setHour(userData.hour);
+        setDay(userData.day);
+        setSeason(userData.season);
+      }
     }
+
     updatePetsWithNewKeys();
     updateInventoryWithNewKeys();
   }, [userData]);
@@ -99,8 +110,6 @@ export default function GameSession({ Component, pageProps }) {
         season: season,
       });
     }
-
-    console.log("Combined DATA", dataRef.current);
   }
 
   useEffect(() => {
@@ -116,13 +125,16 @@ export default function GameSession({ Component, pageProps }) {
     season,
   ]);
 
-  async function saveUserData(data) {
+  async function saveInitialUserData() {
+    setSaveToastVisible(true);
+    let saveDate = initialSaveData;
+    saveDate.email = session.user.email;
     const response = await fetch("/api/user/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(saveDate),
     });
 
     if (!response.ok) {
@@ -130,12 +142,34 @@ export default function GameSession({ Component, pageProps }) {
     }
   }
 
+  async function saveUserData() {
+    setSaveToastVisible(true);
+    const response = await fetch("/api/user/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataRef.current),
+    });
+
+    if (!response.ok) {
+      console.error(response.status);
+    }
+  }
+  async function deleteUserData() {
+    const response = await fetch("/api/user/", {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      console.error(response.status);
+    }
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       combineSaveData();
-      //saveUserData(dataRef.current);
-      console.log("saved data", dataRef.current);
-    }, 10000);
+      saveUserData();
+    }, 30000);
 
     return () => clearInterval(interval);
   }, []);
@@ -211,16 +245,14 @@ export default function GameSession({ Component, pageProps }) {
         const interval = setInterval(() => {
           addHour();
           console.log("Clock");
-        }, 1000);
+        }, 60000); //60.000 ms intervall
         return () => clearInterval(interval);
       }
     }
   }, [router.pathname, hour, session]);
 
   //Rain mechanic
-  const [isRaining, setIsRaining] = useLocalStorageState("isRaining", {
-    defaultValue: false,
-  });
+  const [isRaining, setIsRaining] = useState(false);
 
   function getRandomRainTime(min, max) {
     return Math.random() * (max - min) + min;
@@ -251,13 +283,14 @@ export default function GameSession({ Component, pageProps }) {
     setSettingPage(true);
   }
 
-  //TODO: inventory and time
   function handleGameReset() {
+    deleteUserData();
     onResetInventory();
     onResetMoney();
     setMyPets([]);
     onResetTime();
     setSettingPage(false);
+    saveInitialUserData();
   }
 
   return (
@@ -281,8 +314,10 @@ export default function GameSession({ Component, pageProps }) {
         <SettingPopUp
           onSettingPageClose={handleSettingPageClose}
           handleGameReset={handleGameReset}
+          handleManualSave={saveUserData}
         />
       )}
+      {saveToastVisible && <SaveToast />}
     </>
   );
 }

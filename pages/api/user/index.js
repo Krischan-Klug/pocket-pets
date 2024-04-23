@@ -3,8 +3,6 @@ import User from "@/db/models/User";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 
-// und dann conditional actions:
-
 export default async function handler(request, response) {
   await dbConnect();
   const session = await getServerSession(request, response, authOptions);
@@ -12,7 +10,12 @@ export default async function handler(request, response) {
   if (session) {
     if (request.method === "GET") {
       const user = await User.findOne({ email: session.user.email });
-      response.status(200).json(user);
+      console.log("BACKEND: ", user);
+      if (user === null) {
+        response.status(404).json({ status: "no user found" });
+      } else {
+        response.status(200).json(user);
+      }
     }
 
     if (request.method === "POST") {
