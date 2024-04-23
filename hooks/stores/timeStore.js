@@ -5,8 +5,11 @@ export const useTimeStore = create(
   persist(
     (set) => ({
       hour: 0,
+      setHour: (hourToSet) => set({ hour: hourToSet }),
       day: 1,
+      setDay: (dayToSet) => set({ day: dayToSet }),
       season: 0,
+      setSeason: (seasonToSet) => set({ season: seasonToSet }),
       addHour: () => {
         set((state) => {
           const { hour, day, season } = state;

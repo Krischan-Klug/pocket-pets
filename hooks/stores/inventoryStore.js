@@ -8,6 +8,16 @@ export const useInventoryStore = create(
     (set) => ({
       foodInventory: initialFoods,
       toyInventory: initialToys,
+      setAllfoodInvetory: (foodInventory) => {
+        set((state) => ({
+          foodInventory: foodInventory,
+        }));
+      },
+      setAllToyInventory: (toyInventory) => {
+        set((state) => ({
+          toyInventory: toyInventory,
+        }));
+      },
       updateInventoryWithNewKeys: () => {
         set((state) => ({
           foodInventory: [

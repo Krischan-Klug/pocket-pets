@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import SettingPopUp from "@/components/SettingPage/SettingPopUp";
 import SettingPageButton from "@/components/SettingPage/SettingPageButton";
@@ -11,8 +11,6 @@ import { useTimeStore } from "@/hooks/stores/timeStore";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useAchievementStore } from "@/hooks/stores/achievementStore";
 import useSWR from "swr";
-import { get } from "mongoose";
-import { achievements } from "@/lib/achievements";
 
 export default function GameSession({ Component, pageProps }) {
   const addMoney = useMoneyStore((state) => state.addMoney);
@@ -33,6 +31,7 @@ export default function GameSession({ Component, pageProps }) {
   const hour = useTimeStore((state) => state.hour);
   const addHour = useTimeStore((state) => state.addHour);
   const onResetTime = useTimeStore((state) => state.onResetTime);
+  const setHour = useTimeStore((state) => state.setHour);
 
   const router = useRouter();
 
@@ -40,55 +39,105 @@ export default function GameSession({ Component, pageProps }) {
   const { data: session } = useSession();
 
   const allAchievements = useAchievementStore((state) => state.allAchievements);
+  const setAllAchievements = useAchievementStore(
+    (state) => state.setAllAchievements
+  );
   const foodInventory = useInventoryStore((state) => state.foodInventory);
+  const setAllfoodInvetory = useInventoryStore(
+    (state) => state.setAllfoodInvetory
+  );
   const toyInventory = useInventoryStore((state) => state.toyInventory);
+  const setAllToyInventory = useInventoryStore(
+    (state) => state.setAllToyInventory
+  );
   const money = useMoneyStore((state) => state.money);
+  const setAllMoney = useMoneyStore((state) => state.setAllMoney);
   const day = useTimeStore((state) => state.day);
+  const setDay = useTimeStore((state) => state.setDay);
   const season = useTimeStore((state) => state.season);
+  const setSeason = useTimeStore((state) => state.setSeason);
 
-  const { data, error, isLoading } = useSWR("api/user/");
+  const { data: userData, error, isLoading } = useSWR("api/user/");
+  const [userExist, setUserExist] = useState(false);
 
-  const saveData = {
-    email: "asdasd@asdasd.de",
-    achievements: allAchievements,
-    foodInventory: foodInventory,
-    toyInventory: toyInventory,
-    money: money,
-    myPets: myPets,
-    hour: hour,
-    day: day,
-    season: season,
-  };
+  const [saveData, setSaveData] = useState({});
+  const dataRef = useRef(saveData);
+  console.log(userData);
 
-  async function saveUserData() {
+  //fix: update pets with new keys when local storage is loaded and init game
+  useEffect(() => {
+    if (userData) {
+      setUserExist(true);
+      setAllAchievements(userData.achievements);
+      setAllfoodInvetory(userData.foodInventory);
+      setAllToyInventory(userData.toyInventory);
+      setAllMoney(userData.money);
+      setMyPets(userData.myPets);
+      setHour(userData.hour);
+      setDay(userData.day);
+      setSeason(userData.season);
+    }
+    updatePetsWithNewKeys();
+    updateInventoryWithNewKeys();
+  }, [userData]);
+
+  useEffect(() => {
+    dataRef.current = saveData;
+  }, [saveData]);
+
+  function combineSaveData() {
+    if (session) {
+      setSaveData({
+        email: session.user.email,
+        achievements: allAchievements,
+        foodInventory: foodInventory,
+        toyInventory: toyInventory,
+        money: money,
+        myPets: myPets,
+        hour: hour,
+        day: day,
+        season: season,
+      });
+    }
+
+    console.log("Combined DATA", dataRef.current);
+  }
+
+  useEffect(() => {
+    combineSaveData();
+  }, [
+    allAchievements,
+    foodInventory,
+    toyInventory,
+    money,
+    myPets,
+    hour,
+    day,
+    season,
+  ]);
+
+  async function saveUserData(data) {
     const response = await fetch("/api/user/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(saveData),
+      body: JSON.stringify(data),
     });
 
     if (!response.ok) {
       console.log(response.status);
     }
   }
-  //saveUserData(saveData);
-  //console.log(saveData);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      saveUserData();
-      console.log("saving data", saveData);
-    }, 30000);
+      combineSaveData();
+      //saveUserData(dataRef.current);
+      console.log("saved data", dataRef.current);
+    }, 10000);
 
     return () => clearInterval(interval);
-  }, []);
-
-  //fix: update pets with new keys when local storage is loaded
-  useEffect(() => {
-    updatePetsWithNewKeys();
-    updateInventoryWithNewKeys();
   }, []);
 
   // daily event

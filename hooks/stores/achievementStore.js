@@ -6,6 +6,9 @@ export const useAchievementStore = create(
   persist(
     (set) => ({
       allAchievements: achievements,
+      setAllAchievements: (newAchievements) => {
+        set({ allAchievements: newAchievements });
+      },
       updatedAchievementsWithNewKeys: () => {
         set((state) => ({
           allAchievements: [
