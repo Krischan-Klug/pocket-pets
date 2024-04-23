@@ -5,7 +5,7 @@ const StyledInventoryContainer = styled.button`
   border: solid 2px ${({ $bordercolor }) => $bordercolor};
   border-radius: 10px;
   height: 100px;
-  width: 100px;
+  min-width: 100px;
   padding: 1px 0px;
   display: flex;
   flex-direction: column;

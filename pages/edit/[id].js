@@ -26,12 +26,21 @@ const StyledEditForm = styled.form`
   display: flex;
   flex-direction: column;
   width: 300px;
-  gap: 20px;
+  gap: 10px;
 `;
 
 const StyledEditButton = styled(StyledButton)`
-  margin-bottom: 20px;
   justify-content: center;
+`;
+
+const StyledScrollInventoryContainer = styled(StyledInventoryContainer)`
+  width: 300px;
+  height: 100px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  button:first-child {
+    margin-left: 250px;
+  }
 `;
 
 const StyledImageContainer = styled.div`
@@ -171,7 +180,7 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
             </InputLabel>
           </Label>
 
-          <StyledInventoryContainer>
+          <StyledScrollInventoryContainer>
             {availableClothes.map((clothesitem) => (
               <InventoryContainer
                 key={clothesitem.id}
@@ -191,7 +200,7 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
                 <Link href={`/${id}/shop/`}>To Shop</Link>
               </>
             )}
-          </StyledInventoryContainer>
+          </StyledScrollInventoryContainer>
           <StyledEditButton type="submit">Save</StyledEditButton>
         </StyledEditForm>
         <StyledImageContainer>
