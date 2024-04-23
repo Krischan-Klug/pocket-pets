@@ -244,7 +244,6 @@ export default function GameSession({ Component, pageProps }) {
       ) {
         const interval = setInterval(() => {
           addHour();
-          console.log("Clock");
         }, 60000); //60.000 ms intervall
         return () => clearInterval(interval);
       }
