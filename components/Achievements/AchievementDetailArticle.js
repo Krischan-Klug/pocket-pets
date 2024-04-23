@@ -8,7 +8,6 @@ const StyledAchievementArticle = styled.article`
   gap: 10px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   width: 80vw;
-
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(5px);
 `;

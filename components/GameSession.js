@@ -138,7 +138,7 @@ export default function GameSession({ Component, pageProps }) {
     });
 
     if (!response.ok) {
-      console.log(response.status);
+      console.error(response.status);
     }
   }
 
