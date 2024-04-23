@@ -371,7 +371,7 @@ export default function PetDetailPage({
                 router.push(`/${id}/inventory`);
               }}
             >
-              inventory
+              Inventory
             </StyledButton>
             <StyledButton onClick={toggleMinigamesPopUp}>
               Minigames
