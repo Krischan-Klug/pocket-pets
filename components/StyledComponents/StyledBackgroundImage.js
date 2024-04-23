@@ -129,8 +129,8 @@ const timeColor = [
 export const StyledTimeBackground = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: ${({ currentseason, currenttime }) => {
-    const currentHourColor = timeColor[currentseason][currenttime];
+  background-color: ${({ $currentseason, $currenttime }) => {
+    const currentHourColor = timeColor[$currentseason][$currenttime];
     return currentHourColor || "rgb(0, 17, 26)";
   }};
   position: absolute;
@@ -165,8 +165,8 @@ export const StyledStaticBackground = styled.div`
 `;
 
 export const StyledRainBackground = styled.div`
-  background-image: ${({ iswinter }) =>
-    iswinter === "true"
+  background-image: ${({ $iswinter }) =>
+    $iswinter === "true"
       ? `url(${snowBackground.src})`
       : `url(${rainBackground.src})`};
   background-size: cover;

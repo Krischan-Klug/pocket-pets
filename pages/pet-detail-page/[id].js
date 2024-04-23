@@ -38,7 +38,6 @@ import { useAchievementStore } from "@/hooks/stores/achievementStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
 import MinigamesPopUp from "@/components/DetailPage/MinigamesPopUp";
 
-
 const StyledEditImage = styled(Image)`
   transform: scale(1);
   transition: 0.5s;
@@ -323,11 +322,11 @@ export default function PetDetailPage({
   return (
     <>
       <StyledBackgroundImageWrapper>
-        <StyledTimeBackground currenttime={hour} currentseason={season} />
+        <StyledTimeBackground $currenttime={hour} $currentseason={season} />
         {isRaining && (
           <StyledRainBackground
-            iswinter={season === 3 ? "true" : "false"}
-            currentseason={season}
+            $iswinter={season === 3 ? "true" : "false"}
+            $currentseason={season}
           />
         )}
 
@@ -351,8 +350,8 @@ export default function PetDetailPage({
               Level: <span>{calculateLevel(xp)}</span>
             </StyledXPBar>
           </StyledNameSection>
-          <Calendar day={day} season={season} />
-          <Clock hour={hour} />
+          <Calendar $day={day} $season={season} />
+          <Clock $hour={hour} />
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
             <StatusBar text={"Hunger"} value={currentPet.hunger} />

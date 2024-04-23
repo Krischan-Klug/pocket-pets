@@ -24,7 +24,7 @@ const HourHand = styled.div`
   height: 15px;
   border-radius: 2px;
   background-color: #333;
-  transform: ${({ hour }) => `rotate(${hour * 30}deg)`};
+  transform: ${({ $hour }) => `rotate(${$hour * 30}deg)`};
 `;
 
 const rotateMinuteHand = keyframes`
