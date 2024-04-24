@@ -1,14 +1,13 @@
-import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ShopTable from "@/components/Shop/ShopTable";
 import { clothes } from "@/lib/shop.js";
 import MoneyCounter from "@/components/util/MoneyCounter";
-import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHeader";
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 import StyledLink from "@/components/StyledComponents/StyledLink";
+import { StyledShopBackground } from "@/components/StyledComponents/StyledBackgroundImage";
 
 export default function ClothesShop() {
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);
@@ -44,6 +43,7 @@ export default function ClothesShop() {
 
   return (
     <>
+      <StyledShopBackground />
       <header>
         <StyledLink href={`/${id}/shop`}>Back</StyledLink>
         <h1>Bed Shop</h1>
