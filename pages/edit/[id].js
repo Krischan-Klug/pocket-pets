@@ -35,13 +35,7 @@ const StyledEditButton = styled(StyledButton)`
 
 const StyledScrollInventoryContainer = styled(StyledInventoryContainer)`
   width: 300px;
-  /* height: 100px; */
   overflow-x: auto;
-  /* display: flex; */
-  /* flex-wrap: nowrap;
-  button:first-child {
-    margin-left: calc((100vw - 300px) / 2);
-  } */
 `;
 
 const StyledInventoryWrapper = styled.div`
@@ -49,12 +43,6 @@ const StyledInventoryWrapper = styled.div`
   flex-wrap: nowrap; // Prevents wrapping of children, forcing a single line
   gap: 10px; //  Ensures spacing between items
   min-width: 0; // // Fixes flexbox issues with overflow
-
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  min-width: 500px; */
 `;
 
 const StyledImageContainer = styled.div`
@@ -110,7 +98,6 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
   function handleClickOnClothesItem(id) {
     setSelectedClothesItemId(id);
     const clothesitem = clothes.find((item) => item.id === id);
-    console.log("CLOTHESITEM: ", clothesitem);
 
     setClothesImage({
       alt: clothesitem.name,
