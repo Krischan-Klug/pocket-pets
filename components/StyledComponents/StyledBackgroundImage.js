@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import backgroundImage from "public/assets/images/backgrounds/background1.png";
 import staticBackgroundImage from "public/assets/images/backgrounds/background2.png";
+import dressingRoomImage from "public/assets/images/backgrounds/background3_dressingRoom_vecteezy.png";
 import rainBackground from "public/assets/images/backgrounds/rain.gif";
 import snowBackground from "public/assets/images/backgrounds/snowing.gif";
 
@@ -157,6 +158,18 @@ export const StyledStaticBackground = styled.div`
   background-size: cover;
   background-position-x: center;
   background-position-y: top;
+  background-attachment: fixed;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: -10;
+`;
+
+export const StyledDressingRoomBackground = styled.div`
+  background-image: url(${dressingRoomImage.src});
+  background-size: cover;
+  background-position-x: center;
+  background-position-y: bottom;
   background-attachment: fixed;
   width: 100vw;
   height: 100vh;
