@@ -35,20 +35,26 @@ const StyledEditButton = styled(StyledButton)`
 
 const StyledScrollInventoryContainer = styled(StyledInventoryContainer)`
   width: 300px;
-  height: 100px;
+  /* height: 100px; */
   overflow-x: auto;
-  flex-wrap: nowrap;
+  /* display: flex; */
+  /* flex-wrap: nowrap;
   button:first-child {
     margin-left: calc((100vw - 300px) / 2);
-  }
+  } */
 `;
 
 const StyledInventoryWrapper = styled.div`
   display: flex;
+  flex-wrap: nowrap; // Prevents wrapping of children, forcing a single line
+  gap: 10px; //  Ensures spacing between items
+  min-width: 0; // // Fixes flexbox issues with overflow
+
+  /* display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  min-width: 500px;
+  min-width: 500px; */
 `;
 
 const StyledImageContainer = styled.div`
