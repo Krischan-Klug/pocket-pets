@@ -14,6 +14,7 @@ import StyledLink from "@/components/StyledComponents/StyledLink";
 import { clothes } from "@/lib/shop";
 import { usePetStore } from "@/hooks/stores/petStore";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
+import { useTimeStore } from "@/hooks/stores/timeStore";
 import StyledInventoryContainer from "@/components/StyledComponents/StyledInventoryContainer";
 import InventoryContainer from "@/components/DetailPage/InventoryContainer";
 import {
@@ -66,10 +67,12 @@ const StyledDiv = styled.div`
   left: 25px; /* Adjust the horizontal position */
 `;
 
-export default function EditPet({ currentTime, currentSeason, isRaining }) {
+export default function EditPet({ isRaining }) {
   const myPets = usePetStore((state) => state.myPets);
   const onUpdatePet = usePetStore((state) => state.onUpdatePet);
   const clothesInventory = useInventoryStore((state) => state.clothesInventory);
+  const hour = useTimeStore((state) => state.hour);
+  const season = useTimeStore((state) => state.season);
 
   const [savePopUp, setSavePopUp] = useState(false);
   const [newCurrentPetData, setNewCurrentPetData] = useState(null);
@@ -149,14 +152,11 @@ export default function EditPet({ currentTime, currentSeason, isRaining }) {
 
   return (
     <>
-      <StyledTimeBackground
-        currenttime={currentTime}
-        currentseason={currentSeason}
-      />
+      <StyledTimeBackground $currenttime={hour} $currentseason={season} />
       {isRaining && (
         <StyledRainBackground
-          iswinter={currentSeason === 3 ? "true" : "false"}
-          currentseason={currentSeason}
+          $iswinter={season === 3 ? "true" : "false"}
+          $currentseason={season}
         />
       )}
       <StyledDressingRoomBackground />

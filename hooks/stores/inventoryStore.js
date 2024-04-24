@@ -16,13 +16,19 @@ export const useInventoryStore = create((set) => ({
       foodInventory: foodInventory,
     }));
   },
-  
+
   setAllToyInventory: (toyInventory) => {
     set((state) => ({
       toyInventory: toyInventory,
     }));
   },
-  
+
+  setAllClothesInventory: (clothesInventory) => {
+    set((state) => ({
+      clothesInventory: clothesInventory,
+    }));
+  },
+
   updateInventoryWithNewKeys: () => {
     set((state) => ({
       foodInventory: [
@@ -38,15 +44,15 @@ export const useInventoryStore = create((set) => ({
         ),
       ],
       clothesInventory: [
-            ...state.clothesInventory,
-            ...initialClothes.filter(
-              (clothes) =>
-                !state.clothesInventory.some((item) => item.id === clothes.id)
-            ),
-          ],
+        ...state.clothesInventory,
+        ...initialClothes.filter(
+          (clothes) =>
+            !state.clothesInventory.some((item) => item.id === clothes.id)
+        ),
+      ],
     }));
   },
-  
+
   onUpdateFood: (value, newFoodId) => {
     set((state) => ({
       foodInventory: state.foodInventory.map((food) =>
@@ -54,7 +60,7 @@ export const useInventoryStore = create((set) => ({
       ),
     }));
   },
-  
+
   onUpdateToy: (newToyId) => {
     set((state) => ({
       toyInventory: state.toyInventory.map((toy) =>
@@ -62,17 +68,15 @@ export const useInventoryStore = create((set) => ({
       ),
     }));
   },
-  
+
   onUpdateClothes: (newClothesId) => {
-        set((state) => ({
-          clothesInventory: state.clothesInventory.map((clothes) =>
-            clothes.id === newClothesId
-              ? { ...clothes, purchased: true }
-              : clothes
-          ),
-        }));
-      },
-  
+    set((state) => ({
+      clothesInventory: state.clothesInventory.map((clothes) =>
+        clothes.id === newClothesId ? { ...clothes, purchased: true } : clothes
+      ),
+    }));
+  },
+
   onResetInventory: () => {
     set(() => ({
       foodInventory: initialFoods,
@@ -80,7 +84,4 @@ export const useInventoryStore = create((set) => ({
       clothesInventory: initialClothes,
     }));
   },
-   
-    })
-  )
-);
+}));

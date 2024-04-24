@@ -38,7 +38,6 @@ import { useAchievementStore } from "@/hooks/stores/achievementStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
 import MinigamesPopUp from "@/components/DetailPage/MinigamesPopUp";
 
-
 const StyledEditImage = styled(Image)`
   transform: scale(1);
   transition: 0.5s;
@@ -421,12 +420,11 @@ export default function PetDetailPage({
               }}
             >
               Dressing Room
-               </StyledButton>
+            </StyledButton>
 
             <StyledButton onClick={toggleMinigamesPopUp}>
               Minigames
             </StyledButton>
-
           </StyledMoneyHandleSection>
         </header>
         <StyledPetDetailPageMain>
@@ -443,13 +441,7 @@ export default function PetDetailPage({
                   height={50}
                 ></Image>
               </button>
-              {feedButtonPopUp !== false && (
-                <HungerInventoryPopUp
-                  onFeedButton={handleFeedButton}
-                  onCancel={() => setFeedButtonPopUp(false)}
-                  petId={id}
-                />
-              )}
+
               <button
                 onClick={() => setPlayButtonPopUp(true)}
                 disabled={isInteracting.duration > 0 || currentPet.isDead}
@@ -461,13 +453,6 @@ export default function PetDetailPage({
                   height={50}
                 ></Image>
               </button>
-              {playButtonPopUp !== false && (
-                <ToyInventoryPopUp
-                  onPlayButton={handlePlayButton}
-                  onCancel={() => setPlayButtonPopUp(false)}
-                  petId={id}
-                />
-              )}
             </StyledInteractionButtonWrapperLeft>
             <StyledPetContainer>
               {isDead && (
@@ -532,12 +517,6 @@ export default function PetDetailPage({
                   width={150}
                 />
               </StyledImageContainer>
-              {/* <StyledPetImage
-                src={isDead ? graveImage : image}
-                alt={type}
-                height={150}
-                width={150}
-              /> */}
             </StyledPetContainer>
             <StyledInteractionButtonWrapperRight>
               <button
@@ -570,6 +549,20 @@ export default function PetDetailPage({
       )}
       {minigamesPopUp && (
         <MinigamesPopUp id={id} closePopUp={toggleMinigamesPopUp} />
+      )}
+      {feedButtonPopUp !== false && (
+        <HungerInventoryPopUp
+          onFeedButton={handleFeedButton}
+          onCancel={() => setFeedButtonPopUp(false)}
+          petId={id}
+        />
+      )}
+      {playButtonPopUp !== false && (
+        <ToyInventoryPopUp
+          onPlayButton={handlePlayButton}
+          onCancel={() => setPlayButtonPopUp(false)}
+          petId={id}
+        />
       )}
     </>
   );

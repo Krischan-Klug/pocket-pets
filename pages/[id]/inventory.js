@@ -185,15 +185,20 @@ export default function Inventory({ userStats }) {
             $headerheight={headerHeight}
             $tabcontainerheight={tabContainerHeight}
           >
-            {availableClothes.map((clothesitem) => (
-              <ItemCard
-                key={clothesitem.id}
-                name={findClothesValuesById(clothesitem.id).name}
-                image={findClothesValuesById(clothesitem.id).image}
-                description={findClothesValuesById(clothesitem.id).description}
-              />
-            ))}
-            {availableClothes.length === 0 && (
+            {availableClothes.map(
+              (clothesitem) =>
+                clothesitem.id > 0 && (
+                  <ItemCard
+                    key={clothesitem.id}
+                    name={findClothesValuesById(clothesitem.id).name}
+                    image={findClothesValuesById(clothesitem.id).image}
+                    description={
+                      findClothesValuesById(clothesitem.id).description
+                    }
+                  />
+                )
+            )}
+            {availableClothes.length === 1 && (
               <>
                 <p>
                   You need to purchase a bed in the shop first before you can
