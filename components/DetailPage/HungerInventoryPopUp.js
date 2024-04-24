@@ -13,6 +13,10 @@ import { useInventoryStore } from "@/hooks/stores/inventoryStore";
 const StyledErrorMessage = styled.p`
   color: red;
 `;
+const StyledInventoryContainerScroll = styled(StyledInventoryContainer)`
+  height: calc(95vh - 160px);
+  overflow-y: auto;
+`;
 
 export default function HungerInventoryPopUp({
   onFeedButton,
@@ -48,7 +52,7 @@ export default function HungerInventoryPopUp({
     <StyledPopUpOverlay>
       <StyledPopUpContent>
         <h3>What food item would you like to feed?</h3>
-        <StyledInventoryContainer>
+        <StyledInventoryContainerScroll>
           {availableFoods.map((fooditem) => (
             <InventoryContainer
               key={fooditem.id}
@@ -71,7 +75,7 @@ export default function HungerInventoryPopUp({
               <Link href={`/${petId}/shop/`}>To Shop</Link>
             </>
           )}
-        </StyledInventoryContainer>
+        </StyledInventoryContainerScroll>
         <StyledConfirmButtonWrapper>
           <StyledConfirmPopUpButton onClick={handleConfirmButtonClick}>
             Feed
