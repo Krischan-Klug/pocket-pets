@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { foods, toys } from "@/lib/shop";
 import Link from "next/link";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
+import { StyledShopBackground } from "@/components/StyledComponents/StyledBackgroundImage";
 
 import ItemCard from "@/components/Inventory/ItemCard";
 
@@ -94,6 +95,7 @@ export default function Inventory({ userStats }) {
   }
   return (
     <>
+      <StyledShopBackground />
       <header ref={headerRef}>
         <StyledLink href={`/pet-detail-page/${id}`}>Back</StyledLink>
         <h1>Inventory</h1>

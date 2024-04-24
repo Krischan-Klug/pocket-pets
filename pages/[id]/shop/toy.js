@@ -8,6 +8,7 @@ import StyledDefaultHeader from "@/components/StyledComponents/StyledDefaultHead
 import ConfirmationPopup from "@/components/util/ConfirmPopUp";
 import { useMoneyStore } from "@/hooks/stores/moneyStore";
 import { useInventoryStore } from "@/hooks/stores/inventoryStore";
+import { StyledShopBackground } from "@/components/StyledComponents/StyledBackgroundImage";
 
 export default function ToyShop() {
   const subtractMoney = useMoneyStore((state) => state.subtractMoney);
@@ -43,6 +44,7 @@ export default function ToyShop() {
 
   return (
     <>
+      <StyledShopBackground />
       <StyledDefaultHeader>
         <StyledLeftButton onClick={() => router.push(`/${id}/shop`)}>
           Back
