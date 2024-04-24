@@ -387,7 +387,7 @@ export default function PetDetailPage({
             </StyledXPBar>
           </StyledNameSection>
           <Calendar $day={day} $season={season} />
-          <Clock $hour={hour} />
+          <Clock hour={hour} />
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
             <StatusBar text={"Hunger"} value={currentPet.hunger} />

@@ -83,7 +83,7 @@ export default function Clock({ hour }) {
   return (
     <ClockContainer>
       {generateClockMarks()}
-      <HourHand hour={hour} />
+      <HourHand $hour={hour} />
       <MinuteHand />
       <CenterDot />
     </ClockContainer>
