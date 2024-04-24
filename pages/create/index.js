@@ -59,7 +59,6 @@ export default function Create({ isRaining }) {
   const hour = useTimeStore((state) => state.hour);
   const season = useTimeStore((state) => state.season);
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
     onAddPet({
@@ -86,11 +85,11 @@ export default function Create({ isRaining }) {
 
   return (
     <>
-      <StyledTimeBackground currenttime={hour} currentseason={season} />
+      <StyledTimeBackground $currenttime={hour} $currentseason={season} />
       {isRaining && (
         <StyledRainBackground
-          iswinter={season === 3 ? "true" : "false"}
-          currentseason={season}
+          $iswinter={season === 3 ? "true" : "false"}
+          $currentseason={season}
         />
       )}
       <StyledBathBackground />
