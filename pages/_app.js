@@ -18,7 +18,6 @@ export default function App({ Component, pageProps }) {
             Component={Component}
             pageProps={pageProps}
           ></GameSession>
-
           <AudioInterface />
         </SessionProvider>
       </SWRConfig>

@@ -11,6 +11,7 @@ const userSchema = new Schema({
   myPets: { type: Array, required: true },
   season: { type: Number, required: true },
   toyInventory: { type: Array, required: true },
+  clothesInventory: { type: Array, required: true },
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

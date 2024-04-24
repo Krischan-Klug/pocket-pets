@@ -51,6 +51,10 @@ export default function GameSession({ Component, pageProps }) {
   const setAllToyInventory = useInventoryStore(
     (state) => state.setAllToyInventory
   );
+  const clothesInventory = useInventoryStore((state) => state.clothesInventory);
+  const setAllClothesInventory = useInventoryStore(
+    (state) => state.setAllClothesInventory
+  );
   const money = useMoneyStore((state) => state.money);
   const setAllMoney = useMoneyStore((state) => state.setAllMoney);
   const day = useTimeStore((state) => state.day);
@@ -80,6 +84,7 @@ export default function GameSession({ Component, pageProps }) {
         setAllAchievements(userData.achievements);
         setAllfoodInvetory(userData.foodInventory);
         setAllToyInventory(userData.toyInventory);
+        setAllClothesInventory(userData.clothesInventory);
         setAllMoney(userData.money);
         setMyPets(userData.myPets);
         setHour(userData.hour);
@@ -103,6 +108,7 @@ export default function GameSession({ Component, pageProps }) {
         achievements: allAchievements,
         foodInventory: foodInventory,
         toyInventory: toyInventory,
+        clothesInventory: clothesInventory,
         money: money,
         myPets: myPets,
         hour: hour,
@@ -118,6 +124,7 @@ export default function GameSession({ Component, pageProps }) {
     allAchievements,
     foodInventory,
     toyInventory,
+    clothesInventory,
     money,
     myPets,
     hour,
@@ -138,7 +145,7 @@ export default function GameSession({ Component, pageProps }) {
     });
 
     if (!response.ok) {
-      console.log(response.status);
+      console.error(response.status);
     }
   }
 

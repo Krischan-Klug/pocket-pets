@@ -4,6 +4,8 @@ import styled from "styled-components";
 import HungerImage from "@/components/util/HungerImage";
 import ToyImage from "@/components/util/ToyImage";
 import { StyledShopBackground } from "@/components/StyledComponents/StyledBackgroundImage";
+import ClothesImage from "@/components/util/ClothesImage";
+
 
 const StyledShopCategoryButton = styled.button`
   display: flex;
@@ -42,6 +44,12 @@ export default function Shop() {
         >
           <ToyImage height={120} width={120} />
           Toys
+        </StyledShopCategoryButton>
+        <StyledShopCategoryButton
+          onClick={() => router.push(`/${id}/shop/clothes`)}
+        >
+          <ClothesImage height={120} width={120} />
+          Beds
         </StyledShopCategoryButton>
       </main>
     </>

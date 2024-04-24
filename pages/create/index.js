@@ -59,9 +59,9 @@ export default function Create({ isRaining }) {
   const hour = useTimeStore((state) => state.hour);
   const season = useTimeStore((state) => state.season);
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
-
     onAddPet({
       ...defaultMyPet,
       id: uuidv4(),

@@ -38,7 +38,6 @@ import { useAchievementStore } from "@/hooks/stores/achievementStore";
 import { useTimeStore } from "@/hooks/stores/timeStore";
 import MinigamesPopUp from "@/components/DetailPage/MinigamesPopUp";
 
-
 const StyledEditImage = styled(Image)`
   transform: scale(1);
   transition: 0.5s;
@@ -63,8 +62,29 @@ const StyledPetContainer = styled.section`
   bottom: 0;
 `;
 
+// const StyledPetImage = styled(Image)`
+//   margin: 40px 0;
+// `;
+
 const StyledPetImage = styled(Image)`
-  margin: 40px 0;
+  position: absolute;
+  bottom: 50px;
+  left: 50%; /* Position at the center of the screen */
+  transform: translateX(-50%);
+`;
+
+const StyledImageContainer = styled.div`
+  position: relative;
+  width: 300px;
+  height: 300px;
+`;
+
+const StyledDiv = styled.div`
+  height: 250px;
+  width: 250px;
+  position: absolute;
+  bottom: ${({ $yoffset }) => $yoffset}px;
+  left: 25px; /* Adjust the horizontal position */
 `;
 
 const sleepingAnimation = keyframes`
@@ -100,12 +120,28 @@ const StyledInteractionImage = styled(Image)`
     1s ease-in-out infinite;
 `;
 
-const SyledInteractionButtonWrapper = styled.div`
+const StyledInteractionButtonWrapperLeft = styled.div`
+  position: absolute;
+  bottom: 30px;
+  left: 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
+  z-index: 5;
+`;
+
+const StyledInteractionButtonWrapperRight = styled.div`
+  position: absolute;
+  bottom: 100px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  z-index: 5;
 `;
 
 const StyledGameArea = styled.section`
@@ -147,9 +183,12 @@ const StyledNameWrapper = styled.div`
   border-radius: var(--border-radius);
 `;
 
-const StyledReviewButton = styled(StyledButton)`
+const StyledReviveButton = styled(StyledButton)`
   position: absolute;
   top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
 `;
 
 export default function PetDetailPage({
@@ -323,11 +362,11 @@ export default function PetDetailPage({
   return (
     <>
       <StyledBackgroundImageWrapper>
-        <StyledTimeBackground currenttime={hour} currentseason={season} />
+        <StyledTimeBackground $currenttime={hour} $currentseason={season} />
         {isRaining && (
           <StyledRainBackground
-            iswinter={season === 3 ? "true" : "false"}
-            currentseason={season}
+            $iswinter={season === 3 ? "true" : "false"}
+            $currentseason={season}
           />
         )}
 
@@ -351,8 +390,8 @@ export default function PetDetailPage({
               Level: <span>{calculateLevel(xp)}</span>
             </StyledXPBar>
           </StyledNameSection>
-          <Calendar day={day} season={season} />
-          <Clock hour={hour} />
+          <Calendar $day={day} $season={season} />
+          <Clock $hour={hour} />
           <StatusBarWrapper>
             <StatusBar text={"Health"} value={currentPet.health} />
             <StatusBar text={"Hunger"} value={currentPet.hunger} />
@@ -372,8 +411,17 @@ export default function PetDetailPage({
                 router.push(`/${id}/inventory`);
               }}
             >
-              inventory
+              Inventory
             </StyledButton>
+
+            <StyledButton
+              onClick={() => {
+                router.push(`/edit/${id}/`);
+              }}
+            >
+              Dressing Room
+            </StyledButton>
+
             <StyledButton onClick={toggleMinigamesPopUp}>
               Minigames
             </StyledButton>
@@ -381,7 +429,7 @@ export default function PetDetailPage({
         </header>
         <StyledPetDetailPageMain>
           <StyledGameArea>
-            <SyledInteractionButtonWrapper>
+            <StyledInteractionButtonWrapperLeft>
               <button
                 disabled={isInteracting.duration > 0 || currentPet.isDead}
                 onClick={() => setFeedButtonPopUp(true)}
@@ -393,13 +441,7 @@ export default function PetDetailPage({
                   height={50}
                 ></Image>
               </button>
-              {feedButtonPopUp !== false && (
-                <HungerInventoryPopUp
-                  onFeedButton={handleFeedButton}
-                  onCancel={() => setFeedButtonPopUp(false)}
-                  petId={id}
-                />
-              )}
+
               <button
                 onClick={() => setPlayButtonPopUp(true)}
                 disabled={isInteracting.duration > 0 || currentPet.isDead}
@@ -411,23 +453,16 @@ export default function PetDetailPage({
                   height={50}
                 ></Image>
               </button>
-              {playButtonPopUp !== false && (
-                <ToyInventoryPopUp
-                  onPlayButton={handlePlayButton}
-                  onCancel={() => setPlayButtonPopUp(false)}
-                  petId={id}
-                />
-              )}
-            </SyledInteractionButtonWrapper>
+            </StyledInteractionButtonWrapperLeft>
             <StyledPetContainer>
               {isDead && (
-                <StyledReviewButton
+                <StyledReviveButton
                   onClick={() => {
                     if (money >= 200) {
                       setConfirmationPopUpContent({
                         ...confirmationPopUpContent,
                         show: true,
-                        message: `Are you sure you want to revive ${name}? `,
+                        message: `Are you sure you want to revive ${name}?`,
                         onConfirm: () => handleConfirm(200),
                         onCancel: () =>
                           setConfirmationPopUpContent({
@@ -439,7 +474,7 @@ export default function PetDetailPage({
                       setConfirmationPopUpContent({
                         ...confirmationPopUpContent,
                         show: true,
-                        message: `You don't have enough money for this. `,
+                        message: `You don't have enough money for this.`,
                         onConfirm: () =>
                           setConfirmationPopUpContent({
                             ...confirmationPopUpContent,
@@ -452,7 +487,7 @@ export default function PetDetailPage({
                 >
                   Revive {name} costs
                   <MoneyColored cost={200} money={money} /> <MoneyImage />
-                </StyledReviewButton>
+                </StyledReviveButton>
               )}
               {isInteracting.duration > 0 && (
                 <StyledInteractionImage
@@ -463,14 +498,27 @@ export default function PetDetailPage({
                   $animationstyle={isInteracting.interaction}
                 />
               )}
-              <StyledPetImage
-                src={isDead ? graveImage : image}
-                alt={type}
-                height={150}
-                width={150}
-              />
+              <StyledImageContainer>
+                {currentPet.clothes.id !== null &&
+                  currentPet.clothes.id !== 0 && (
+                    <StyledDiv $yoffset={currentPet.clothes.yOffset}>
+                      <Image
+                        alt={currentPet.clothes.name}
+                        src={currentPet.clothes.image}
+                        width={250}
+                        height={250}
+                      />
+                    </StyledDiv>
+                  )}
+                <StyledPetImage
+                  src={isDead ? graveImage : image}
+                  alt={type}
+                  height={150}
+                  width={150}
+                />
+              </StyledImageContainer>
             </StyledPetContainer>
-            <SyledInteractionButtonWrapper>
+            <StyledInteractionButtonWrapperRight>
               <button
                 onClick={() => handleSleep(100)}
                 disabled={isInteracting.duration > 0 || currentPet.isDead}
@@ -482,7 +530,7 @@ export default function PetDetailPage({
                   height={50}
                 ></Image>
               </button>
-            </SyledInteractionButtonWrapper>
+            </StyledInteractionButtonWrapperRight>
           </StyledGameArea>
         </StyledPetDetailPageMain>
       </StyledBackgroundImageWrapper>
@@ -501,6 +549,20 @@ export default function PetDetailPage({
       )}
       {minigamesPopUp && (
         <MinigamesPopUp id={id} closePopUp={toggleMinigamesPopUp} />
+      )}
+      {feedButtonPopUp !== false && (
+        <HungerInventoryPopUp
+          onFeedButton={handleFeedButton}
+          onCancel={() => setFeedButtonPopUp(false)}
+          petId={id}
+        />
+      )}
+      {playButtonPopUp !== false && (
+        <ToyInventoryPopUp
+          onPlayButton={handlePlayButton}
+          onCancel={() => setPlayButtonPopUp(false)}
+          petId={id}
+        />
       )}
     </>
   );

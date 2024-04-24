@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import backgroundImage from "public/assets/images/backgrounds/background1.png";
 import staticBackgroundImage from "public/assets/images/backgrounds/background2.png";
+import dressingRoomImage from "public/assets/images/backgrounds/background3_dressingRoom_vecteezy.png";
 import rainBackground from "public/assets/images/backgrounds/rain.gif";
 import snowBackground from "public/assets/images/backgrounds/snowing.gif";
 import bathBackground from "public/assets/images/backgrounds/background3.png";
@@ -131,8 +132,8 @@ const timeColor = [
 export const StyledTimeBackground = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: ${({ currentseason, currenttime }) => {
-    const currentHourColor = timeColor[currentseason][currenttime];
+  background-color: ${({ $currentseason, $currenttime }) => {
+    const currentHourColor = timeColor[$currentseason][$currenttime];
     return currentHourColor || "rgb(0, 17, 26)";
   }};
   position: absolute;
@@ -190,9 +191,21 @@ export const StyledStaticBackground = styled.div`
   z-index: -10;
 `;
 
+export const StyledDressingRoomBackground = styled.div`
+  background-image: url(${dressingRoomImage.src});
+  background-size: cover;
+  background-position-x: center;
+  background-position-y: bottom;
+  background-attachment: fixed;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: -10;
+`;
+
 export const StyledRainBackground = styled.div`
-  background-image: ${({ iswinter }) =>
-    iswinter === "true"
+  background-image: ${({ $iswinter }) =>
+    $iswinter === "true"
       ? `url(${snowBackground.src})`
       : `url(${rainBackground.src})`};
   background-size: cover;

@@ -33,7 +33,7 @@ const CalendarDay = styled.div`
 const BlackDecoration = styled.div`
   position: absolute;
   top: -6px;
-  left: ${({ positionleft }) => positionleft}px;
+  left: ${({ $positionleft }) => $positionleft}px;
   height: 12px;
   width: 8px;
   border-radius: 4px;
@@ -41,9 +41,9 @@ const BlackDecoration = styled.div`
   z-index: 1;
 `;
 
-export default function Calendar({ day, season }) {
+export default function Calendar({ $day, $season }) {
   const seasonText = () => {
-    switch (season) {
+    switch ($season) {
       case 0:
         return "Spring";
       case 1:
@@ -57,15 +57,15 @@ export default function Calendar({ day, season }) {
     }
   };
 
-  const currentDayInSeason = ((day - 1) % 8) + 1;
+  const currentDayInSeason = (($day - 1) % 8) + 1;
 
   return (
     <>
       <StyledCalendarWrapper>
         <CalendarSeason>{seasonText()}</CalendarSeason>
-        <BlackDecoration positionleft={7} />
-        <BlackDecoration positionleft={24} />
-        <BlackDecoration positionleft={40} />
+        <BlackDecoration $positionleft={7} />
+        <BlackDecoration $positionleft={24} />
+        <BlackDecoration $positionleft={40} />
         <CalendarDay>{currentDayInSeason}</CalendarDay>
       </StyledCalendarWrapper>
     </>
