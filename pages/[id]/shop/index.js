@@ -3,7 +3,9 @@ import StyledLeftButton from "@/components/StyledComponents/StyledLeftButton";
 import styled from "styled-components";
 import HungerImage from "@/components/util/HungerImage";
 import ToyImage from "@/components/util/ToyImage";
+import { StyledShopBackground } from "@/components/StyledComponents/StyledBackgroundImage";
 import ClothesImage from "@/components/util/ClothesImage";
+
 
 const StyledShopCategoryButton = styled.button`
   display: flex;
@@ -13,6 +15,8 @@ const StyledShopCategoryButton = styled.button`
   width: 150px;
   height: 150px;
   border-radius: var(--border-radius);
+  background-color: #f2e8da;
+  border-color: lightgrey;
 `;
 
 export default function Shop() {
@@ -21,6 +25,7 @@ export default function Shop() {
 
   return (
     <>
+      <StyledShopBackground />
       <header>
         <StyledLeftButton onClick={() => router.push(`/pet-detail-page/${id}`)}>
           Back

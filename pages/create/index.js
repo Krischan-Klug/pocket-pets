@@ -17,12 +17,19 @@ import arrowRight from "/public/assets/icons/round_arrow_forward_ios_black.png";
 import StyledLink from "@/components/StyledComponents/StyledLink";
 import { usePetStore } from "@/hooks/stores/petStore";
 import { useAchievementStore } from "@/hooks/stores/achievementStore";
+import {
+  StyledBathBackground,
+  StyledTimeBackground,
+  StyledRainBackground,
+} from "@/components/StyledComponents/StyledBackgroundImage";
+import { useTimeStore } from "@/hooks/stores/timeStore";
 
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  margin-top: 20px;
 `;
 
 const PetSelectionSection = styled.section`
@@ -30,6 +37,7 @@ const PetSelectionSection = styled.section`
   flex-direction: row;
   align-items: center;
   gap: 20px;
+  margin-top: 170px;
 `;
 const SytledTypeChangeButton = styled(Image)`
   transform: scale(1);
@@ -41,13 +49,16 @@ const SytledTypeChangeButton = styled(Image)`
   }
 `;
 
-export default function Create({}) {
+export default function Create({ isRaining }) {
   const onAddPet = usePetStore((state) => state.onAddPet);
   const router = useRouter();
   const [petType, setPetType] = useState(0);
   const updateAchievementCurrentAmount = useAchievementStore(
     (state) => state.updateAchievementCurrentAmount
   );
+  const hour = useTimeStore((state) => state.hour);
+  const season = useTimeStore((state) => state.season);
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -75,6 +86,14 @@ export default function Create({}) {
 
   return (
     <>
+      <StyledTimeBackground currenttime={hour} currentseason={season} />
+      {isRaining && (
+        <StyledRainBackground
+          iswinter={season === 3 ? "true" : "false"}
+          currentseason={season}
+        />
+      )}
+      <StyledBathBackground />
       <header>
         <StyledLink href={"/"}>Back</StyledLink>
         <h1>Add a New Pet</h1>

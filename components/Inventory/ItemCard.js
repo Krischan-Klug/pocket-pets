@@ -12,6 +12,7 @@ const StyledItemCard = styled.button`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: #f2e8da;
   cursor: help;
 `;
 

@@ -4,6 +4,8 @@ import staticBackgroundImage from "public/assets/images/backgrounds/background2.
 import dressingRoomImage from "public/assets/images/backgrounds/background3_dressingRoom_vecteezy.png";
 import rainBackground from "public/assets/images/backgrounds/rain.gif";
 import snowBackground from "public/assets/images/backgrounds/snowing.gif";
+import bathBackground from "public/assets/images/backgrounds/background3.png";
+import shopBackground from "public/assets/images/backgrounds/background4.png";
 
 export const StyledBackgroundImageWrapper = styled.div`
   display: flex;
@@ -143,6 +145,30 @@ export const StyledTimeBackground = styled.div`
 
 export const StyledWallBackground = styled.div`
   background-image: url(${backgroundImage.src});
+  background-size: cover;
+  background-position-x: center;
+  background-position-y: bottom;
+  background-attachment: fixed;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: -10;
+`;
+
+export const StyledBathBackground = styled.div`
+  background-image: url(${bathBackground.src});
+  background-size: cover;
+  background-position-x: center;
+  background-position-y: bottom;
+  background-attachment: fixed;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: -10;
+`;
+
+export const StyledShopBackground = styled.div`
+  background-image: url(${shopBackground.src});
   background-size: cover;
   background-position-x: center;
   background-position-y: bottom;

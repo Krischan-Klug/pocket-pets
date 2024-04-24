@@ -33,6 +33,9 @@ const StyledTableRow = styled.tr`
   &:nth-child(even) {
     background-color: #f2e8da;
   }
+  &:nth-child(odd) {
+    background-color: #e9ddcb;
+  }
 
   &:hover {
     background-color: #e0d5c4;
