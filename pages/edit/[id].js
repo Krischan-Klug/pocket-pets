@@ -76,7 +76,7 @@ export default function EditPet({ isRaining }) {
 
   const [savePopUp, setSavePopUp] = useState(false);
   const [newCurrentPetData, setNewCurrentPetData] = useState(null);
-  const [selectedClothesItemId, setSelectedClothesItemId] = useState(null);
+  const [selectedClothesItemId, setSelectedClothesItemId] = useState(0);
   const [clothesImage, setClothesImage] = useState({
     src: "",
     alt: "",
