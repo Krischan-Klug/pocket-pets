@@ -5,7 +5,7 @@ import StyledPopUpContent from "@/components/StyledComponents/StyledPopUpContent
 import styled from "styled-components";
 
 const StyledMinigameLink = styled(StyledLink)`
-  width: 90%;
+  width: 150px;
 `;
 
 const StyledMinigameContent = styled(StyledPopUpContent)`

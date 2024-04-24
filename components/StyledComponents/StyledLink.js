@@ -12,10 +12,12 @@ const StyledLink = styled(Link)`
   width: 50px;
   transform: scale(1);
   transition: 0.5s;
+  text-align: center;
 
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
 
   &:hover {
     transform: scale(1.1);
