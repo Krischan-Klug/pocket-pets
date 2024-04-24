@@ -50,21 +50,16 @@ const StyledEditImage = styled(Image)`
 `;
 
 const StyledPetDetailPageMain = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  justify-content: space-between;
+  position: absolute;
+  bottom: 0px;
+  overflow: hidden;
+  height: 50vh;
 `;
 
 const StyledPetContainer = styled.section`
   position: relative;
   bottom: 0;
 `;
-
-// const StyledPetImage = styled(Image)`
-//   margin: 40px 0;
-// `;
 
 const StyledPetImage = styled(Image)`
   position: absolute;
@@ -111,19 +106,20 @@ const foodAnimation = keyframes`
 const StyledInteractionImage = styled(Image)`
   position: absolute;
   top: 0;
-  right: 30%;
+  right: 40%;
   animation: ${(props) => {
       if (props.$animationstyle === "sleeping") return sleepingAnimation;
       if (props.$animationstyle === "toy") return toyAnimation;
       if (props.$animationstyle === "food") return foodAnimation;
     }}
     1s ease-in-out infinite;
+  z-index: 25;
 `;
 
 const StyledInteractionButtonWrapperLeft = styled.div`
   position: absolute;
   bottom: 30px;
-  left: 15px;
+  left: 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -135,7 +131,7 @@ const StyledInteractionButtonWrapperLeft = styled.div`
 const StyledInteractionButtonWrapperRight = styled.div`
   position: absolute;
   bottom: 100px;
-  right: 15px;
+  right: 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -185,7 +181,7 @@ const StyledNameWrapper = styled.div`
 
 const StyledReviveButton = styled(StyledButton)`
   position: absolute;
-  top: -20px;
+  top: 0px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
