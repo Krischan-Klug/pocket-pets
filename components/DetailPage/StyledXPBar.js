@@ -13,7 +13,6 @@ const StyledXPBar = styled.p`
   display: inline-block;
   box-sizing: border-box;
   position: absolute;
-
   top: 10px;
 `;
 
